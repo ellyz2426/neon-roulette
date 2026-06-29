@@ -95,6 +95,28 @@ for (let i = 0; i < 12; i++) STREETS.push([i * 3 + 1, i * 3 + 2, i * 3 + 3]);
 const LINES: number[][] = [];
 for (let i = 0; i < 11; i++) LINES.push([...STREETS[i], ...STREETS[i + 1]]);
 
+// ─── French Call Bets (European wheel positions) ───
+// Voisins du Zero: 17 numbers near zero (22,18,29,7,28,12,35,3,26,0,32,15,19,4,21,2,25)
+const VOISINS_DU_ZERO = [22,18,29,7,28,12,35,3,26,0,32,15,19,4,21,2,25];
+// Tiers du Cylindre: 12 numbers opposite zero (27,13,36,11,30,8,23,10,5,24,16,33)
+const TIERS_DU_CYLINDRE = [27,13,36,11,30,8,23,10,5,24,16,33];
+// Orphelins: 8 remaining numbers (1,20,14,31,9,17,34,6)
+const ORPHELINS = [1,20,14,31,9,17,34,6];
+// Jeu Zero: 7 numbers closest to zero (12,35,3,26,0,32,15)
+const JEU_ZERO = [12,35,3,26,0,32,15];
+
+function getNeighbors(number: number, count: number, isAmerican: boolean): number[] {
+  const seq = isAmerican ? AMER_SEQUENCE : EURO_SEQUENCE;
+  const idx = seq.indexOf(number);
+  if (idx < 0) return [number];
+  const result: number[] = [];
+  for (let i = -count; i <= count; i++) {
+    const pos = (idx + i + seq.length) % seq.length;
+    result.push(seq[pos]);
+  }
+  return result;
+}
+
 // ─── Achievements ───
 interface Achievement { id: string; name: string; desc: string; check: (s: GameState) => boolean; }
 const ACHIEVEMENTS: Achievement[] = [
@@ -151,7 +173,7 @@ interface GameState {
   chipSkin: number; themeIdx: number;
 }
 
-type UIState = 'title' | 'modes' | 'table' | 'playing' | 'spinning' | 'result' | 'gameover' | 'leaderboard' | 'achievements' | 'stats' | 'settings' | 'help' | 'pause' | 'chips';
+type UIState = 'title' | 'modes' | 'table' | 'playing' | 'spinning' | 'result' | 'gameover' | 'leaderboard' | 'achievements' | 'stats' | 'settings' | 'help' | 'pause' | 'chips' | 'callbets' | 'autospin';
 type GameMode = 'single' | 'session' | 'marathon' | 'high-roller' | 'daily' | 'practice' | 'streak' | 'tournament';
 
 function loadState(): GameState {
@@ -369,6 +391,14 @@ async function main() {
   let betTooltip = '';
   let streakFxTimer = 0;
   let initialCameraZ = 0;
+  let autoSpinCount = 0;
+  let autoSpinMax = 10;
+  let autoSpinStopAmount = 500;
+  let autoSpinRunning = false;
+  let autoSpinPauseTimer = 0;
+  let neighborCount = 2;
+  let neighborPickMode = false;
+  let ballTrail: { x: number; y: number; z: number; alpha: number }[] = [];
 
   const theme = () => THEMES[state.themeIdx];
   state.themesUsed.add(theme().name);
@@ -699,7 +729,13 @@ async function main() {
     const hits = raycaster.intersectObjects(zoneMeshes);
     if (hits.length > 0) {
       const zone = betZones[zoneMeshes.indexOf(hits[0].object as Mesh)];
-      if (zone) placeBet(zone);
+      if (zone) {
+        if (neighborPickMode && zone.type === 'straight' && zone.number !== undefined) {
+          placeNeighborBet(zone.number);
+        } else {
+          placeBet(zone);
+        }
+      }
     }
   });
 
@@ -716,6 +752,7 @@ async function main() {
     if (e.key === ' ' && uiState === 'playing' && bets.length > 0) startSpin();
     if (e.key === 'c' && uiState === 'playing') clearBets();
     if (e.key === 'r' && uiState === 'playing') rebet();
+    if (e.key === 'a' && uiState === 'playing') { uiState = 'autospin' as UIState; hideAllPanels(); const ae = panelEntities['autospin']; if (ae && ae.object3D) ae.object3D.visible = true; updateAutoSpinPanel(); }
     if (e.key === 'Enter' && uiState === 'result') continueAfterResult();
     if ((e.key === 'Escape' || e.key === 'p') && (uiState === 'playing' || uiState === 'pause')) {
       uiState = uiState === 'pause' ? 'playing' : 'pause';
@@ -866,7 +903,11 @@ async function main() {
       else { state.redStreak = 0; state.blackStreak = 0; }
 
       playWin();
-      emitParticles(0, 1.5, -1, 20, theme().glow);
+      const winColor = isRed(currentResult) ? '#ff4444' : isBlack(currentResult) ? '#8844ff' : '#44ff88';
+      emitParticles(0, 1.5, -1, 25, winColor);
+      emitParticles(0, 2.0, -2, 15, theme().glow);
+      if (totalWin >= 100) emitParticles(-1, 1.8, -1.5, 15, '#ffcc00');
+      if (totalWin >= 500) emitParticles(1, 1.8, -1.5, 20, '#ff88ff');
     } else {
       currentStreak = 0;
       state.redStreak = 0;
@@ -914,7 +955,14 @@ async function main() {
     // Check game over conditions
     const isOver = checkGameOver();
     if (isOver) {
+      if (autoSpinRunning) stopAutoSpin();
       endGame();
+    } else if (autoSpinRunning) {
+      // Auto-spin: pause briefly then trigger next
+      uiState = 'playing';
+      showPanel('playing');
+      updateHUD();
+      autoSpinPauseTimer = 1.0;
     } else {
       uiState = 'playing';
       showPanel('playing');
@@ -990,6 +1038,114 @@ async function main() {
     toastTimer = 2.5;
   }
 
+  // ─── Call Bets ───
+  function placeCallBet(numbers: number[]) {
+    if (uiState !== 'playing' || isSpinning) return;
+    const chipCost = selectedChip * numbers.length;
+    if (chipCost > bankroll && gameMode !== 'practice') {
+      showToast('Not enough chips!');
+      return;
+    }
+    for (const num of numbers) {
+      bets.push({ type: 'straight', number: num, amount: selectedChip });
+      if (gameMode !== 'practice') bankroll -= selectedChip;
+      state.betTypesUsed.add('straight');
+      const zone = betZones.find(z => z.type === 'straight' && z.number === num);
+      if (zone) addChipMarker(zone.mesh.position.clone());
+    }
+    playChipPlace();
+    updateHUD();
+  }
+
+  function placeVoisins() {
+    placeCallBet(VOISINS_DU_ZERO);
+    showToast('Voisins du Zero — 17 numbers!');
+  }
+
+  function placeTiers() {
+    placeCallBet(TIERS_DU_CYLINDRE);
+    showToast('Tiers du Cylindre — 12 numbers!');
+  }
+
+  function placeOrphelins() {
+    placeCallBet(ORPHELINS);
+    showToast('Orphelins — 8 numbers!');
+  }
+
+  function placeJeuZero() {
+    placeCallBet(JEU_ZERO);
+    showToast('Jeu Zero — 7 numbers!');
+  }
+
+  function placeNeighborBet(centerNumber: number) {
+    const nbrs = getNeighbors(centerNumber, neighborCount, isAmerican);
+    placeCallBet(nbrs);
+    showToast(centerNumber + ' + ' + neighborCount + ' neighbors');
+    neighborPickMode = false;
+  }
+
+  // ─── Auto-Spin ───
+  function startAutoSpin() {
+    if (lastBets.length === 0) {
+      showToast('Place a bet first!');
+      return;
+    }
+    autoSpinCount = 0;
+    autoSpinRunning = true;
+    autoSpinPauseTimer = 0;
+    showToast('Auto-spin started: ' + autoSpinMax + ' spins');
+    triggerAutoSpin();
+  }
+
+  function stopAutoSpin() {
+    autoSpinRunning = false;
+    autoSpinCount = 0;
+    showToast('Auto-spin stopped');
+  }
+
+  function doubleBets() {
+    if (bets.length === 0 || isSpinning) return;
+    const extraCost = bets.reduce((s, b) => s + b.amount, 0);
+    if (extraCost > bankroll && gameMode !== 'practice') {
+      showToast('Not enough chips to double!');
+      return;
+    }
+    for (const b of bets) {
+      if (gameMode !== 'practice') bankroll -= b.amount;
+      b.amount *= 2;
+    }
+    playChipPlace();
+    showToast('Bets doubled!');
+    updateHUD();
+  }
+
+  function triggerAutoSpin() {
+    if (!autoSpinRunning) return;
+    if (autoSpinCount >= autoSpinMax) {
+      stopAutoSpin();
+      showToast('Auto-spin complete!');
+      return;
+    }
+    if (bankroll <= 0 && gameMode !== 'practice') {
+      stopAutoSpin();
+      showToast('Out of chips!');
+      return;
+    }
+    if (bankroll >= autoSpinStopAmount && autoSpinCount > 0) {
+      stopAutoSpin();
+      showToast('Win target reached: $' + bankroll + '!');
+      return;
+    }
+    // Rebet and spin
+    rebet();
+    if (bets.length > 0) {
+      autoSpinCount++;
+      startSpin();
+    } else {
+      stopAutoSpin();
+    }
+  }
+
   // ─── UI Panel Management ───
   const panelEntities: Record<string, Entity> = {};
   const panelDocs: Record<string, UIKitDocument> = {};
@@ -1010,7 +1166,7 @@ async function main() {
       case 'title': show('title'); break;
       case 'modes': show('modes'); break;
       case 'table': show('table'); break;
-      case 'playing': show('hud'); show('betting'); show('history'); show('hotcold'); show('payouts'); break;
+      case 'playing': show('hud'); show('betting'); show('history'); show('hotcold'); show('payouts'); show('callbets'); break;
       case 'spinning': show('hud'); break;
       case 'result': show('result'); show('hud'); break;
       case 'gameover': show('gameover'); break;
@@ -1021,6 +1177,8 @@ async function main() {
       case 'help': show('help'); break;
       case 'pause': show('pause'); break;
       case 'chips': show('chips'); break;
+      case 'callbets': show('callbets'); show('hud'); break;
+      case 'autospin': show('autospin'); show('hud'); break;
     }
   }
 
@@ -1094,6 +1252,8 @@ async function main() {
     chips: { config: './ui/chips.json', world: true, pos: [0, 2.0, -3.5], scale: 1.2 },
     hotcold: { config: './ui/hotcold.json', world: true, pos: [-1.8, 1.5, -2.5], scale: 0.8 },
     payouts: { config: './ui/payouts.json', world: true, pos: [1.8, 1.8, -2.0], scale: 0.7 },
+    callbets: { config: './ui/callbets.json', world: true, pos: [-1.8, 1.8, -2.0], scale: 0.9 },
+    autospin: { config: './ui/autospin.json', world: true, pos: [0, 2.0, -3.5], scale: 1.2 },
   };
 
   for (const [key, cfg] of Object.entries(panelConfigs)) {
@@ -1128,6 +1288,8 @@ async function main() {
     chipsQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/chips.json')] },
     hotcoldQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/hotcold.json')] },
     payoutsQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/payouts.json')] },
+    callbetsQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/callbets.json')] },
+    autospinQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/autospin.json')] },
   }) {
     init() {
       const wire = (qName: string, key: string, bindings: Record<string, () => void>) => {
@@ -1189,6 +1351,9 @@ async function main() {
         'btn-spin': () => { if (bets.length > 0) startSpin(); },
         'btn-clear': () => { clearBets(); playClick(); },
         'btn-rebet': () => { rebet(); playClick(); },
+        'btn-callbets': () => { hideAllPanels(); const ce = panelEntities['callbets']; if (ce && ce.object3D) ce.object3D.visible = true; const he = panelEntities['hud']; if (he && he.object3D) he.object3D.visible = true; updateCallBetsPanel(); playClick(); },
+        'btn-autospin': () => { hideAllPanels(); const ae = panelEntities['autospin']; if (ae && ae.object3D) ae.object3D.visible = true; const he = panelEntities['hud']; if (he && he.object3D) he.object3D.visible = true; updateAutoSpinPanel(); playClick(); },
+        'btn-double': () => { doubleBets(); playClick(); },
       });
 
       wire('resultQ', 'result', {
@@ -1237,6 +1402,27 @@ async function main() {
 
       wire('hotcoldQ', 'hotcold', {});
       wire('payoutsQ', 'payouts', {});
+
+      wire('callbetsQ', 'callbets', {
+        'btn-voisins': () => { placeVoisins(); playClick(); },
+        'btn-tiers': () => { placeTiers(); playClick(); },
+        'btn-orphelins': () => { placeOrphelins(); playClick(); },
+        'btn-jeuzero': () => { placeJeuZero(); playClick(); },
+        'nbr-minus': () => { neighborCount = Math.max(1, neighborCount - 1); updateCallBetsPanel(); playClick(); },
+        'nbr-plus': () => { neighborCount = Math.min(5, neighborCount + 1); updateCallBetsPanel(); playClick(); },
+        'nbr-pick': () => { neighborPickMode = !neighborPickMode; updateCallBetsPanel(); playClick(); },
+        'btn-back': () => { uiState = 'playing'; showPanel('playing'); updateHUD(); playClick(); },
+      });
+
+      wire('autospinQ', 'autospin', {
+        'auto-minus': () => { autoSpinMax = Math.max(5, autoSpinMax - 5); updateAutoSpinPanel(); playClick(); },
+        'auto-plus': () => { autoSpinMax = Math.min(100, autoSpinMax + 5); updateAutoSpinPanel(); playClick(); },
+        'stop-minus': () => { autoSpinStopAmount = Math.max(100, autoSpinStopAmount - 100); updateAutoSpinPanel(); playClick(); },
+        'stop-plus': () => { autoSpinStopAmount = Math.min(50000, autoSpinStopAmount + 100); updateAutoSpinPanel(); playClick(); },
+        'btn-start-auto': () => { startAutoSpin(); uiState = 'playing'; showPanel('playing'); updateHUD(); playClick(); },
+        'btn-stop-auto': () => { stopAutoSpin(); updateAutoSpinPanel(); playClick(); },
+        'btn-back': () => { uiState = 'playing'; showPanel('playing'); updateHUD(); playClick(); },
+      });
     }
   }
 
@@ -1338,6 +1524,21 @@ async function main() {
         setText(e, 'cold' + (i + 1), '--');
       }
     }
+  }
+
+  function updateCallBetsPanel() {
+    const e = panelEntities['callbets'];
+    if (!e) return;
+    setText(e, 'nbr-count', neighborCount + ' neighbor' + (neighborCount > 1 ? 's' : ''));
+    setText(e, 'nbr-pick-label', neighborPickMode ? 'Click a number on table...' : 'Pick a number...');
+  }
+
+  function updateAutoSpinPanel() {
+    const e = panelEntities['autospin'];
+    if (!e) return;
+    setText(e, 'auto-count', String(autoSpinMax));
+    setText(e, 'stop-amount', '$' + autoSpinStopAmount);
+    setText(e, 'auto-status', autoSpinRunning ? 'Running: ' + autoSpinCount + '/' + autoSpinMax : 'Not running');
   }
 
   function updateGameOverPanel() {
@@ -1471,6 +1672,16 @@ async function main() {
           playSpinSound();
         }
 
+        // Ball trail particles
+        if (Math.random() < 0.4) {
+          emitParticles(
+            ball.position.x + wheelGroup.position.x,
+            ball.position.y + wheelGroup.position.y,
+            ball.position.z + wheelGroup.position.z,
+            1, '#ffffff'
+          );
+        }
+
         // Resolve
         if (progress >= 1) {
           this.bounceInterval = 0;
@@ -1478,6 +1689,31 @@ async function main() {
           updateHistoryPanel();
           updateHotCold();
           if (uiState === 'gameover') updateGameOverPanel();
+        }
+      }
+
+      // Auto-spin pause timer
+      if (autoSpinRunning && autoSpinPauseTimer > 0) {
+        autoSpinPauseTimer -= delta;
+        if (autoSpinPauseTimer <= 0 && uiState === 'playing') {
+          triggerAutoSpin();
+        }
+      }
+
+      // Ball trail effect during spin
+      if (isSpinning && ball.visible) {
+        ballTrail.push({ x: ball.position.x + wheelGroup.position.x, y: ball.position.y + wheelGroup.position.y, z: ball.position.z + wheelGroup.position.z, alpha: 1.0 });
+        if (ballTrail.length > 12) ballTrail.shift();
+      } else {
+        ballTrail.length = 0;
+      }
+      // Update trail particles (reuse from particle pool for visual trail)
+      for (let i = 0; i < ballTrail.length; i++) {
+        const t2 = ballTrail[i];
+        t2.alpha -= delta * 2;
+        if (t2.alpha <= 0 && i < ballTrail.length - 1) {
+          ballTrail.splice(i, 1);
+          i--;
         }
       }
 

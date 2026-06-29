@@ -1,0 +1,47 @@
+<panel>
+  <style>
+    .root { flexDirection: column; alignItems: center; gap: 8; padding: 12; backgroundColor: rgba(0,10,20,0.92); borderRadius: 8; width: 220; }
+    .title { fontSize: 12; color: #00ffcc; fontWeight: bold; }
+    .desc { fontSize: 8; color: #88aaaa; }
+    .row { flexDirection: row; gap: 6; alignItems: center; justifyContent: center; }
+    .btn { backgroundColor: rgba(0,80,80,0.7); borderRadius: 4; padding: 6; paddingLeft: 10; paddingRight: 10; }
+    .btn-text { fontSize: 9; color: #00ffcc; }
+    .btn-sm { backgroundColor: rgba(0,60,60,0.6); borderRadius: 4; padding: 4; paddingLeft: 8; paddingRight: 8; }
+    .btn-sm-text { fontSize: 8; color: #88cccc; }
+    .label { fontSize: 9; color: #aacccc; }
+    .value { fontSize: 11; color: #00ffcc; fontWeight: bold; }
+    .divider { width: 190; height: 1; backgroundColor: rgba(0,255,204,0.2); }
+    .section { flexDirection: column; gap: 4; alignItems: center; }
+  </style>
+  <container class="root">
+    <text class="title">Auto-Spin</text>
+    <text class="desc">Repeat your bets automatically</text>
+    <container class="divider" />
+    <container class="section">
+      <text class="label">Spins remaining:</text>
+      <container class="row">
+        <container class="btn-sm" id="auto-minus"><text class="btn-sm-text">-5</text></container>
+        <text class="value" id="auto-count">10</text>
+        <container class="btn-sm" id="auto-plus"><text class="btn-sm-text">+5</text></container>
+      </container>
+    </container>
+    <container class="section">
+      <text class="label">Stop on win amount:</text>
+      <container class="row">
+        <container class="btn-sm" id="stop-minus"><text class="btn-sm-text">-100</text></container>
+        <text class="value" id="stop-amount">$500</text>
+        <container class="btn-sm" id="stop-plus"><text class="btn-sm-text">+100</text></container>
+      </container>
+    </container>
+    <container class="divider" />
+    <container class="row">
+      <container class="btn" id="btn-start-auto"><text class="btn-text">Start Auto-Spin</text></container>
+    </container>
+    <container class="row">
+      <container class="btn-sm" id="btn-stop-auto"><text class="btn-sm-text" id="auto-status">Not running</text></container>
+    </container>
+    <container class="row">
+      <container class="btn-sm" id="btn-back"><text class="btn-sm-text">Back</text></container>
+    </container>
+  </container>
+</panel>

@@ -1,16 +1,38 @@
-<container flexDirection="column" alignItems="center" gap="6" padding="10">
-  <text fontSize="16" fontWeight="bold" color="#ccaa00">PLACE YOUR BETS</text>
-  <container flexDirection="row" gap="6" marginTop="4">
-    <text name="chip-1" fontSize="12" color="#88cccc" cursor="pointer" hover-color="#ffffff">$1</text>
-    <text name="chip-5" fontSize="12" color="#00ccaa" cursor="pointer" hover-color="#ffffff">$5</text>
-    <text name="chip-10" fontSize="12" color="#ccaa00" cursor="pointer" hover-color="#ffffff">$10</text>
-    <text name="chip-25" fontSize="12" color="#ff8844" cursor="pointer" hover-color="#ffffff">$25</text>
-    <text name="chip-100" fontSize="12" color="#ff4488" cursor="pointer" hover-color="#ffffff">$100</text>
+<panel>
+  <style>
+    .root { flexDirection: column; alignItems: center; gap: 6; padding: 10; }
+    .title { fontSize: 16; fontWeight: bold; color: #ccaa00; }
+    .chip-row { flexDirection: row; gap: 6; marginTop: 4; }
+    .chip { fontSize: 12; color: #88cccc; }
+    .chip-active { fontSize: 12; color: #00ccaa; }
+    .selected { fontSize: 10; color: #ffffff; }
+    .btn-row { flexDirection: row; gap: 8; marginTop: 4; }
+    .spin { fontSize: 16; fontWeight: bold; color: #00ff88; }
+    .clear { fontSize: 12; color: #ff4444; }
+    .rebet { fontSize: 12; color: #aa88ff; }
+    .extra-row { flexDirection: row; gap: 10; marginTop: 6; }
+    .btn-call { fontSize: 10; color: #00ccff; }
+    .btn-auto { fontSize: 10; color: #ffaa00; }
+  </style>
+  <container class="root">
+    <text class="title">PLACE YOUR BETS</text>
+    <container class="chip-row">
+      <text class="chip" id="chip-1">$1</text>
+      <text class="chip-active" id="chip-5">$5</text>
+      <text class="chip" id="chip-10">$10</text>
+      <text class="chip" id="chip-25">$25</text>
+      <text class="chip" id="chip-100">$100</text>
+    </container>
+    <text class="selected" id="selected-chip">Selected: $5</text>
+    <container class="btn-row">
+      <text class="spin" id="btn-spin">SPIN</text>
+      <text class="clear" id="btn-clear">CLEAR</text>
+      <text class="rebet" id="btn-rebet">REBET</text>
+    </container>
+    <container class="extra-row">
+      <text class="btn-call" id="btn-callbets">Call Bets</text>
+      <text class="btn-auto" id="btn-autospin">Auto-Spin</text>
+      <text class="btn-call" id="btn-double">2x Bets</text>
+    </container>
   </container>
-  <text name="selected-chip" fontSize="10" color="#ffffff">Selected: $5</text>
-  <container flexDirection="row" gap="8" marginTop="4">
-    <text name="btn-spin" fontSize="16" fontWeight="bold" color="#00ff88" cursor="pointer" hover-color="#ffffff">SPIN</text>
-    <text name="btn-clear" fontSize="12" color="#ff4444" cursor="pointer" hover-color="#ffffff">CLEAR</text>
-    <text name="btn-rebet" fontSize="12" color="#aa88ff" cursor="pointer" hover-color="#ffffff">REBET</text>
-  </container>
-</container>
+</panel>

@@ -1,0 +1,38 @@
+
+> neon-roulette@1.0.0 dev:runtime
+> vite
+
+🚀 Generating initial UIKitML files for dev server...
+👁️  UIKitML file watcher started - monitoring for changes...
+
+  VITE v7.3.6  ready in 2208 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://198.19.0.2:5173/
+➕ UIKitML file add: ui/callbets.uikitml
+✅ UIKitML file recompiled: callbets.uikitml
+➕ UIKitML file add: ui/autospin.uikitml
+✅ UIKitML file recompiled: autospin.uikitml
+9:59:25 AM [vite] (client) page reload src/index.ts
+9:59:31 AM [vite] (client) page reload src/index.ts
+9:59:49 AM [vite] (client) page reload src/index.ts
+10:00:01 AM [vite] (client) page reload src/index.ts
+10:00:09 AM [vite] (client) page reload src/index.ts
+10:00:15 AM [vite] (client) page reload src/index.ts
+10:00:25 AM [vite] (client) page reload src/index.ts
+10:00:43 AM [vite] (client) page reload src/index.ts
+10:01:04 AM [vite] (client) page reload src/index.ts
+10:01:18 AM [vite] (client) page reload src/index.ts
+10:01:27 AM [vite] (client) page reload src/index.ts
+10:01:34 AM [vite] (client) page reload src/index.ts
+10:01:52 AM [vite] (client) page reload src/index.ts
+📝 UIKitML file change: ui/betting.uikitml
+✅ UIKitML file recompiled: betting.uikitml
+10:02:12 AM [vite] (client) page reload src/index.ts
+10:02:23 AM [vite] (client) page reload src/index.ts
+10:02:34 AM [vite] (client) page reload src/index.ts
+10:02:47 AM [vite] (client) page reload src/index.ts
+📝 UIKitML file change: ui/betting.uikitml
+✅ UIKitML file recompiled: betting.uikitml
+10:02:59 AM [vite] (client) page reload src/index.ts
+10:03:06 AM [vite] (client) page reload src/index.ts

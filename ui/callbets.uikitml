@@ -1,0 +1,47 @@
+<panel>
+  <style>
+    .root { flexDirection: column; alignItems: center; gap: 8; padding: 12; backgroundColor: rgba(0,10,20,0.92); borderRadius: 8; width: 280; }
+    .title { fontSize: 14; color: #00ffcc; fontWeight: bold; }
+    .desc { fontSize: 8; color: #88aaaa; }
+    .row { flexDirection: row; gap: 6; alignItems: center; justifyContent: center; }
+    .btn { backgroundColor: rgba(0,80,80,0.7); borderRadius: 4; padding: 6; paddingLeft: 10; paddingRight: 10; }
+    .btn-text { fontSize: 9; color: #00ffcc; }
+    .btn-sm { backgroundColor: rgba(0,60,60,0.6); borderRadius: 4; padding: 4; paddingLeft: 8; paddingRight: 8; }
+    .btn-sm-text { fontSize: 8; color: #88cccc; }
+    .neighbors-row { flexDirection: row; gap: 4; alignItems: center; justifyContent: center; }
+    .neighbor-label { fontSize: 8; color: #aacccc; }
+    .section { flexDirection: column; gap: 4; alignItems: center; }
+    .divider { width: 250; height: 1; backgroundColor: rgba(0,255,204,0.2); }
+  </style>
+  <container class="root">
+    <text class="title">Call Bets</text>
+    <text class="desc">Classic French roulette wagers</text>
+    <container class="divider" />
+    <container class="section">
+      <container class="row">
+        <container class="btn" id="btn-voisins"><text class="btn-text">Voisins du Zero</text></container>
+        <container class="btn" id="btn-tiers"><text class="btn-text">Tiers du Cylindre</text></container>
+      </container>
+      <container class="row">
+        <container class="btn" id="btn-orphelins"><text class="btn-text">Orphelins</text></container>
+        <container class="btn" id="btn-jeuzero"><text class="btn-text">Jeu Zero</text></container>
+      </container>
+    </container>
+    <container class="divider" />
+    <container class="section">
+      <text class="neighbor-label">Neighbors Bet</text>
+      <container class="neighbors-row">
+        <container class="btn-sm" id="nbr-minus"><text class="btn-sm-text">-</text></container>
+        <text class="neighbor-label" id="nbr-count">2 neighbors</text>
+        <container class="btn-sm" id="nbr-plus"><text class="btn-sm-text">+</text></container>
+      </container>
+      <container class="neighbors-row">
+        <container class="btn-sm" id="nbr-pick"><text class="btn-sm-text" id="nbr-pick-label">Pick a number...</text></container>
+      </container>
+    </container>
+    <container class="divider" />
+    <container class="row">
+      <container class="btn-sm" id="btn-back"><text class="btn-sm-text">Back</text></container>
+    </container>
+  </container>
+</panel>
