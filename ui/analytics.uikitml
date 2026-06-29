@@ -1,0 +1,67 @@
+<panel>
+  <style>
+    .root { flexDirection: column; alignItems: center; gap: 4; padding: 10; backgroundColor: rgba(0,10,20,0.94); borderRadius: 8; width: 320; }
+    .title { fontSize: 16; fontWeight: bold; color: #44ccff; }
+    .section { fontSize: 11; fontWeight: bold; color: #88cccc; marginTop: 4; }
+    .row { flexDirection: row; gap: 8; alignItems: center; }
+    .label { fontSize: 9; color: #668888; }
+    .val { fontSize: 9; color: #ffffff; }
+    .stat { fontSize: 9; color: #88ccaa; }
+    .pattern { fontSize: 9; color: #ff88cc; }
+    .divider { width: 280; height: 1; backgroundColor: rgba(68,204,255,0.2); }
+    .back { fontSize: 12; color: #668888; marginTop: 6; }
+    .dist-row { flexDirection: row; gap: 4; alignItems: center; }
+    .red-val { fontSize: 10; color: #ff4444; }
+    .black-val { fontSize: 10; color: #aa88ff; }
+    .green-val { fontSize: 10; color: #44ff88; }
+    .profit-type { fontSize: 8; color: #aacccc; }
+  </style>
+  <container class="root">
+    <text class="title">SESSION ANALYTICS</text>
+    <text class="section">Color Distribution</text>
+    <container class="dist-row">
+      <text class="red-val" id="red-count">Red: 0</text>
+      <text class="black-val" id="black-count">Black: 0</text>
+      <text class="green-val" id="green-count">Green: 0</text>
+    </container>
+    <container class="dist-row">
+      <text class="stat" id="red-pct">0%</text>
+      <text class="stat" id="black-pct">0%</text>
+      <text class="stat" id="green-pct">0%</text>
+    </container>
+    <container class="divider" />
+    <text class="section">Odd/Even Split</text>
+    <container class="row">
+      <text class="val" id="odd-count">Odd: 0</text>
+      <text class="val" id="even-count">Even: 0</text>
+    </container>
+    <text class="section">High/Low Split</text>
+    <container class="row">
+      <text class="val" id="low-count">1-18: 0</text>
+      <text class="val" id="high-count">19-36: 0</text>
+    </container>
+    <container class="divider" />
+    <text class="section">Profit by Bet Type</text>
+    <text class="profit-type" id="profit-1">--</text>
+    <text class="profit-type" id="profit-2">--</text>
+    <text class="profit-type" id="profit-3">--</text>
+    <text class="profit-type" id="profit-4">--</text>
+    <text class="profit-type" id="profit-5">--</text>
+    <container class="divider" />
+    <text class="section">Patterns Detected</text>
+    <text class="pattern" id="pattern-1">--</text>
+    <text class="pattern" id="pattern-2">--</text>
+    <text class="pattern" id="pattern-3">--</text>
+    <container class="divider" />
+    <text class="section">Streaks</text>
+    <container class="row">
+      <text class="stat" id="longest-win">Best Win: 0</text>
+      <text class="stat" id="longest-lose">Worst Loss: 0</text>
+    </container>
+    <container class="row">
+      <text class="stat" id="longest-red">Red Run: 0</text>
+      <text class="stat" id="longest-black">Black Run: 0</text>
+    </container>
+    <text class="back" id="btn-back">BACK</text>
+  </container>
+</panel>

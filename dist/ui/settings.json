@@ -328,14 +328,71 @@
                 "dataUid": "uid-29"
               },
               {
-                "sourceTag": "text",
+                "sourceTag": "container",
                 "type": "custom",
                 "children": [
-                  "BACK"
+                  {
+                    "sourceTag": "text",
+                    "type": "custom",
+                    "children": [
+                      "Table Limits"
+                    ],
+                    "properties": {
+                      "class": "section"
+                    },
+                    "dataUid": "uid-33"
+                  },
+                  {
+                    "sourceTag": "text",
+                    "type": "custom",
+                    "children": [
+                      "Min: $1"
+                    ],
+                    "properties": {
+                      "class": "rule-label",
+                      "id": "limit-min"
+                    },
+                    "dataUid": "uid-34"
+                  },
+                  {
+                    "sourceTag": "text",
+                    "type": "custom",
+                    "children": [
+                      "Max Inside: $100"
+                    ],
+                    "properties": {
+                      "class": "rule-label",
+                      "id": "limit-max"
+                    },
+                    "dataUid": "uid-35"
+                  },
+                  {
+                    "sourceTag": "text",
+                    "type": "custom",
+                    "children": [
+                      "Max Outside: $500"
+                    ],
+                    "properties": {
+                      "class": "rule-label",
+                      "id": "limit-outside"
+                    },
+                    "dataUid": "uid-36"
+                  },
+                  {
+                    "sourceTag": "text",
+                    "type": "custom",
+                    "children": [
+                      "BACK"
+                    ],
+                    "properties": {
+                      "class": "back",
+                      "id": "btn-back"
+                    },
+                    "dataUid": "uid-37"
+                  }
                 ],
                 "properties": {
-                  "class": "back",
-                  "id": "btn-back"
+                  "class": "divider"
                 },
                 "dataUid": "uid-32"
               }
@@ -440,7 +497,7 @@
         "column": 0
       },
       "end": {
-        "line": 52,
+        "line": 57,
         "column": 8
       }
     },
@@ -560,7 +617,7 @@
         "column": 2
       },
       "end": {
-        "line": 52,
+        "line": 57,
         "column": 0
       }
     },
@@ -780,8 +837,8 @@
         "column": 4
       },
       "end": {
-        "line": 51,
-        "column": 14
+        "line": 57,
+        "column": 0
       }
     },
     "uid-25": {
@@ -860,7 +917,57 @@
         "column": 4
       },
       "end": {
-        "line": 50,
+        "line": 56,
+        "column": 14
+      }
+    },
+    "uid-33": {
+      "start": {
+        "line": 51,
+        "column": 4
+      },
+      "end": {
+        "line": 51,
+        "column": 45
+      }
+    },
+    "uid-34": {
+      "start": {
+        "line": 52,
+        "column": 4
+      },
+      "end": {
+        "line": 52,
+        "column": 58
+      }
+    },
+    "uid-35": {
+      "start": {
+        "line": 53,
+        "column": 4
+      },
+      "end": {
+        "line": 53,
+        "column": 67
+      }
+    },
+    "uid-36": {
+      "start": {
+        "line": 54,
+        "column": 4
+      },
+      "end": {
+        "line": 54,
+        "column": 72
+      }
+    },
+    "uid-37": {
+      "start": {
+        "line": 55,
+        "column": 4
+      },
+      "end": {
+        "line": 55,
         "column": 48
       }
     }

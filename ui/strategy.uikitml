@@ -1,0 +1,41 @@
+<panel>
+  <style>
+    .root { flexDirection: column; alignItems: center; gap: 5; padding: 10; backgroundColor: rgba(0,10,20,0.94); borderRadius: 8; width: 300; }
+    .title { fontSize: 16; fontWeight: bold; color: #ff88cc; }
+    .desc { fontSize: 8; color: #668888; }
+    .section { fontSize: 11; fontWeight: bold; color: #aacccc; marginTop: 4; }
+    .row { flexDirection: row; gap: 8; alignItems: center; }
+    .label { fontSize: 10; color: #88cccc; }
+    .val { fontSize: 10; color: #ffffff; }
+    .btn { fontSize: 11; color: #44ccaa; backgroundColor: rgba(0,40,40,0.5); borderRadius: 4; padding: 4; paddingLeft: 10; paddingRight: 10; }
+    .btn-active { fontSize: 11; color: #00ffcc; backgroundColor: rgba(0,80,60,0.7); borderRadius: 4; padding: 4; paddingLeft: 10; paddingRight: 10; }
+    .divider { width: 260; height: 1; backgroundColor: rgba(255,136,204,0.2); }
+    .status { fontSize: 9; color: #ffaa44; }
+    .stat { fontSize: 9; color: #88aacc; }
+    .back { fontSize: 12; color: #668888; marginTop: 6; }
+    .info { fontSize: 8; color: #556666; }
+  </style>
+  <container class="root">
+    <text class="title">BETTING STRATEGY</text>
+    <text class="desc">Auto-adjusts even-money bets</text>
+    <container class="divider" />
+    <text class="section">Select Strategy</text>
+    <text class="btn" id="btn-none">None (Manual)</text>
+    <text class="btn" id="btn-martingale">Martingale (2x on loss)</text>
+    <text class="btn" id="btn-fibonacci">Fibonacci Sequence</text>
+    <text class="btn" id="btn-dalembert">D'Alembert (+1/-1)</text>
+    <text class="btn" id="btn-reverse-mart">Reverse Martingale</text>
+    <text class="btn" id="btn-oscar">Oscar's Grind</text>
+    <container class="divider" />
+    <text class="section">Active Strategy</text>
+    <text class="val" id="active-strategy">None</text>
+    <text class="status" id="strat-status">--</text>
+    <text class="stat" id="strat-step">Step: --</text>
+    <text class="stat" id="strat-next-bet">Next Bet: --</text>
+    <text class="stat" id="strat-profit">Strategy P/L: $0</text>
+    <container class="divider" />
+    <text class="info">Strategies apply to even-money bets only</text>
+    <text class="info">(red/black, odd/even, high/low)</text>
+    <text class="back" id="btn-back">BACK</text>
+  </container>
+</panel>

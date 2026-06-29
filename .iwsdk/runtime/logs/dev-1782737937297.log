@@ -35,3 +35,41 @@
 ✅ UIKitML file recompiled: betting.uikitml
 📝 UIKitML file change: ui/gameover.uikitml
 ✅ UIKitML file recompiled: gameover.uikitml
+➕ UIKitML file add: ui/analytics.uikitml
+➕ UIKitML file add: ui/strategy.uikitml
+✅ UIKitML file recompiled: strategy.uikitml
+1:59:05 PM [vite] (client) page reload src/index.ts
+1:59:12 PM [vite] (client) page reload src/index.ts
+1:59:20 PM [vite] (client) page reload src/index.ts
+1:59:34 PM [vite] (client) page reload src/index.ts
+1:59:44 PM [vite] (client) page reload src/index.ts
+1:59:58 PM [vite] (client) page reload src/index.ts
+2:00:12 PM [vite] (client) page reload src/index.ts
+2:00:36 PM [vite] (client) page reload src/index.ts
+2:00:45 PM [vite] (client) page reload src/index.ts
+2:00:54 PM [vite] (client) page reload src/index.ts
+[browser] [PanelUISystem] Error loading panel for entity 29: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+[browser] [PanelUISystem] Error loading panel for entity 29: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+2:01:12 PM [vite] (client) page reload src/index.ts
+2:01:19 PM [vite] (client) page reload src/index.ts
+[browser] [PanelUISystem] Error loading panel for entity 29: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+📝 UIKitML file change: ui/betting.uikitml
+✅ UIKitML file recompiled: betting.uikitml
+[browser] [PanelUISystem] Error loading panel for entity 29: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+📝 UIKitML file change: ui/betting.uikitml
+✅ UIKitML file recompiled: betting.uikitml
+[browser] [PanelUISystem] Error loading panel for entity 29: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+[browser] [PanelUISystem] Error loading panel for entity 29: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+2:01:58 PM [vite] (client) page reload src/index.ts
+2:02:04 PM [vite] (client) page reload src/index.ts
+[browser] [PanelUISystem] Error loading panel for entity 29: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+[browser] [PanelUISystem] Error loading panel for entity 29: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+2:02:17 PM [vite] (client) page reload src/index.ts
+[browser] [PanelUISystem] Error loading panel for entity 29: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+📝 UIKitML file change: ui/settings.uikitml
+✅ UIKitML file recompiled: settings.uikitml
+2:02:38 PM [vite] (client) page reload src/index.ts
+[browser] [PanelUISystem] Error loading panel for entity 29: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+2:02:47 PM [vite] (client) page reload src/index.ts
+[browser] [PanelUISystem] Error loading panel for entity 29: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+[browser] [PanelUISystem] Error loading panel for entity 29: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON

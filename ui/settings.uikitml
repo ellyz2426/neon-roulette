@@ -48,6 +48,11 @@
       <text class="rule-label">En Prison</text>
       <text class="rule-val" id="btn-enprison">OFF</text>
     </container>
+    <container class="divider" />
+    <text class="section">Table Limits</text>
+    <text class="rule-label" id="limit-min">Min: $1</text>
+    <text class="rule-label" id="limit-max">Max Inside: $100</text>
+    <text class="rule-label" id="limit-outside">Max Outside: $500</text>
     <text class="back" id="btn-back">BACK</text>
   </container>
 </panel>

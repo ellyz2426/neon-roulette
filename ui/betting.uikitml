@@ -18,6 +18,7 @@
     .mgl-label { fontSize: 9; color: #ff88cc; }
     .btn-undo { fontSize: 10; color: #ffaa44; }
     .btn-quick { fontSize: 10; color: #44ffaa; }
+    .btn-analytics { fontSize: 10; color: #44ccff; }
     .bet-summary { fontSize: 8; color: #88aaaa; marginTop: 2; }
   </style>
   <container class="root">
@@ -44,9 +45,10 @@
     <container class="extra-row">
       <text class="btn-undo" id="btn-undo">Undo (U)</text>
       <text class="btn-quick" id="btn-quickbets">Quick Bets (Q)</text>
+      <text class="btn-analytics" id="btn-analytics">Analytics</text>
     </container>
     <container class="martingale-row">
-      <text class="mgl-label" id="btn-martingale">Martingale</text>
+      <text class="mgl-label" id="btn-martingale">Strategy</text>
       <text class="mgl-label" id="martingale-status"></text>
     </container>
     <text class="bet-summary" id="bet-summary">No bets placed</text>

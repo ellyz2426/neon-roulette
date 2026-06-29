@@ -472,7 +472,6 @@ async function main() {
   let enPrisonEnabled = false;
   let enPrisonBets: Bet[] = [];
   let partageRefund = 0;
-  let martingaleActive = false;
   let startingBankroll = 1000;
   let sessionProfit = 0;
   let dealerMsg = '';
@@ -487,6 +486,202 @@ async function main() {
   let winningTableZoneIdx = -1;
   let winTablePulseTime = 0;
   let heatmapEnabled = true;
+
+  // ─── Betting Strategy System ───
+  type StrategyType = 'none' | 'martingale' | 'fibonacci' | 'dalembert' | 'reverse-martingale' | 'oscar';
+  let activeStrategy: StrategyType = 'none';
+  let strategyStep = 0;
+  let strategyBaseUnit = 5;
+  let strategyProfit = 0;
+  let oscarGoal = 0; // For Oscar's Grind: current unit goal
+
+  // Fibonacci sequence for betting
+  const FIBONACCI = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377];
+
+  function getStrategyBetMultiplier(): number {
+    switch (activeStrategy) {
+      case 'martingale': return Math.pow(2, strategyStep);
+      case 'fibonacci': return FIBONACCI[Math.min(strategyStep, FIBONACCI.length - 1)];
+      case 'dalembert': return Math.max(1, 1 + strategyStep);
+      case 'reverse-martingale': return Math.pow(2, strategyStep);
+      case 'oscar': return Math.max(1, 1 + strategyStep);
+      default: return 1;
+    }
+  }
+
+  function strategyOnWin() {
+    if (activeStrategy === 'none') return;
+    const betAmount = strategyBaseUnit * getStrategyBetMultiplier();
+    strategyProfit += betAmount;
+    switch (activeStrategy) {
+      case 'martingale': strategyStep = 0; break; // Reset on win
+      case 'fibonacci': strategyStep = Math.max(0, strategyStep - 2); break; // Move back 2 steps
+      case 'dalembert': strategyStep = Math.max(0, strategyStep - 1); break; // Decrease by 1
+      case 'reverse-martingale': strategyStep++; break; // Increase on win (opposite of regular)
+      case 'oscar': {
+        if (strategyProfit >= oscarGoal) { strategyStep = 0; strategyProfit = 0; oscarGoal = strategyBaseUnit; }
+        else { strategyStep++; }
+        break;
+      }
+    }
+  }
+
+  function strategyOnLoss() {
+    if (activeStrategy === 'none') return;
+    const betAmount = strategyBaseUnit * getStrategyBetMultiplier();
+    strategyProfit -= betAmount;
+    switch (activeStrategy) {
+      case 'martingale': strategyStep++; break; // Double on loss
+      case 'fibonacci': strategyStep++; break; // Advance sequence
+      case 'dalembert': strategyStep++; break; // Increase by 1
+      case 'reverse-martingale': strategyStep = 0; break; // Reset on loss
+      case 'oscar': break; // Stay at same level on loss
+    }
+  }
+
+  function resetStrategy() {
+    strategyStep = 0;
+    strategyProfit = 0;
+    oscarGoal = strategyBaseUnit;
+  }
+
+  // ─── Session Analytics Tracking ───
+  interface BetTypeProfit { type: string; wagered: number; won: number; count: number; }
+  const betTypeProfits: Map<string, BetTypeProfit> = new Map();
+  let sessionColorDist = { red: 0, black: 0, green: 0 };
+  let sessionOddEven = { odd: 0, even: 0 };
+  let sessionHighLow = { low: 0, high: 0 };
+  let longestWinStreak = 0;
+  let longestLoseStreak = 0;
+  let currentLoseStreak = 0;
+  let longestRedRun = 0;
+  let longestBlackRun = 0;
+  let currentRedRun = 0;
+  let currentBlackRun = 0;
+  let detectedPatterns: string[] = [];
+
+  function trackResultAnalytics(result: number, totalWin: number, totalBet: number) {
+    // Color distribution
+    if (isRed(result)) { sessionColorDist.red++; currentRedRun++; currentBlackRun = 0; }
+    else if (isBlack(result)) { sessionColorDist.black++; currentBlackRun++; currentRedRun = 0; }
+    else { sessionColorDist.green++; currentRedRun = 0; currentBlackRun = 0; }
+
+    longestRedRun = Math.max(longestRedRun, currentRedRun);
+    longestBlackRun = Math.max(longestBlackRun, currentBlackRun);
+
+    // Odd/Even
+    if (result > 0 && result <= 36) {
+      if (result % 2 === 1) sessionOddEven.odd++;
+      else sessionOddEven.even++;
+    }
+
+    // High/Low
+    if (result >= 1 && result <= 18) sessionHighLow.low++;
+    else if (result >= 19 && result <= 36) sessionHighLow.high++;
+
+    // Win/loss streaks
+    if (totalWin > 0) {
+      currentLoseStreak = 0;
+    } else {
+      currentLoseStreak++;
+      longestLoseStreak = Math.max(longestLoseStreak, currentLoseStreak);
+    }
+    longestWinStreak = Math.max(longestWinStreak, currentStreak);
+
+    // Pattern detection
+    detectPatterns();
+  }
+
+  function trackBetTypeProfit(betType: string, wagered: number, won: number) {
+    let entry = betTypeProfits.get(betType);
+    if (!entry) { entry = { type: betType, wagered: 0, won: 0, count: 0 }; betTypeProfits.set(betType, entry); }
+    entry.wagered += wagered;
+    entry.won += won;
+    entry.count++;
+  }
+
+  function detectPatterns() {
+    detectedPatterns = [];
+    if (spinHistory.length < 3) return;
+
+    // Check for repeating number
+    if (spinHistory.length >= 2 && spinHistory[0] === spinHistory[1]) {
+      detectedPatterns.push('REPEAT! ' + (spinHistory[0] === 37 ? '00' : spinHistory[0]) + ' appeared twice');
+    }
+
+    // Check for color alternation (RBRBRB...)
+    if (spinHistory.length >= 6) {
+      let alternating = true;
+      for (let i = 0; i < 5; i++) {
+        const cur = isRed(spinHistory[i]) ? 'R' : isBlack(spinHistory[i]) ? 'B' : 'G';
+        const next = isRed(spinHistory[i + 1]) ? 'R' : isBlack(spinHistory[i + 1]) ? 'B' : 'G';
+        if (cur === next || cur === 'G' || next === 'G') { alternating = false; break; }
+      }
+      if (alternating) detectedPatterns.push('Alternating colors (6+)');
+    }
+
+    // Check for long color run
+    if (currentRedRun >= 4) detectedPatterns.push('Red run: ' + currentRedRun + ' in a row');
+    if (currentBlackRun >= 4) detectedPatterns.push('Black run: ' + currentBlackRun + ' in a row');
+
+    // Check for same dozen
+    if (spinHistory.length >= 3) {
+      const d = (n: number) => n >= 1 && n <= 12 ? 1 : n >= 13 && n <= 24 ? 2 : n >= 25 && n <= 36 ? 3 : 0;
+      const d0 = d(spinHistory[0]);
+      if (d0 > 0 && d0 === d(spinHistory[1]) && d0 === d(spinHistory[2])) {
+        detectedPatterns.push('Dozen ' + d0 + ' streak (3+)');
+      }
+    }
+
+    // Check for ascending or descending
+    if (spinHistory.length >= 3 && spinHistory[0] > 0 && spinHistory[1] > 0 && spinHistory[2] > 0) {
+      if (spinHistory[0] > spinHistory[1] && spinHistory[1] > spinHistory[2]) {
+        detectedPatterns.push('Descending: ' + spinHistory[2] + '->' + spinHistory[1] + '->' + spinHistory[0]);
+      }
+      if (spinHistory[0] < spinHistory[1] && spinHistory[1] < spinHistory[2]) {
+        detectedPatterns.push('Ascending: ' + spinHistory[2] + '->' + spinHistory[1] + '->' + spinHistory[0]);
+      }
+    }
+  }
+
+  // ─── Table Limits ───
+  interface TableLimits { minBet: number; maxBet: number; maxStraight: number; maxOutside: number; }
+  let tableLimits: TableLimits = { minBet: 1, maxBet: 500, maxStraight: 100, maxOutside: 500 };
+
+  function setTableLimits(mode: GameMode) {
+    switch (mode) {
+      case 'single': tableLimits = { minBet: 1, maxBet: 500, maxStraight: 100, maxOutside: 500 }; break;
+      case 'session': tableLimits = { minBet: 1, maxBet: 500, maxStraight: 100, maxOutside: 500 }; break;
+      case 'marathon': tableLimits = { minBet: 1, maxBet: 1000, maxStraight: 200, maxOutside: 1000 }; break;
+      case 'high-roller': tableLimits = { minBet: 25, maxBet: 5000, maxStraight: 1000, maxOutside: 5000 }; break;
+      case 'daily': tableLimits = { minBet: 1, maxBet: 500, maxStraight: 100, maxOutside: 500 }; break;
+      case 'practice': tableLimits = { minBet: 1, maxBet: 10000, maxStraight: 10000, maxOutside: 10000 }; break;
+      case 'streak': tableLimits = { minBet: 5, maxBet: 500, maxStraight: 100, maxOutside: 500 }; break;
+      case 'tournament': tableLimits = { minBet: 10, maxBet: 2000, maxStraight: 500, maxOutside: 2000 }; break;
+    }
+  }
+
+  function checkBetLimit(zone: BetZone, amount: number): boolean {
+    const insideBets: BetType[] = ['straight', 'split', 'corner', 'street', 'line', 'five'];
+    const isInside = insideBets.includes(zone.type);
+    const maxForType = isInside ? tableLimits.maxStraight : tableLimits.maxOutside;
+
+    // Sum existing bets on this zone
+    let existing = 0;
+    for (const b of bets) {
+      if (b.type === zone.type && b.number === zone.number) existing += b.amount;
+    }
+
+    if (existing + amount > maxForType) {
+      showToast('Max bet: $' + maxForType + ' on ' + zone.type);
+      return false;
+    }
+    if (amount < tableLimits.minBet) {
+      showToast('Min bet: $' + tableLimits.minBet);
+      return false;
+    }
+    return true;
+  }
 
   const theme = () => THEMES[state.themeIdx];
   state.themesUsed.add(theme().name);
@@ -914,6 +1109,8 @@ async function main() {
       showToast('Five-bet is American only!');
       return;
     }
+    // Check table limits
+    if (!checkBetLimit(zone, selectedChip)) return;
     bets.push({ type: zone.type, number: zone.number, numbers: zone.numbers, amount: selectedChip });
     if (gameMode !== 'practice') bankroll -= selectedChip;
     state.betTypesUsed.add(zone.type);
@@ -1134,6 +1331,18 @@ async function main() {
       showToast('Level Up! Lv.' + state.level);
     }
 
+    // Track analytics
+    trackResultAnalytics(currentResult, totalWin, bets.reduce((s, b) => s + b.amount, 0));
+    for (const b of bets) {
+      trackBetTypeProfit(b.type, b.amount, evaluateBet(b, currentResult));
+    }
+
+    // Strategy tracking
+    if (activeStrategy !== 'none') {
+      if (totalWin > 0) strategyOnWin();
+      else strategyOnLoss();
+    }
+
     // Achievements
     checkAchievements();
 
@@ -1179,9 +1388,11 @@ async function main() {
     } else {
       uiState = 'playing';
       showPanel('playing');
-      // Apply martingale on loss
-      if (martingaleActive && currentStreak === 0 && sessionSpins > 0) {
-        applyMartingale();
+      // Apply betting strategy on loss (for even-money bets)
+      if (activeStrategy !== 'none' && currentStreak === 0 && sessionSpins > 0) {
+        applyStrategy();
+      } else if (activeStrategy === 'reverse-martingale' && currentStreak > 0 && sessionSpins > 0) {
+        applyStrategy();
       }
       updateHUD();
     }
@@ -1239,6 +1450,16 @@ async function main() {
     sessionElapsed = 0;
     winningTableZoneIdx = -1;
     winTablePulseTime = 0;
+    setTableLimits(mode);
+    resetStrategy();
+    // Reset session analytics
+    betTypeProfits.clear();
+    sessionColorDist = { red: 0, black: 0, green: 0 };
+    sessionOddEven = { odd: 0, even: 0 };
+    sessionHighLow = { low: 0, high: 0 };
+    longestWinStreak = 0; longestLoseStreak = 0; currentLoseStreak = 0;
+    longestRedRun = 0; longestBlackRun = 0; currentRedRun = 0; currentBlackRun = 0;
+    detectedPatterns = [];
 
     uiState = 'playing';
     showPanel('playing');
@@ -1651,7 +1872,7 @@ async function main() {
     const rules: string[] = [];
     if (laPartageEnabled) rules.push('La Partage');
     if (enPrisonEnabled) rules.push('En Prison');
-    if (martingaleActive) rules.push('Martingale');
+    if (activeStrategy !== 'none') rules.push(activeStrategy);
     if (enPrisonBets.length > 0) rules.push(enPrisonBets.length + ' imprisoned');
     setText(e, 'rule-label', rules.join(' | '));
     // Session timer
@@ -1700,7 +1921,8 @@ async function main() {
     const e = panelEntities['betting'];
     if (!e) return;
     setText(e, 'selected-chip', 'Selected: $' + selectedChip);
-    setText(e, 'martingale-status', martingaleActive ? 'ON' : 'OFF');
+    const stratLabel = activeStrategy === 'none' ? 'OFF' : activeStrategy.toUpperCase();
+    setText(e, 'martingale-status', stratLabel);
   }
 
   function updateBetSummary() {
@@ -1723,29 +1945,33 @@ async function main() {
     setText(e, 'bet-summary', parts.slice(0, 4).join(' | ') + (parts.length > 4 ? ' +' + (parts.length - 4) + ' more' : ''));
   }
 
-  // Martingale: auto-double on loss for even-money bets
-  function applyMartingale() {
-    if (!martingaleActive || lastBets.length === 0) return;
-    // Only apply to even-money bets
+  // Apply betting strategy: auto-adjust bets for even-money bet types
+  function applyStrategy() {
+    if (activeStrategy === 'none' || lastBets.length === 0) return;
     const evenMoneyTypes: BetType[] = ['red', 'black', 'odd', 'even', 'low', 'high'];
-    const mgBets = lastBets.filter(b => evenMoneyTypes.includes(b.type));
-    if (mgBets.length === 0) return;
-    // Double each even-money bet
-    const doubled = mgBets.map(b => ({ ...b, amount: b.amount * 2 }));
-    const totalCost = doubled.reduce((s, b) => s + b.amount, 0);
+    const stratBets = lastBets.filter(b => evenMoneyTypes.includes(b.type));
+    if (stratBets.length === 0) return;
+
+    const mult = getStrategyBetMultiplier();
+    const adjusted = stratBets.map(b => ({ ...b, amount: Math.min(strategyBaseUnit * mult, tableLimits.maxOutside) }));
+    const totalCost = adjusted.reduce((s, b) => s + b.amount, 0);
+
     if (totalCost > bankroll && gameMode !== 'practice') {
-      showToast('Martingale: not enough chips');
+      showToast(activeStrategy + ': not enough chips (need $' + totalCost + ')');
       return;
     }
-    bets = doubled;
+
+    bets = adjusted;
     if (gameMode !== 'practice') bankroll -= totalCost;
     clearChipMarkers();
     for (const b of bets) {
       const zone = betZones.find(z => z.type === b.type && z.number === b.number);
       if (zone) addChipMarker(zone.mesh.position.clone());
     }
-    showToast('Martingale: doubled to $' + totalCost);
+    const stratName = activeStrategy.charAt(0).toUpperCase() + activeStrategy.slice(1);
+    showToast(stratName + ': $' + totalCost + ' (step ' + strategyStep + ')');
     updateHUD();
+    updateStrategyPanel();
   }
 
   // ─── Create UI Entities ───
@@ -1777,6 +2003,8 @@ async function main() {
     favorites: { config: './ui/favorites.json', world: true, pos: [0, 2.0, -3.5], scale: 1.2 },
     tutorial: { config: './ui/tutorial.json', world: true, pos: [0, 2.0, -3.5], scale: 1.5 },
     quickbets: { config: './ui/quickbets.json', world: true, pos: [0, 2.0, -3.5], scale: 1.2 },
+    analytics: { config: './ui/analytics.json', world: true, pos: [0, 2.0, -3.5], scale: 1.2 },
+    strategy: { config: './ui/strategy.json', world: true, pos: [0, 2.0, -3.5], scale: 1.2 },
   };
 
   for (const [key, cfg] of Object.entries(panelConfigs)) {
@@ -1819,6 +2047,8 @@ async function main() {
     favoritesQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/favorites.json')] },
     tutorialQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/tutorial.json')] },
     quickbetsQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/quickbets.json')] },
+    analyticsQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/analytics.json')] },
+    strategyQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/strategy.json')] },
   }) {
     init() {
       const wire = (qName: string, key: string, bindings: Record<string, () => void>) => {
@@ -1885,10 +2115,20 @@ async function main() {
         'btn-callbets': () => { hideAllPanels(); const ce = panelEntities['callbets']; if (ce && ce.object3D) ce.object3D.visible = true; const re = panelEntities['racetrack']; if (re && re.object3D) re.object3D.visible = true; const he = panelEntities['hud']; if (he && he.object3D) he.object3D.visible = true; updateCallBetsPanel(); updateRacetrackPanel(); playClick(); },
         'btn-autospin': () => { hideAllPanels(); const ae = panelEntities['autospin']; if (ae && ae.object3D) ae.object3D.visible = true; const he = panelEntities['hud']; if (he && he.object3D) he.object3D.visible = true; updateAutoSpinPanel(); playClick(); },
         'btn-double': () => { doubleBets(); playClick(); },
-        'btn-martingale': () => { martingaleActive = !martingaleActive; updateBettingPanel(); playClick(); showToast('Martingale: ' + (martingaleActive ? 'ON' : 'OFF')); },
+        'btn-martingale': () => {
+          // Toggle to strategy panel instead of just toggling martingale
+          hideAllPanels();
+          const se = panelEntities['strategy'];
+          if (se && se.object3D) se.object3D.visible = true;
+          const he = panelEntities['hud'];
+          if (he && he.object3D) he.object3D.visible = true;
+          updateStrategyPanel();
+          playClick();
+        },
         'btn-favorites': () => { uiState = 'favorites' as UIState; hideAllPanels(); const fe = panelEntities['favorites']; if (fe && fe.object3D) fe.object3D.visible = true; const he = panelEntities['hud']; if (he && he.object3D) he.object3D.visible = true; updateFavoritesPanel(); playClick(); },
         'btn-undo': () => { undoLastBet(); },
         'btn-quickbets': () => { uiState = 'quickbets'; hideAllPanels(); const qe = panelEntities['quickbets']; if (qe && qe.object3D) qe.object3D.visible = true; const he = panelEntities['hud']; if (he && he.object3D) he.object3D.visible = true; playClick(); },
+        'btn-analytics': () => { hideAllPanels(); const ae = panelEntities['analytics']; if (ae && ae.object3D) ae.object3D.visible = true; const he = panelEntities['hud']; if (he && he.object3D) he.object3D.visible = true; updateAnalyticsPanel(); playClick(); },
       });
 
       wire('resultQ', 'result', {
@@ -2008,6 +2248,20 @@ async function main() {
         'qb-cold-5': () => { const cold = getCold5(); placeQuickBetGroup(cold.slice(0, 5)); showToast('Cold 5: ' + cold.slice(0, 5).join(',')); playClick(); },
         'qb-back': backToPlaying,
       });
+
+      wire('analyticsQ', 'analytics', {
+        'btn-back': () => { uiState = 'playing'; showPanel('playing'); updateHUD(); playClick(); },
+      });
+
+      wire('strategyQ', 'strategy', {
+        'btn-none': () => { activeStrategy = 'none'; resetStrategy(); updateStrategyPanel(); showToast('Strategy: Manual'); playClick(); },
+        'btn-martingale': () => { activeStrategy = 'martingale'; resetStrategy(); strategyBaseUnit = selectedChip; updateStrategyPanel(); showToast('Strategy: Martingale (2x on loss)'); playClick(); },
+        'btn-fibonacci': () => { activeStrategy = 'fibonacci'; resetStrategy(); strategyBaseUnit = selectedChip; updateStrategyPanel(); showToast('Strategy: Fibonacci sequence'); playClick(); },
+        'btn-dalembert': () => { activeStrategy = 'dalembert'; resetStrategy(); strategyBaseUnit = selectedChip; updateStrategyPanel(); showToast("Strategy: D'Alembert (+1/-1)"); playClick(); },
+        'btn-reverse-mart': () => { activeStrategy = 'reverse-martingale'; resetStrategy(); strategyBaseUnit = selectedChip; updateStrategyPanel(); showToast('Strategy: Reverse Martingale'); playClick(); },
+        'btn-oscar': () => { activeStrategy = 'oscar'; resetStrategy(); strategyBaseUnit = selectedChip; oscarGoal = selectedChip; updateStrategyPanel(); showToast("Strategy: Oscar's Grind"); playClick(); },
+        'btn-back': () => { uiState = 'playing'; showPanel('playing'); updateHUD(); playClick(); },
+      });
     }
   }
 
@@ -2062,6 +2316,9 @@ async function main() {
     setText(e, 'theme-val', theme().name);
     setText(e, 'btn-partage', laPartageEnabled ? 'ON' : 'OFF');
     setText(e, 'btn-enprison', enPrisonEnabled ? 'ON' : 'OFF');
+    setText(e, 'limit-min', 'Min: $' + tableLimits.minBet);
+    setText(e, 'limit-max', 'Max Inside: $' + tableLimits.maxStraight);
+    setText(e, 'limit-outside', 'Max Outside: $' + tableLimits.maxOutside);
   }
 
   function updateChipsPanel() {
@@ -2182,6 +2439,72 @@ async function main() {
       setText(e, 't' + i, covered ? '[' + numStr + ']' : numStr);
     }
     setText(e, 'coverage-count', coveredNumbers.size + ' covered');
+  }
+
+  function updateAnalyticsPanel() {
+    const e = panelEntities['analytics'];
+    if (!e) return;
+    const total = sessionColorDist.red + sessionColorDist.black + sessionColorDist.green;
+    setText(e, 'red-count', 'Red: ' + sessionColorDist.red);
+    setText(e, 'black-count', 'Black: ' + sessionColorDist.black);
+    setText(e, 'green-count', 'Green: ' + sessionColorDist.green);
+    setText(e, 'red-pct', total > 0 ? Math.round(sessionColorDist.red / total * 100) + '%' : '0%');
+    setText(e, 'black-pct', total > 0 ? Math.round(sessionColorDist.black / total * 100) + '%' : '0%');
+    setText(e, 'green-pct', total > 0 ? Math.round(sessionColorDist.green / total * 100) + '%' : '0%');
+    setText(e, 'odd-count', 'Odd: ' + sessionOddEven.odd);
+    setText(e, 'even-count', 'Even: ' + sessionOddEven.even);
+    setText(e, 'low-count', '1-18: ' + sessionHighLow.low);
+    setText(e, 'high-count', '19-36: ' + sessionHighLow.high);
+
+    // Profit by bet type (top 5)
+    const profitEntries = [...betTypeProfits.values()].sort((a, b) => (b.won - b.wagered) - (a.won - a.wagered));
+    for (let i = 0; i < 5; i++) {
+      if (profitEntries[i]) {
+        const p = profitEntries[i];
+        const profit = p.won - p.wagered;
+        setText(e, 'profit-' + (i + 1), p.type + ': ' + (profit >= 0 ? '+' : '') + '$' + profit + ' (' + p.count + ' bets)');
+      } else {
+        setText(e, 'profit-' + (i + 1), '--');
+      }
+    }
+
+    // Patterns
+    for (let i = 0; i < 3; i++) {
+      setText(e, 'pattern-' + (i + 1), detectedPatterns[i] || '--');
+    }
+
+    // Streaks
+    setText(e, 'longest-win', 'Best Win: ' + longestWinStreak);
+    setText(e, 'longest-lose', 'Worst Loss: ' + longestLoseStreak);
+    setText(e, 'longest-red', 'Red Run: ' + longestRedRun);
+    setText(e, 'longest-black', 'Black Run: ' + longestBlackRun);
+  }
+
+  function updateStrategyPanel() {
+    const e = panelEntities['strategy'];
+    if (!e) return;
+    const STRAT_NAMES: Record<StrategyType, string> = {
+      'none': 'None (Manual)',
+      'martingale': 'Martingale',
+      'fibonacci': 'Fibonacci',
+      'dalembert': "D'Alembert",
+      'reverse-martingale': 'Reverse Martingale',
+      'oscar': "Oscar's Grind",
+    };
+    setText(e, 'active-strategy', STRAT_NAMES[activeStrategy]);
+    if (activeStrategy === 'none') {
+      setText(e, 'strat-status', 'No strategy active');
+      setText(e, 'strat-step', 'Step: --');
+      setText(e, 'strat-next-bet', 'Next Bet: manual');
+      setText(e, 'strat-profit', 'Strategy P/L: $0');
+    } else {
+      const mult = getStrategyBetMultiplier();
+      const nextBet = strategyBaseUnit * mult;
+      setText(e, 'strat-status', 'Active -- auto-adjusts even-money bets');
+      setText(e, 'strat-step', 'Step: ' + strategyStep);
+      setText(e, 'strat-next-bet', 'Next Bet: $' + nextBet + ' (' + mult + 'x base)');
+      setText(e, 'strat-profit', 'Strategy P/L: ' + (strategyProfit >= 0 ? '+' : '') + '$' + strategyProfit);
+    }
   }
 
   function applyTheme() {

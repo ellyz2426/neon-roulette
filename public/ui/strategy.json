@@ -1,0 +1,739 @@
+{
+  "element": {
+    "sourceTag": "panel",
+    "type": "custom",
+    "children": [
+      {
+        "sourceTag": "container",
+        "type": "custom",
+        "children": [
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "BETTING STRATEGY"
+            ],
+            "properties": {
+              "class": "title"
+            },
+            "dataUid": "uid-3"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Auto-adjusts even-money bets"
+            ],
+            "properties": {
+              "class": "desc"
+            },
+            "dataUid": "uid-4"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "Select Strategy"
+                ],
+                "properties": {
+                  "class": "section"
+                },
+                "dataUid": "uid-6"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "None (Manual)"
+                ],
+                "properties": {
+                  "class": "btn",
+                  "id": "btn-none"
+                },
+                "dataUid": "uid-7"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "Martingale (2x on loss)"
+                ],
+                "properties": {
+                  "class": "btn",
+                  "id": "btn-martingale"
+                },
+                "dataUid": "uid-8"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "Fibonacci Sequence"
+                ],
+                "properties": {
+                  "class": "btn",
+                  "id": "btn-fibonacci"
+                },
+                "dataUid": "uid-9"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "D'Alembert (+1/-1)"
+                ],
+                "properties": {
+                  "class": "btn",
+                  "id": "btn-dalembert"
+                },
+                "dataUid": "uid-10"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "Reverse Martingale"
+                ],
+                "properties": {
+                  "class": "btn",
+                  "id": "btn-reverse-mart"
+                },
+                "dataUid": "uid-11"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "Oscar's Grind"
+                ],
+                "properties": {
+                  "class": "btn",
+                  "id": "btn-oscar"
+                },
+                "dataUid": "uid-12"
+              },
+              {
+                "sourceTag": "container",
+                "type": "custom",
+                "children": [
+                  {
+                    "sourceTag": "text",
+                    "type": "custom",
+                    "children": [
+                      "Active Strategy"
+                    ],
+                    "properties": {
+                      "class": "section"
+                    },
+                    "dataUid": "uid-14"
+                  },
+                  {
+                    "sourceTag": "text",
+                    "type": "custom",
+                    "children": [
+                      "None"
+                    ],
+                    "properties": {
+                      "class": "val",
+                      "id": "active-strategy"
+                    },
+                    "dataUid": "uid-15"
+                  },
+                  {
+                    "sourceTag": "text",
+                    "type": "custom",
+                    "children": [
+                      "--"
+                    ],
+                    "properties": {
+                      "class": "status",
+                      "id": "strat-status"
+                    },
+                    "dataUid": "uid-16"
+                  },
+                  {
+                    "sourceTag": "text",
+                    "type": "custom",
+                    "children": [
+                      "Step: --"
+                    ],
+                    "properties": {
+                      "class": "stat",
+                      "id": "strat-step"
+                    },
+                    "dataUid": "uid-17"
+                  },
+                  {
+                    "sourceTag": "text",
+                    "type": "custom",
+                    "children": [
+                      "Next Bet: --"
+                    ],
+                    "properties": {
+                      "class": "stat",
+                      "id": "strat-next-bet"
+                    },
+                    "dataUid": "uid-18"
+                  },
+                  {
+                    "sourceTag": "text",
+                    "type": "custom",
+                    "children": [
+                      "Strategy P/L: $0"
+                    ],
+                    "properties": {
+                      "class": "stat",
+                      "id": "strat-profit"
+                    },
+                    "dataUid": "uid-19"
+                  },
+                  {
+                    "sourceTag": "container",
+                    "type": "custom",
+                    "children": [
+                      {
+                        "sourceTag": "text",
+                        "type": "custom",
+                        "children": [
+                          "Strategies apply to even-money bets only"
+                        ],
+                        "properties": {
+                          "class": "info"
+                        },
+                        "dataUid": "uid-21"
+                      },
+                      {
+                        "sourceTag": "text",
+                        "type": "custom",
+                        "children": [
+                          "(red/black, odd/even, high/low)"
+                        ],
+                        "properties": {
+                          "class": "info"
+                        },
+                        "dataUid": "uid-22"
+                      },
+                      {
+                        "sourceTag": "text",
+                        "type": "custom",
+                        "children": [
+                          "BACK"
+                        ],
+                        "properties": {
+                          "class": "back",
+                          "id": "btn-back"
+                        },
+                        "dataUid": "uid-23"
+                      }
+                    ],
+                    "properties": {
+                      "class": "divider"
+                    },
+                    "dataUid": "uid-20"
+                  }
+                ],
+                "properties": {
+                  "class": "divider"
+                },
+                "dataUid": "uid-13"
+              }
+            ],
+            "properties": {
+              "class": "divider"
+            },
+            "dataUid": "uid-5"
+          }
+        ],
+        "properties": {
+          "class": "root"
+        },
+        "dataUid": "uid-2"
+      }
+    ],
+    "properties": {},
+    "dataUid": "uid-1"
+  },
+  "classes": {
+    "root": {
+      "content": {
+        "flexDirection": "column",
+        "alignItems": "center",
+        "gap": "5",
+        "padding": "10",
+        "backgroundColor": "rgba(0,10,20,0.94)",
+        "borderRadius": 8,
+        "width": "300"
+      }
+    },
+    "title": {
+      "content": {
+        "fontSize": "16",
+        "fontWeight": "bold",
+        "color": "#ff88cc"
+      }
+    },
+    "desc": {
+      "content": {
+        "fontSize": "8",
+        "color": "#668888"
+      }
+    },
+    "section": {
+      "content": {
+        "fontSize": "11",
+        "fontWeight": "bold",
+        "color": "#aacccc",
+        "marginTop": "4"
+      }
+    },
+    "row": {
+      "content": {
+        "flexDirection": "row",
+        "gap": "8",
+        "alignItems": "center"
+      }
+    },
+    "label": {
+      "content": {
+        "fontSize": "10",
+        "color": "#88cccc"
+      }
+    },
+    "val": {
+      "content": {
+        "fontSize": "10",
+        "color": "#ffffff"
+      }
+    },
+    "btn": {
+      "content": {
+        "fontSize": "11",
+        "color": "#44ccaa",
+        "backgroundColor": "rgba(0,40,40,0.5)",
+        "borderRadius": 4,
+        "padding": "4",
+        "paddingLeft": "10",
+        "paddingRight": "10"
+      }
+    },
+    "btn-active": {
+      "content": {
+        "fontSize": "11",
+        "color": "#00ffcc",
+        "backgroundColor": "rgba(0,80,60,0.7)",
+        "borderRadius": 4,
+        "padding": "4",
+        "paddingLeft": "10",
+        "paddingRight": "10"
+      }
+    },
+    "divider": {
+      "content": {
+        "width": "260",
+        "height": "1",
+        "backgroundColor": "rgba(255,136,204,0.2)"
+      }
+    },
+    "status": {
+      "content": {
+        "fontSize": "9",
+        "color": "#ffaa44"
+      }
+    },
+    "stat": {
+      "content": {
+        "fontSize": "9",
+        "color": "#88aacc"
+      }
+    },
+    "back": {
+      "content": {
+        "fontSize": "12",
+        "color": "#668888",
+        "marginTop": "6"
+      }
+    },
+    "info": {
+      "content": {
+        "fontSize": "8",
+        "color": "#556666"
+      }
+    }
+  },
+  "ranges": {
+    "uid-1": {
+      "start": {
+        "line": 0,
+        "column": 0
+      },
+      "end": {
+        "line": 40,
+        "column": 8
+      }
+    },
+    "root": {
+      "start": {
+        "line": 2,
+        "column": 4
+      },
+      "end": {
+        "line": 2,
+        "column": 9
+      }
+    },
+    "title": {
+      "start": {
+        "line": 3,
+        "column": 4
+      },
+      "end": {
+        "line": 3,
+        "column": 10
+      }
+    },
+    "desc": {
+      "start": {
+        "line": 4,
+        "column": 4
+      },
+      "end": {
+        "line": 4,
+        "column": 9
+      }
+    },
+    "section": {
+      "start": {
+        "line": 5,
+        "column": 4
+      },
+      "end": {
+        "line": 5,
+        "column": 12
+      }
+    },
+    "row": {
+      "start": {
+        "line": 6,
+        "column": 4
+      },
+      "end": {
+        "line": 6,
+        "column": 8
+      }
+    },
+    "label": {
+      "start": {
+        "line": 7,
+        "column": 4
+      },
+      "end": {
+        "line": 7,
+        "column": 10
+      }
+    },
+    "val": {
+      "start": {
+        "line": 8,
+        "column": 4
+      },
+      "end": {
+        "line": 8,
+        "column": 8
+      }
+    },
+    "btn": {
+      "start": {
+        "line": 9,
+        "column": 4
+      },
+      "end": {
+        "line": 9,
+        "column": 8
+      }
+    },
+    "btn-active": {
+      "start": {
+        "line": 10,
+        "column": 4
+      },
+      "end": {
+        "line": 10,
+        "column": 15
+      }
+    },
+    "divider": {
+      "start": {
+        "line": 11,
+        "column": 4
+      },
+      "end": {
+        "line": 11,
+        "column": 12
+      }
+    },
+    "status": {
+      "start": {
+        "line": 12,
+        "column": 4
+      },
+      "end": {
+        "line": 12,
+        "column": 11
+      }
+    },
+    "stat": {
+      "start": {
+        "line": 13,
+        "column": 4
+      },
+      "end": {
+        "line": 13,
+        "column": 9
+      }
+    },
+    "back": {
+      "start": {
+        "line": 14,
+        "column": 4
+      },
+      "end": {
+        "line": 14,
+        "column": 9
+      }
+    },
+    "info": {
+      "start": {
+        "line": 15,
+        "column": 4
+      },
+      "end": {
+        "line": 15,
+        "column": 9
+      }
+    },
+    "uid-2": {
+      "start": {
+        "line": 17,
+        "column": 2
+      },
+      "end": {
+        "line": 40,
+        "column": 0
+      }
+    },
+    "uid-3": {
+      "start": {
+        "line": 18,
+        "column": 4
+      },
+      "end": {
+        "line": 18,
+        "column": 47
+      }
+    },
+    "uid-4": {
+      "start": {
+        "line": 19,
+        "column": 4
+      },
+      "end": {
+        "line": 19,
+        "column": 58
+      }
+    },
+    "uid-5": {
+      "start": {
+        "line": 20,
+        "column": 4
+      },
+      "end": {
+        "line": 40,
+        "column": 0
+      }
+    },
+    "uid-6": {
+      "start": {
+        "line": 21,
+        "column": 4
+      },
+      "end": {
+        "line": 21,
+        "column": 48
+      }
+    },
+    "uid-7": {
+      "start": {
+        "line": 22,
+        "column": 4
+      },
+      "end": {
+        "line": 22,
+        "column": 56
+      }
+    },
+    "uid-8": {
+      "start": {
+        "line": 23,
+        "column": 4
+      },
+      "end": {
+        "line": 23,
+        "column": 72
+      }
+    },
+    "uid-9": {
+      "start": {
+        "line": 24,
+        "column": 4
+      },
+      "end": {
+        "line": 24,
+        "column": 66
+      }
+    },
+    "uid-10": {
+      "start": {
+        "line": 25,
+        "column": 4
+      },
+      "end": {
+        "line": 25,
+        "column": 66
+      }
+    },
+    "uid-11": {
+      "start": {
+        "line": 26,
+        "column": 4
+      },
+      "end": {
+        "line": 26,
+        "column": 69
+      }
+    },
+    "uid-12": {
+      "start": {
+        "line": 27,
+        "column": 4
+      },
+      "end": {
+        "line": 27,
+        "column": 57
+      }
+    },
+    "uid-13": {
+      "start": {
+        "line": 28,
+        "column": 4
+      },
+      "end": {
+        "line": 40,
+        "column": 0
+      }
+    },
+    "uid-14": {
+      "start": {
+        "line": 29,
+        "column": 4
+      },
+      "end": {
+        "line": 29,
+        "column": 48
+      }
+    },
+    "uid-15": {
+      "start": {
+        "line": 30,
+        "column": 4
+      },
+      "end": {
+        "line": 30,
+        "column": 54
+      }
+    },
+    "uid-16": {
+      "start": {
+        "line": 31,
+        "column": 4
+      },
+      "end": {
+        "line": 31,
+        "column": 52
+      }
+    },
+    "uid-17": {
+      "start": {
+        "line": 32,
+        "column": 4
+      },
+      "end": {
+        "line": 32,
+        "column": 54
+      }
+    },
+    "uid-18": {
+      "start": {
+        "line": 33,
+        "column": 4
+      },
+      "end": {
+        "line": 33,
+        "column": 62
+      }
+    },
+    "uid-19": {
+      "start": {
+        "line": 34,
+        "column": 4
+      },
+      "end": {
+        "line": 34,
+        "column": 64
+      }
+    },
+    "uid-20": {
+      "start": {
+        "line": 35,
+        "column": 4
+      },
+      "end": {
+        "line": 39,
+        "column": 14
+      }
+    },
+    "uid-21": {
+      "start": {
+        "line": 36,
+        "column": 4
+      },
+      "end": {
+        "line": 36,
+        "column": 70
+      }
+    },
+    "uid-22": {
+      "start": {
+        "line": 37,
+        "column": 4
+      },
+      "end": {
+        "line": 37,
+        "column": 61
+      }
+    },
+    "uid-23": {
+      "start": {
+        "line": 38,
+        "column": 4
+      },
+      "end": {
+        "line": 38,
+        "column": 48
+      }
+    }
+  }
+}
