@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "sessionId": "51e6bb5b-6a78-4976-a008-3ccdf926ada3",
+  "sessionId": "c299c83c-6801-450d-8b57-408f36fd0ca3",
   "workspaceRoot": "/home/hatch/workspace/neon-roulette",
-  "pid": 56502,
+  "pid": 61526,
   "port": 5173,
   "localUrl": "http://localhost:5173/",
   "networkUrls": [
@@ -16,8 +16,8 @@
     "status": "connected",
     "connected": true,
     "connectedClientCount": 1,
-    "lastTransitionAt": "2026-06-29T12:10:16.616Z"
+    "lastTransitionAt": "2026-06-29T13:04:17.120Z"
   },
-  "registeredAt": "2026-06-29T12:10:01.935Z",
-  "updatedAt": "2026-06-29T12:10:16.622Z"
+  "registeredAt": "2026-06-29T12:58:59.169Z",
+  "updatedAt": "2026-06-29T13:04:17.120Z"
 }

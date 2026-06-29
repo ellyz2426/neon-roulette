@@ -16,6 +16,8 @@
     .btn-fav { fontSize: 10; color: #cc88ff; }
     .martingale-row { flexDirection: row; gap: 6; marginTop: 4; alignItems: center; }
     .mgl-label { fontSize: 9; color: #ff88cc; }
+    .btn-undo { fontSize: 10; color: #ffaa44; }
+    .btn-quick { fontSize: 10; color: #44ffaa; }
     .bet-summary { fontSize: 8; color: #88aaaa; marginTop: 2; }
   </style>
   <container class="root">
@@ -38,6 +40,10 @@
       <text class="btn-auto" id="btn-autospin">Auto-Spin</text>
       <text class="btn-call" id="btn-double">2x Bets</text>
       <text class="btn-fav" id="btn-favorites">Favs</text>
+    </container>
+    <container class="extra-row">
+      <text class="btn-undo" id="btn-undo">Undo (U)</text>
+      <text class="btn-quick" id="btn-quickbets">Quick Bets (Q)</text>
     </container>
     <container class="martingale-row">
       <text class="mgl-label" id="btn-martingale">Martingale</text>

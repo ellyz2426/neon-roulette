@@ -112,6 +112,18 @@
               "id": "rule-label"
             },
             "dataUid": "uid-11"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "0:00"
+            ],
+            "properties": {
+              "class": "mode",
+              "id": "session-time"
+            },
+            "dataUid": "uid-12"
           }
         ],
         "properties": {
@@ -201,7 +213,7 @@
         "column": 0
       },
       "end": {
-        "line": 25,
+        "line": 26,
         "column": 8
       }
     },
@@ -321,7 +333,7 @@
         "column": 2
       },
       "end": {
-        "line": 24,
+        "line": 25,
         "column": 14
       }
     },
@@ -413,6 +425,16 @@
       "end": {
         "line": 23,
         "column": 46
+      }
+    },
+    "uid-12": {
+      "start": {
+        "line": 24,
+        "column": 4
+      },
+      "end": {
+        "line": 24,
+        "column": 52
       }
     }
   }

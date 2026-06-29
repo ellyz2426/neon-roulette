@@ -173,7 +173,7 @@ interface GameState {
   chipSkin: number; themeIdx: number;
 }
 
-type UIState = 'title' | 'modes' | 'table' | 'playing' | 'spinning' | 'result' | 'gameover' | 'leaderboard' | 'achievements' | 'stats' | 'settings' | 'help' | 'pause' | 'chips' | 'callbets' | 'autospin' | 'racetrack' | 'favorites' | 'tutorial';
+type UIState = 'title' | 'modes' | 'table' | 'playing' | 'spinning' | 'result' | 'gameover' | 'leaderboard' | 'achievements' | 'stats' | 'settings' | 'help' | 'pause' | 'chips' | 'callbets' | 'autospin' | 'racetrack' | 'favorites' | 'tutorial' | 'quickbets';
 type GameMode = 'single' | 'session' | 'marathon' | 'high-roller' | 'daily' | 'practice' | 'streak' | 'tournament';
 
 function loadState(): GameState {
@@ -481,6 +481,12 @@ async function main() {
   let tutorialStep = 0;
   let tutorialActive = false;
   let favorites = loadFavorites();
+  let bankrollHistory: number[] = [];
+  let sessionStartTime = 0;
+  let sessionElapsed = 0;
+  let winningTableZoneIdx = -1;
+  let winTablePulseTime = 0;
+  let heatmapEnabled = true;
 
   const theme = () => THEMES[state.themeIdx];
   state.themesUsed.add(theme().name);
@@ -887,6 +893,8 @@ async function main() {
     if (e.key === ' ' && uiState === 'playing' && bets.length > 0) startSpin();
     if (e.key === 'c' && uiState === 'playing') clearBets();
     if (e.key === 'r' && uiState === 'playing') rebet();
+    if (e.key === 'u' && uiState === 'playing') undoLastBet();
+    if (e.key === 'q' && uiState === 'playing') { uiState = 'quickbets'; hideAllPanels(); const qe = panelEntities['quickbets']; if (qe && qe.object3D) qe.object3D.visible = true; const he = panelEntities['hud']; if (he && he.object3D) he.object3D.visible = true; playClick(); }
     if (e.key === 'a' && uiState === 'playing') { uiState = 'autospin' as UIState; hideAllPanels(); const ae = panelEntities['autospin']; if (ae && ae.object3D) ae.object3D.visible = true; updateAutoSpinPanel(); }
     if (e.key === 'f' && uiState === 'playing') { uiState = 'favorites' as UIState; hideAllPanels(); const fe = panelEntities['favorites']; if (fe && fe.object3D) fe.object3D.visible = true; const he = panelEntities['hud']; if (he && he.object3D) he.object3D.visible = true; updateFavoritesPanel(); }
     if (e.key === 'Enter' && uiState === 'result') continueAfterResult();
@@ -926,6 +934,21 @@ async function main() {
     }
     bets = [];
     clearChipMarkers();
+    updateHUD();
+    updateOddsPanel();
+  }
+
+  function undoLastBet() {
+    if (bets.length === 0 || isSpinning) return;
+    const removed = bets.pop()!;
+    if (gameMode !== 'practice') bankroll += removed.amount;
+    // Remove last chip marker
+    if (chipMarkers.length > 0) {
+      const last = chipMarkers.pop()!;
+      tableGroup.remove(last);
+    }
+    playClick();
+    showToast('Undo: ' + removed.type + (removed.number !== undefined ? ' ' + removed.number : ''));
     updateHUD();
     updateOddsPanel();
   }
@@ -1044,6 +1067,7 @@ async function main() {
     }
     bankroll += totalWin;
     sessionProfit = bankroll - startingBankroll;
+    bankrollHistory.push(bankroll);
     state.totalSpins++;
     sessionSpins++;
 
@@ -1122,6 +1146,10 @@ async function main() {
     // Highlight winning pocket on wheel
     winningPocketIdx = targetPocket;
     winPulseTime = 0;
+
+    // Highlight winning number on betting table
+    winningTableZoneIdx = betZones.findIndex(z => z.type === 'straight' && z.number === currentResult);
+    winTablePulseTime = 0;
 
     // Camera zoom back
     cameraZooming = false;
@@ -1206,6 +1234,11 @@ async function main() {
     clearChipMarkers();
     startingBankroll = bankroll;
     sessionProfit = 0;
+    bankrollHistory = [bankroll];
+    sessionStartTime = Date.now();
+    sessionElapsed = 0;
+    winningTableZoneIdx = -1;
+    winTablePulseTime = 0;
 
     uiState = 'playing';
     showPanel('playing');
@@ -1395,6 +1428,85 @@ async function main() {
     neighborPickMode = false;
   }
 
+  // ─── Quick Bet Patterns ───
+  function placeQuickBet(type: BetType) {
+    if (uiState !== 'playing' && uiState !== 'quickbets') return;
+    if (selectedChip > bankroll && gameMode !== 'practice') return;
+    bets.push({ type, amount: selectedChip });
+    if (gameMode !== 'practice') bankroll -= selectedChip;
+    state.betTypesUsed.add(type);
+    const zone = betZones.find(z => z.type === type && z.number === undefined);
+    if (zone) addChipMarker(zone.mesh.position.clone());
+    playChipPlace();
+    updateHUD();
+    updateOddsPanel();
+  }
+
+  function placeQuickBetGroup(numbers: number[]) {
+    if (uiState !== 'playing' && uiState !== 'quickbets') return;
+    const chipCost = selectedChip * numbers.length;
+    if (chipCost > bankroll && gameMode !== 'practice') {
+      showToast('Not enough chips!');
+      return;
+    }
+    for (const num of numbers) {
+      bets.push({ type: 'straight', number: num, amount: selectedChip });
+      if (gameMode !== 'practice') bankroll -= selectedChip;
+      state.betTypesUsed.add('straight');
+      const zone = betZones.find(z => z.type === 'straight' && z.number === num);
+      if (zone) addChipMarker(zone.mesh.position.clone());
+    }
+    playChipPlace();
+    updateHUD();
+    updateOddsPanel();
+  }
+
+  // Snake bet: 1, 5, 9, 12, 14, 16, 19, 23, 27, 30, 32, 34 (zigzag across the table)
+  const SNAKE_BET = [1, 5, 9, 12, 14, 16, 19, 23, 27, 30, 32, 34];
+
+  function getHot5(): number[] {
+    const sorted = [...state.hotNumbers.entries()].sort((a, b) => b[1] - a[1]);
+    return sorted.slice(0, 5).map(([n]) => n);
+  }
+
+  function getCold5(): number[] {
+    const allNums: number[] = [];
+    const pCount = isAmerican ? 38 : 37;
+    const seq = isAmerican ? AMER_SEQUENCE : EURO_SEQUENCE;
+    for (let i = 0; i < pCount; i++) allNums.push(seq[i]);
+    const coldSorted = allNums.map(n => ({ num: n, cnt: state.hotNumbers.get(n) || 0 })).sort((a, b) => a.cnt - b.cnt);
+    return coldSorted.slice(0, 5).map(c => c.num);
+  }
+
+  // ─── Number Heatmap ───
+  function updateHeatmap() {
+    if (!heatmapEnabled || spinHistory.length === 0) return;
+    const counts = new Map<number, number>();
+    for (const n of spinHistory) {
+      counts.set(n, (counts.get(n) || 0) + 1);
+    }
+    const maxCount = Math.max(...counts.values(), 1);
+    for (const zone of betZones) {
+      if (zone.type === 'straight' && zone.number !== undefined) {
+        const cnt = counts.get(zone.number) || 0;
+        const intensity = cnt / maxCount;
+        // Blend in a warm glow for frequently-hit numbers
+        if (cnt > 0 && uiState === 'playing') {
+          const mat = zone.mesh.material as MeshStandardMaterial;
+          mat.emissiveIntensity = 0.2 + intensity * 0.6;
+        }
+      }
+    }
+  }
+
+  // ─── Session Timer ───
+  function formatSessionTime(ms: number): string {
+    const totalSec = Math.floor(ms / 1000);
+    const min = Math.floor(totalSec / 60);
+    const sec = totalSec % 60;
+    return min + ':' + (sec < 10 ? '0' : '') + sec;
+  }
+
   // ─── Auto-Spin ───
   function startAutoSpin() {
     if (lastBets.length === 0) {
@@ -1492,6 +1604,7 @@ async function main() {
       case 'autospin': show('autospin'); show('hud'); break;
       case 'favorites': show('favorites'); show('hud'); break;
       case 'tutorial': show('tutorial'); break;
+      case 'quickbets': show('quickbets'); show('hud'); break;
     }
   }
 
@@ -1541,6 +1654,11 @@ async function main() {
     if (martingaleActive) rules.push('Martingale');
     if (enPrisonBets.length > 0) rules.push(enPrisonBets.length + ' imprisoned');
     setText(e, 'rule-label', rules.join(' | '));
+    // Session timer
+    if (sessionStartTime > 0) {
+      sessionElapsed = Date.now() - sessionStartTime;
+      setText(e, 'session-time', formatSessionTime(sessionElapsed));
+    }
     // Update betting panel summary
     updateBetSummary();
   }
@@ -1658,6 +1776,7 @@ async function main() {
     odds: { config: './ui/odds.json', world: true, pos: [-1.8, 1.2, -2.0], scale: 0.7 },
     favorites: { config: './ui/favorites.json', world: true, pos: [0, 2.0, -3.5], scale: 1.2 },
     tutorial: { config: './ui/tutorial.json', world: true, pos: [0, 2.0, -3.5], scale: 1.5 },
+    quickbets: { config: './ui/quickbets.json', world: true, pos: [0, 2.0, -3.5], scale: 1.2 },
   };
 
   for (const [key, cfg] of Object.entries(panelConfigs)) {
@@ -1699,6 +1818,7 @@ async function main() {
     oddsQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/odds.json')] },
     favoritesQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/favorites.json')] },
     tutorialQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/tutorial.json')] },
+    quickbetsQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/quickbets.json')] },
   }) {
     init() {
       const wire = (qName: string, key: string, bindings: Record<string, () => void>) => {
@@ -1767,6 +1887,8 @@ async function main() {
         'btn-double': () => { doubleBets(); playClick(); },
         'btn-martingale': () => { martingaleActive = !martingaleActive; updateBettingPanel(); playClick(); showToast('Martingale: ' + (martingaleActive ? 'ON' : 'OFF')); },
         'btn-favorites': () => { uiState = 'favorites' as UIState; hideAllPanels(); const fe = panelEntities['favorites']; if (fe && fe.object3D) fe.object3D.visible = true; const he = panelEntities['hud']; if (he && he.object3D) he.object3D.visible = true; updateFavoritesPanel(); playClick(); },
+        'btn-undo': () => { undoLastBet(); },
+        'btn-quickbets': () => { uiState = 'quickbets'; hideAllPanels(); const qe = panelEntities['quickbets']; if (qe && qe.object3D) qe.object3D.visible = true; const he = panelEntities['hud']; if (he && he.object3D) he.object3D.visible = true; playClick(); },
       });
 
       wire('resultQ', 'result', {
@@ -1865,6 +1987,26 @@ async function main() {
         'tut-prev': () => { if (tutorialStep > 0) { tutorialStep--; updateTutorialPanel(); playClick(); } },
         'tut-next': () => { if (tutorialStep < TUTORIAL_STEPS.length - 1) { tutorialStep++; updateTutorialPanel(); playClick(); } else { tutorialActive = false; uiState = 'title'; showPanel('title'); playClick(); } },
         'tut-skip': () => { tutorialActive = false; uiState = 'title'; showPanel('title'); playClick(); },
+      });
+
+      const backToPlaying = () => { uiState = 'playing'; showPanel('playing'); updateHUD(); playClick(); };
+      wire('quickbetsQ', 'quickbets', {
+        'qb-all-red': () => { placeQuickBet('red'); showToast('All Red! 18 numbers'); playClick(); },
+        'qb-all-black': () => { placeQuickBet('black'); showToast('All Black! 18 numbers'); playClick(); },
+        'qb-all-odd': () => { placeQuickBet('odd'); showToast('All Odd! 18 numbers'); playClick(); },
+        'qb-all-even': () => { placeQuickBet('even'); showToast('All Even! 18 numbers'); playClick(); },
+        'qb-low': () => { placeQuickBet('low'); showToast('1-18! Low numbers'); playClick(); },
+        'qb-high': () => { placeQuickBet('high'); showToast('19-36! High numbers'); playClick(); },
+        'qb-columns-all': () => { placeQuickBet('col1'); placeQuickBet('col2'); placeQuickBet('col3'); showToast('All 3 Columns!'); playClick(); },
+        'qb-dozens-all': () => { placeQuickBet('dozen1'); placeQuickBet('dozen2'); placeQuickBet('dozen3'); showToast('All 3 Dozens!'); playClick(); },
+        'qb-streets-all': () => { for (const st of STREETS) { const chipCost = selectedChip; if (chipCost <= bankroll || gameMode === 'practice') { bets.push({ type: 'street', numbers: st, amount: selectedChip }); if (gameMode !== 'practice') bankroll -= selectedChip; } } playChipPlace(); showToast('All 12 Streets!'); updateHUD(); updateOddsPanel(); },
+        'qb-corners-all': () => { placeQuickBetGroup(SNAKE_BET); showToast('Snake Bet! 12 numbers zigzag'); },
+        'qb-first-6': () => { placeQuickBetGroup([1, 2, 3, 4, 5, 6]); showToast('Numbers 1-6!'); },
+        'qb-mid-6': () => { placeQuickBetGroup([16, 17, 18, 19, 20, 21]); showToast('Numbers 16-21!'); },
+        'qb-last-6': () => { placeQuickBetGroup([31, 32, 33, 34, 35, 36]); showToast('Numbers 31-36!'); },
+        'qb-hot-5': () => { const hot = getHot5(); if (hot.length === 0) { showToast('No history yet!'); } else { placeQuickBetGroup(hot); showToast('Hot 5: ' + hot.join(',')); } playClick(); },
+        'qb-cold-5': () => { const cold = getCold5(); placeQuickBetGroup(cold.slice(0, 5)); showToast('Cold 5: ' + cold.slice(0, 5).join(',')); playClick(); },
+        'qb-back': backToPlaying,
       });
     }
   }
@@ -1998,6 +2140,15 @@ async function main() {
     const profit = bankroll - startBank;
     setText(e, 'profit-label', 'Profit: ' + (profit >= 0 ? '+' : '') + '$' + profit);
     setText(e, 'streak-label', 'Best Streak: ' + sessionBestStreak);
+    setText(e, 'duration-label', 'Duration: ' + formatSessionTime(sessionElapsed));
+    // Bankroll trend: show min/max/final
+    if (bankrollHistory.length > 0) {
+      const minBR = Math.min(...bankrollHistory);
+      const maxBR = Math.max(...bankrollHistory);
+      setText(e, 'trend-label', 'Low $' + minBR + ' / High $' + maxBR);
+    } else {
+      setText(e, 'trend-label', '');
+    }
   }
 
   function updateRacetrackPanel() {
@@ -2342,6 +2493,29 @@ async function main() {
           (pm.material as MeshStandardMaterial).emissiveIntensity = 0.5 + pulse * 1.5;
           pm.scale.setScalar(1.0 + pulse * 0.3);
         }
+      }
+
+      // Winning number highlight on betting table
+      if (winningTableZoneIdx >= 0 && winningTableZoneIdx < betZones.length) {
+        winTablePulseTime += delta;
+        const pulse2 = 0.5 + 0.5 * Math.sin(winTablePulseTime * 5.0);
+        const tz = betZones[winningTableZoneIdx];
+        if (tz && uiState === 'result') {
+          (tz.mesh.material as MeshStandardMaterial).emissiveIntensity = 0.5 + pulse2 * 1.2;
+          tz.mesh.scale.setScalar(1.0 + pulse2 * 0.15);
+        } else if (uiState !== 'result') {
+          // Reset when leaving result
+          if (tz) {
+            tz.mesh.scale.setScalar(1.0);
+            (tz.mesh.material as MeshStandardMaterial).emissiveIntensity = 0.2;
+          }
+          winningTableZoneIdx = -1;
+        }
+      }
+
+      // Number heatmap on table (subtle glow on frequently-hit numbers)
+      if (heatmapEnabled && spinHistory.length > 0 && uiState === 'playing') {
+        updateHeatmap();
       }
 
       // Streak visual effects (screen-edge glow when on a streak)

@@ -1,14 +1,80 @@
-<container flexDirection="column" alignItems="center" gap="6" padding="10">
-  <text fontSize="18" fontWeight="bold" color="#ccaa00">GAME OVER</text>
-  <text name="mode-label" fontSize="12" color="#88cccc">Session</text>
-  <text name="final-bankroll" fontSize="16" color="#00ffcc">$1250</text>
-  <text name="spins-label" fontSize="10" color="#ffffff">Spins: 10</text>
-  <text name="wins-label" fontSize="10" color="#00ff88">Wins: 6</text>
-  <text name="biggest-win" fontSize="10" color="#ccaa00">Best Win: $350</text>
-  <text name="profit-label" fontSize="12" color="#00ff88">Profit: +$250</text>
-  <text name="streak-label" fontSize="10" color="#ff4488">Best Streak: 4</text>
-  <container flexDirection="row" gap="8" marginTop="6">
-    <text name="btn-rematch" fontSize="14" color="#00ffcc" cursor="pointer" hover-color="#ffffff">REMATCH</text>
-    <text name="btn-menu" fontSize="14" color="#668888" cursor="pointer" hover-color="#ffffff">MENU</text>
+<panel>
+  <style>
+    .root {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6;
+      padding: 16;
+      width: 360;
+      background-color: rgba(0,8,20,0.95);
+      border-radius: 12;
+      border-width: 1;
+      border-color: rgba(204,170,0,0.5);
+    }
+    .title {
+      font-size: 20;
+      color: rgba(204,170,0,1);
+    }
+    .mode {
+      font-size: 12;
+      color: rgba(136,204,204,1);
+    }
+    .bankroll {
+      font-size: 18;
+      color: rgba(0,255,204,1);
+    }
+    .stat {
+      font-size: 11;
+      color: rgba(255,255,255,1);
+    }
+    .profit {
+      font-size: 14;
+      color: rgba(0,255,136,1);
+    }
+    .streak {
+      font-size: 11;
+      color: rgba(255,68,136,1);
+    }
+    .duration {
+      font-size: 10;
+      color: rgba(170,136,255,1);
+    }
+    .trend {
+      font-size: 10;
+      color: rgba(136,170,170,1);
+    }
+    .btn-row {
+      display: flex;
+      flex-direction: row;
+      gap: 12;
+      margin-top: 8;
+    }
+    .rematch {
+      font-size: 14;
+      color: rgba(0,255,204,1);
+      padding: 6;
+    }
+    .menu {
+      font-size: 14;
+      color: rgba(102,136,136,1);
+      padding: 6;
+    }
+  </style>
+  <container class="root">
+    <text class="title">GAME OVER</text>
+    <text class="mode" id="mode-label">Session</text>
+    <text class="bankroll" id="final-bankroll">$1250</text>
+    <text class="stat" id="spins-label">Spins: 10</text>
+    <text class="stat" id="wins-label">Wins: 6</text>
+    <text class="stat" id="biggest-win">Best Win: $350</text>
+    <text class="profit" id="profit-label">Profit: +$250</text>
+    <text class="streak" id="streak-label">Best Streak: 4</text>
+    <text class="duration" id="duration-label">Duration: 0:00</text>
+    <text class="trend" id="trend-label"></text>
+    <container class="btn-row">
+      <text class="rematch" id="btn-rematch">REMATCH</text>
+      <text class="menu" id="btn-menu">MENU</text>
+    </container>
   </container>
-</container>
+</panel>

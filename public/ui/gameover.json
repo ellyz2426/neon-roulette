@@ -1,112 +1,8 @@
 {
   "element": {
-    "sourceTag": "container",
+    "sourceTag": "panel",
     "type": "custom",
     "children": [
-      {
-        "sourceTag": "text",
-        "type": "custom",
-        "children": [
-          "GAME OVER"
-        ],
-        "properties": {
-          "fontsize": "18",
-          "fontweight": "bold",
-          "color": "#ccaa00"
-        },
-        "dataUid": "uid-2"
-      },
-      {
-        "sourceTag": "text",
-        "type": "custom",
-        "children": [
-          "Session"
-        ],
-        "properties": {
-          "name": "mode-label",
-          "fontsize": "12",
-          "color": "#88cccc"
-        },
-        "dataUid": "uid-3"
-      },
-      {
-        "sourceTag": "text",
-        "type": "custom",
-        "children": [
-          "$1250"
-        ],
-        "properties": {
-          "name": "final-bankroll",
-          "fontsize": "16",
-          "color": "#00ffcc"
-        },
-        "dataUid": "uid-4"
-      },
-      {
-        "sourceTag": "text",
-        "type": "custom",
-        "children": [
-          "Spins: 10"
-        ],
-        "properties": {
-          "name": "spins-label",
-          "fontsize": "10",
-          "color": "#ffffff"
-        },
-        "dataUid": "uid-5"
-      },
-      {
-        "sourceTag": "text",
-        "type": "custom",
-        "children": [
-          "Wins: 6"
-        ],
-        "properties": {
-          "name": "wins-label",
-          "fontsize": "10",
-          "color": "#00ff88"
-        },
-        "dataUid": "uid-6"
-      },
-      {
-        "sourceTag": "text",
-        "type": "custom",
-        "children": [
-          "Best Win: $350"
-        ],
-        "properties": {
-          "name": "biggest-win",
-          "fontsize": "10",
-          "color": "#ccaa00"
-        },
-        "dataUid": "uid-7"
-      },
-      {
-        "sourceTag": "text",
-        "type": "custom",
-        "children": [
-          "Profit: +$250"
-        ],
-        "properties": {
-          "name": "profit-label",
-          "fontsize": "12",
-          "color": "#00ff88"
-        },
-        "dataUid": "uid-8"
-      },
-      {
-        "sourceTag": "text",
-        "type": "custom",
-        "children": [
-          "Best Streak: 4"
-        ],
-        "properties": {
-          "name": "streak-label",
-          "fontsize": "10",
-          "color": "#ff4488"
-        },
-        "dataUid": "uid-9"
-      },
       {
         "sourceTag": "container",
         "type": "custom",
@@ -115,50 +11,249 @@
             "sourceTag": "text",
             "type": "custom",
             "children": [
-              "REMATCH"
+              "GAME OVER"
             ],
             "properties": {
-              "name": "btn-rematch",
-              "fontsize": "14",
-              "color": "#00ffcc",
-              "cursor": "pointer",
-              "hoverColor": "#ffffff"
+              "class": "title"
+            },
+            "dataUid": "uid-3"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Session"
+            ],
+            "properties": {
+              "class": "mode",
+              "id": "mode-label"
+            },
+            "dataUid": "uid-4"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "$1250"
+            ],
+            "properties": {
+              "class": "bankroll",
+              "id": "final-bankroll"
+            },
+            "dataUid": "uid-5"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Spins: 10"
+            ],
+            "properties": {
+              "class": "stat",
+              "id": "spins-label"
+            },
+            "dataUid": "uid-6"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Wins: 6"
+            ],
+            "properties": {
+              "class": "stat",
+              "id": "wins-label"
+            },
+            "dataUid": "uid-7"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Best Win: $350"
+            ],
+            "properties": {
+              "class": "stat",
+              "id": "biggest-win"
+            },
+            "dataUid": "uid-8"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Profit: +$250"
+            ],
+            "properties": {
+              "class": "profit",
+              "id": "profit-label"
+            },
+            "dataUid": "uid-9"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Best Streak: 4"
+            ],
+            "properties": {
+              "class": "streak",
+              "id": "streak-label"
+            },
+            "dataUid": "uid-10"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Duration: 0:00"
+            ],
+            "properties": {
+              "class": "duration",
+              "id": "duration-label"
             },
             "dataUid": "uid-11"
           },
           {
             "sourceTag": "text",
             "type": "custom",
-            "children": [
-              "MENU"
-            ],
+            "children": [],
             "properties": {
-              "name": "btn-menu",
-              "fontsize": "14",
-              "color": "#668888",
-              "cursor": "pointer",
-              "hoverColor": "#ffffff"
+              "class": "trend",
+              "id": "trend-label"
             },
             "dataUid": "uid-12"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "REMATCH"
+                ],
+                "properties": {
+                  "class": "rematch",
+                  "id": "btn-rematch"
+                },
+                "dataUid": "uid-14"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "MENU"
+                ],
+                "properties": {
+                  "class": "menu",
+                  "id": "btn-menu"
+                },
+                "dataUid": "uid-15"
+              }
+            ],
+            "properties": {
+              "class": "btn-row"
+            },
+            "dataUid": "uid-13"
           }
         ],
         "properties": {
-          "flexdirection": "row",
-          "gap": "8",
-          "margintop": "6"
+          "class": "root"
         },
-        "dataUid": "uid-10"
+        "dataUid": "uid-2"
       }
     ],
-    "properties": {
-      "flexdirection": "column",
-      "alignitems": "center",
-      "gap": "6",
-      "padding": "10"
-    },
+    "properties": {},
     "dataUid": "uid-1"
   },
-  "classes": {},
+  "classes": {
+    "root": {
+      "content": {
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "center",
+        "gap": "6",
+        "padding": "16",
+        "width": "360",
+        "backgroundColor": "rgba(0,8,20,0.95)",
+        "borderRadius": 12,
+        "borderWidth": "1",
+        "borderColor": "rgba(204,170,0,0.5)"
+      }
+    },
+    "title": {
+      "content": {
+        "fontSize": "20",
+        "color": "rgba(204,170,0,1)"
+      }
+    },
+    "mode": {
+      "content": {
+        "fontSize": "12",
+        "color": "rgba(136,204,204,1)"
+      }
+    },
+    "bankroll": {
+      "content": {
+        "fontSize": "18",
+        "color": "rgba(0,255,204,1)"
+      }
+    },
+    "stat": {
+      "content": {
+        "fontSize": "11",
+        "color": "rgba(255,255,255,1)"
+      }
+    },
+    "profit": {
+      "content": {
+        "fontSize": "14",
+        "color": "rgba(0,255,136,1)"
+      }
+    },
+    "streak": {
+      "content": {
+        "fontSize": "11",
+        "color": "rgba(255,68,136,1)"
+      }
+    },
+    "duration": {
+      "content": {
+        "fontSize": "10",
+        "color": "rgba(170,136,255,1)"
+      }
+    },
+    "trend": {
+      "content": {
+        "fontSize": "10",
+        "color": "rgba(136,170,170,1)"
+      }
+    },
+    "btn-row": {
+      "content": {
+        "display": "flex",
+        "flexDirection": "row",
+        "gap": "12",
+        "marginTop": "8"
+      }
+    },
+    "rematch": {
+      "content": {
+        "fontSize": "14",
+        "color": "rgba(0,255,204,1)",
+        "padding": "6"
+      }
+    },
+    "menu": {
+      "content": {
+        "fontSize": "14",
+        "color": "rgba(102,136,136,1)",
+        "padding": "6"
+      }
+    }
+  },
   "ranges": {
     "uid-1": {
       "start": {
@@ -166,118 +261,268 @@
         "column": 0
       },
       "end": {
-        "line": 13,
+        "line": 79,
+        "column": 8
+      }
+    },
+    "root": {
+      "start": {
+        "line": 2,
+        "column": 4
+      },
+      "end": {
+        "line": 2,
+        "column": 9
+      }
+    },
+    "title": {
+      "start": {
+        "line": 14,
+        "column": 4
+      },
+      "end": {
+        "line": 14,
+        "column": 10
+      }
+    },
+    "mode": {
+      "start": {
+        "line": 18,
+        "column": 4
+      },
+      "end": {
+        "line": 18,
+        "column": 9
+      }
+    },
+    "bankroll": {
+      "start": {
+        "line": 22,
+        "column": 4
+      },
+      "end": {
+        "line": 22,
+        "column": 13
+      }
+    },
+    "stat": {
+      "start": {
+        "line": 26,
+        "column": 4
+      },
+      "end": {
+        "line": 26,
+        "column": 9
+      }
+    },
+    "profit": {
+      "start": {
+        "line": 30,
+        "column": 4
+      },
+      "end": {
+        "line": 30,
+        "column": 11
+      }
+    },
+    "streak": {
+      "start": {
+        "line": 34,
+        "column": 4
+      },
+      "end": {
+        "line": 34,
+        "column": 11
+      }
+    },
+    "duration": {
+      "start": {
+        "line": 38,
+        "column": 4
+      },
+      "end": {
+        "line": 38,
+        "column": 13
+      }
+    },
+    "trend": {
+      "start": {
+        "line": 42,
+        "column": 4
+      },
+      "end": {
+        "line": 42,
+        "column": 10
+      }
+    },
+    "btn-row": {
+      "start": {
+        "line": 46,
+        "column": 4
+      },
+      "end": {
+        "line": 46,
         "column": 12
+      }
+    },
+    "rematch": {
+      "start": {
+        "line": 52,
+        "column": 4
+      },
+      "end": {
+        "line": 52,
+        "column": 12
+      }
+    },
+    "menu": {
+      "start": {
+        "line": 57,
+        "column": 4
+      },
+      "end": {
+        "line": 57,
+        "column": 9
       }
     },
     "uid-2": {
       "start": {
-        "line": 1,
+        "line": 63,
         "column": 2
       },
       "end": {
-        "line": 1,
-        "column": 72
+        "line": 78,
+        "column": 14
       }
     },
     "uid-3": {
       "start": {
-        "line": 2,
-        "column": 2
+        "line": 64,
+        "column": 4
       },
       "end": {
-        "line": 2,
-        "column": 70
+        "line": 64,
+        "column": 40
       }
     },
     "uid-4": {
       "start": {
-        "line": 3,
-        "column": 2
+        "line": 65,
+        "column": 4
       },
       "end": {
-        "line": 3,
-        "column": 72
+        "line": 65,
+        "column": 53
       }
     },
     "uid-5": {
       "start": {
-        "line": 4,
-        "column": 2
+        "line": 66,
+        "column": 4
       },
       "end": {
-        "line": 4,
-        "column": 73
+        "line": 66,
+        "column": 59
       }
     },
     "uid-6": {
       "start": {
-        "line": 5,
-        "column": 2
+        "line": 67,
+        "column": 4
       },
       "end": {
-        "line": 5,
-        "column": 70
+        "line": 67,
+        "column": 56
       }
     },
     "uid-7": {
       "start": {
-        "line": 6,
-        "column": 2
+        "line": 68,
+        "column": 4
       },
       "end": {
-        "line": 6,
-        "column": 78
+        "line": 68,
+        "column": 53
       }
     },
     "uid-8": {
       "start": {
-        "line": 7,
-        "column": 2
+        "line": 69,
+        "column": 4
       },
       "end": {
-        "line": 7,
-        "column": 78
+        "line": 69,
+        "column": 61
       }
     },
     "uid-9": {
       "start": {
-        "line": 8,
-        "column": 2
+        "line": 70,
+        "column": 4
       },
       "end": {
-        "line": 8,
-        "column": 79
+        "line": 70,
+        "column": 63
       }
     },
     "uid-10": {
       "start": {
-        "line": 9,
-        "column": 2
+        "line": 71,
+        "column": 4
       },
       "end": {
-        "line": 12,
-        "column": 14
+        "line": 71,
+        "column": 64
       }
     },
     "uid-11": {
       "start": {
-        "line": 10,
+        "line": 72,
         "column": 4
       },
       "end": {
-        "line": 10,
-        "column": 112
+        "line": 72,
+        "column": 68
       }
     },
     "uid-12": {
       "start": {
-        "line": 11,
+        "line": 73,
         "column": 4
       },
       "end": {
-        "line": 11,
-        "column": 106
+        "line": 73,
+        "column": 48
+      }
+    },
+    "uid-13": {
+      "start": {
+        "line": 74,
+        "column": 4
+      },
+      "end": {
+        "line": 77,
+        "column": 16
+      }
+    },
+    "uid-14": {
+      "start": {
+        "line": 75,
+        "column": 6
+      },
+      "end": {
+        "line": 75,
+        "column": 59
+      }
+    },
+    "uid-15": {
+      "start": {
+        "line": 76,
+        "column": 6
+      },
+      "end": {
+        "line": 76,
+        "column": 50
       }
     }
   }

@@ -22,5 +22,6 @@
     <text class="profit-pos" id="profit-label">+$0</text>
     <text class="coverage" id="coverage-label">Coverage: 0/37</text>
     <text class="rule" id="rule-label"></text>
+    <text class="mode" id="session-time">0:00</text>
   </container>
 </panel>
