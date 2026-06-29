@@ -1,0 +1,180 @@
+{
+  "element": {
+    "sourceTag": "panel",
+    "type": "custom",
+    "children": [
+      {
+        "sourceTag": "container",
+        "type": "custom",
+        "children": [
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "DEALER"
+            ],
+            "properties": {
+              "class": "title",
+              "id": "dealer-title"
+            },
+            "dataUid": "uid-3"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Place your bets!"
+            ],
+            "properties": {
+              "class": "msg",
+              "id": "dealer-msg"
+            },
+            "dataUid": "uid-4"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [],
+            "properties": {
+              "class": "sub",
+              "id": "dealer-sub"
+            },
+            "dataUid": "uid-5"
+          }
+        ],
+        "properties": {
+          "class": "root"
+        },
+        "dataUid": "uid-2"
+      }
+    ],
+    "properties": {},
+    "dataUid": "uid-1"
+  },
+  "classes": {
+    "root": {
+      "content": {
+        "flexDirection": "column",
+        "alignItems": "center",
+        "gap": "6",
+        "padding": "8",
+        "backgroundColor": "rgba(0,30,50,0.85)",
+        "borderRadius": 8,
+        "width": "340"
+      }
+    },
+    "title": {
+      "content": {
+        "fontSize": "11",
+        "color": "#00ffcc",
+        "fontWeight": "bold"
+      }
+    },
+    "msg": {
+      "content": {
+        "fontSize": "14",
+        "color": "#ffffff",
+        "textAlign": "center"
+      }
+    },
+    "sub": {
+      "content": {
+        "fontSize": "10",
+        "color": "#88ccdd",
+        "textAlign": "center"
+      }
+    }
+  },
+  "ranges": {
+    "uid-1": {
+      "start": {
+        "line": 0,
+        "column": 0
+      },
+      "end": {
+        "line": 12,
+        "column": 8
+      }
+    },
+    "root": {
+      "start": {
+        "line": 2,
+        "column": 4
+      },
+      "end": {
+        "line": 2,
+        "column": 9
+      }
+    },
+    "title": {
+      "start": {
+        "line": 3,
+        "column": 4
+      },
+      "end": {
+        "line": 3,
+        "column": 10
+      }
+    },
+    "msg": {
+      "start": {
+        "line": 4,
+        "column": 4
+      },
+      "end": {
+        "line": 4,
+        "column": 8
+      }
+    },
+    "sub": {
+      "start": {
+        "line": 5,
+        "column": 4
+      },
+      "end": {
+        "line": 5,
+        "column": 8
+      }
+    },
+    "uid-2": {
+      "start": {
+        "line": 7,
+        "column": 2
+      },
+      "end": {
+        "line": 11,
+        "column": 14
+      }
+    },
+    "uid-3": {
+      "start": {
+        "line": 8,
+        "column": 4
+      },
+      "end": {
+        "line": 8,
+        "column": 55
+      }
+    },
+    "uid-4": {
+      "start": {
+        "line": 9,
+        "column": 4
+      },
+      "end": {
+        "line": 9,
+        "column": 61
+      }
+    },
+    "uid-5": {
+      "start": {
+        "line": 10,
+        "column": 4
+      },
+      "end": {
+        "line": 10,
+        "column": 45
+      }
+    }
+  }
+}

@@ -1,0 +1,529 @@
+{
+  "element": {
+    "sourceTag": "panel",
+    "type": "custom",
+    "children": [
+      {
+        "sourceTag": "container",
+        "type": "custom",
+        "children": [
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "GAME OVER"
+            ],
+            "properties": {
+              "class": "title"
+            },
+            "dataUid": "uid-3"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Session"
+            ],
+            "properties": {
+              "class": "mode",
+              "id": "mode-label"
+            },
+            "dataUid": "uid-4"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "$1250"
+            ],
+            "properties": {
+              "class": "bankroll",
+              "id": "final-bankroll"
+            },
+            "dataUid": "uid-5"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Spins: 10"
+            ],
+            "properties": {
+              "class": "stat",
+              "id": "spins-label"
+            },
+            "dataUid": "uid-6"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Wins: 6"
+            ],
+            "properties": {
+              "class": "stat",
+              "id": "wins-label"
+            },
+            "dataUid": "uid-7"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Best Win: $350"
+            ],
+            "properties": {
+              "class": "stat",
+              "id": "biggest-win"
+            },
+            "dataUid": "uid-8"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Profit: +$250"
+            ],
+            "properties": {
+              "class": "profit",
+              "id": "profit-label"
+            },
+            "dataUid": "uid-9"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Best Streak: 4"
+            ],
+            "properties": {
+              "class": "streak",
+              "id": "streak-label"
+            },
+            "dataUid": "uid-10"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Duration: 0:00"
+            ],
+            "properties": {
+              "class": "duration",
+              "id": "duration-label"
+            },
+            "dataUid": "uid-11"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [],
+            "properties": {
+              "class": "trend",
+              "id": "trend-label"
+            },
+            "dataUid": "uid-12"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "REMATCH"
+                ],
+                "properties": {
+                  "class": "rematch",
+                  "id": "btn-rematch"
+                },
+                "dataUid": "uid-14"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "MENU"
+                ],
+                "properties": {
+                  "class": "menu",
+                  "id": "btn-menu"
+                },
+                "dataUid": "uid-15"
+              }
+            ],
+            "properties": {
+              "class": "btn-row"
+            },
+            "dataUid": "uid-13"
+          }
+        ],
+        "properties": {
+          "class": "root"
+        },
+        "dataUid": "uid-2"
+      }
+    ],
+    "properties": {},
+    "dataUid": "uid-1"
+  },
+  "classes": {
+    "root": {
+      "content": {
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "center",
+        "gap": "6",
+        "padding": "16",
+        "width": "360",
+        "backgroundColor": "rgba(0,8,20,0.95)",
+        "borderRadius": 12,
+        "borderWidth": "1",
+        "borderColor": "rgba(204,170,0,0.5)"
+      }
+    },
+    "title": {
+      "content": {
+        "fontSize": "20",
+        "color": "rgba(204,170,0,1)"
+      }
+    },
+    "mode": {
+      "content": {
+        "fontSize": "12",
+        "color": "rgba(136,204,204,1)"
+      }
+    },
+    "bankroll": {
+      "content": {
+        "fontSize": "18",
+        "color": "rgba(0,255,204,1)"
+      }
+    },
+    "stat": {
+      "content": {
+        "fontSize": "11",
+        "color": "rgba(255,255,255,1)"
+      }
+    },
+    "profit": {
+      "content": {
+        "fontSize": "14",
+        "color": "rgba(0,255,136,1)"
+      }
+    },
+    "streak": {
+      "content": {
+        "fontSize": "11",
+        "color": "rgba(255,68,136,1)"
+      }
+    },
+    "duration": {
+      "content": {
+        "fontSize": "10",
+        "color": "rgba(170,136,255,1)"
+      }
+    },
+    "trend": {
+      "content": {
+        "fontSize": "10",
+        "color": "rgba(136,170,170,1)"
+      }
+    },
+    "btn-row": {
+      "content": {
+        "display": "flex",
+        "flexDirection": "row",
+        "gap": "12",
+        "marginTop": "8"
+      }
+    },
+    "rematch": {
+      "content": {
+        "fontSize": "14",
+        "color": "rgba(0,255,204,1)",
+        "padding": "6"
+      }
+    },
+    "menu": {
+      "content": {
+        "fontSize": "14",
+        "color": "rgba(102,136,136,1)",
+        "padding": "6"
+      }
+    }
+  },
+  "ranges": {
+    "uid-1": {
+      "start": {
+        "line": 0,
+        "column": 0
+      },
+      "end": {
+        "line": 79,
+        "column": 8
+      }
+    },
+    "root": {
+      "start": {
+        "line": 2,
+        "column": 4
+      },
+      "end": {
+        "line": 2,
+        "column": 9
+      }
+    },
+    "title": {
+      "start": {
+        "line": 14,
+        "column": 4
+      },
+      "end": {
+        "line": 14,
+        "column": 10
+      }
+    },
+    "mode": {
+      "start": {
+        "line": 18,
+        "column": 4
+      },
+      "end": {
+        "line": 18,
+        "column": 9
+      }
+    },
+    "bankroll": {
+      "start": {
+        "line": 22,
+        "column": 4
+      },
+      "end": {
+        "line": 22,
+        "column": 13
+      }
+    },
+    "stat": {
+      "start": {
+        "line": 26,
+        "column": 4
+      },
+      "end": {
+        "line": 26,
+        "column": 9
+      }
+    },
+    "profit": {
+      "start": {
+        "line": 30,
+        "column": 4
+      },
+      "end": {
+        "line": 30,
+        "column": 11
+      }
+    },
+    "streak": {
+      "start": {
+        "line": 34,
+        "column": 4
+      },
+      "end": {
+        "line": 34,
+        "column": 11
+      }
+    },
+    "duration": {
+      "start": {
+        "line": 38,
+        "column": 4
+      },
+      "end": {
+        "line": 38,
+        "column": 13
+      }
+    },
+    "trend": {
+      "start": {
+        "line": 42,
+        "column": 4
+      },
+      "end": {
+        "line": 42,
+        "column": 10
+      }
+    },
+    "btn-row": {
+      "start": {
+        "line": 46,
+        "column": 4
+      },
+      "end": {
+        "line": 46,
+        "column": 12
+      }
+    },
+    "rematch": {
+      "start": {
+        "line": 52,
+        "column": 4
+      },
+      "end": {
+        "line": 52,
+        "column": 12
+      }
+    },
+    "menu": {
+      "start": {
+        "line": 57,
+        "column": 4
+      },
+      "end": {
+        "line": 57,
+        "column": 9
+      }
+    },
+    "uid-2": {
+      "start": {
+        "line": 63,
+        "column": 2
+      },
+      "end": {
+        "line": 78,
+        "column": 14
+      }
+    },
+    "uid-3": {
+      "start": {
+        "line": 64,
+        "column": 4
+      },
+      "end": {
+        "line": 64,
+        "column": 40
+      }
+    },
+    "uid-4": {
+      "start": {
+        "line": 65,
+        "column": 4
+      },
+      "end": {
+        "line": 65,
+        "column": 53
+      }
+    },
+    "uid-5": {
+      "start": {
+        "line": 66,
+        "column": 4
+      },
+      "end": {
+        "line": 66,
+        "column": 59
+      }
+    },
+    "uid-6": {
+      "start": {
+        "line": 67,
+        "column": 4
+      },
+      "end": {
+        "line": 67,
+        "column": 56
+      }
+    },
+    "uid-7": {
+      "start": {
+        "line": 68,
+        "column": 4
+      },
+      "end": {
+        "line": 68,
+        "column": 53
+      }
+    },
+    "uid-8": {
+      "start": {
+        "line": 69,
+        "column": 4
+      },
+      "end": {
+        "line": 69,
+        "column": 61
+      }
+    },
+    "uid-9": {
+      "start": {
+        "line": 70,
+        "column": 4
+      },
+      "end": {
+        "line": 70,
+        "column": 63
+      }
+    },
+    "uid-10": {
+      "start": {
+        "line": 71,
+        "column": 4
+      },
+      "end": {
+        "line": 71,
+        "column": 64
+      }
+    },
+    "uid-11": {
+      "start": {
+        "line": 72,
+        "column": 4
+      },
+      "end": {
+        "line": 72,
+        "column": 68
+      }
+    },
+    "uid-12": {
+      "start": {
+        "line": 73,
+        "column": 4
+      },
+      "end": {
+        "line": 73,
+        "column": 48
+      }
+    },
+    "uid-13": {
+      "start": {
+        "line": 74,
+        "column": 4
+      },
+      "end": {
+        "line": 77,
+        "column": 16
+      }
+    },
+    "uid-14": {
+      "start": {
+        "line": 75,
+        "column": 6
+      },
+      "end": {
+        "line": 75,
+        "column": 59
+      }
+    },
+    "uid-15": {
+      "start": {
+        "line": 76,
+        "column": 6
+      },
+      "end": {
+        "line": 76,
+        "column": 50
+      }
+    }
+  }
+}

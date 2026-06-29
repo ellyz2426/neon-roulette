@@ -1,0 +1,386 @@
+{
+  "element": {
+    "sourceTag": "panel",
+    "type": "custom",
+    "children": [
+      {
+        "sourceTag": "container",
+        "type": "custom",
+        "children": [
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "TUTORIAL"
+            ],
+            "properties": {
+              "class": "title",
+              "id": "tut-title"
+            },
+            "dataUid": "uid-3"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Learn to play roulette"
+            ],
+            "properties": {
+              "class": "desc",
+              "id": "tut-desc"
+            },
+            "dataUid": "uid-4"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Step 1 of 8"
+            ],
+            "properties": {
+              "class": "step",
+              "id": "tut-step"
+            },
+            "dataUid": "uid-5"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "Prev"
+                ],
+                "properties": {
+                  "class": "prev",
+                  "id": "tut-prev"
+                },
+                "dataUid": "uid-7"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "Next"
+                ],
+                "properties": {
+                  "class": "next",
+                  "id": "tut-next"
+                },
+                "dataUid": "uid-8"
+              }
+            ],
+            "properties": {
+              "class": "row"
+            },
+            "dataUid": "uid-6"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Skip Tutorial"
+            ],
+            "properties": {
+              "class": "skip",
+              "id": "tut-skip"
+            },
+            "dataUid": "uid-9"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "1/8"
+            ],
+            "properties": {
+              "class": "page",
+              "id": "tut-page"
+            },
+            "dataUid": "uid-10"
+          }
+        ],
+        "properties": {
+          "class": "root"
+        },
+        "dataUid": "uid-2"
+      }
+    ],
+    "properties": {},
+    "dataUid": "uid-1"
+  },
+  "classes": {
+    "root": {
+      "content": {
+        "flexDirection": "column",
+        "alignItems": "center",
+        "gap": "4",
+        "padding": "8",
+        "backgroundColor": "rgba(0,30,50,0.85)",
+        "borderRadius": 8,
+        "width": "300"
+      }
+    },
+    "title": {
+      "content": {
+        "fontSize": "11",
+        "color": "#00ffcc",
+        "fontWeight": "bold"
+      }
+    },
+    "desc": {
+      "content": {
+        "fontSize": "9",
+        "color": "#88ccdd",
+        "textAlign": "center"
+      }
+    },
+    "step": {
+      "content": {
+        "fontSize": "9",
+        "color": "#ffffff",
+        "textAlign": "center"
+      }
+    },
+    "row": {
+      "content": {
+        "flexDirection": "row",
+        "gap": "6"
+      }
+    },
+    "prev": {
+      "content": {
+        "fontSize": "9",
+        "color": "#ff8844",
+        "backgroundColor": "rgba(255,136,68,0.15)",
+        "borderRadius": 4,
+        "padding": "4",
+        "width": "50",
+        "textAlign": "center"
+      }
+    },
+    "next": {
+      "content": {
+        "fontSize": "9",
+        "color": "#00ffcc",
+        "backgroundColor": "rgba(0,255,204,0.15)",
+        "borderRadius": 4,
+        "padding": "4",
+        "width": "50",
+        "textAlign": "center"
+      }
+    },
+    "skip": {
+      "content": {
+        "fontSize": "9",
+        "color": "#ff4444",
+        "backgroundColor": "rgba(255,68,68,0.15)",
+        "borderRadius": 4,
+        "padding": "4",
+        "width": "90",
+        "textAlign": "center",
+        "marginTop": "4"
+      }
+    },
+    "page": {
+      "content": {
+        "fontSize": "8",
+        "color": "#668899"
+      }
+    }
+  },
+  "ranges": {
+    "uid-1": {
+      "start": {
+        "line": 0,
+        "column": 0
+      },
+      "end": {
+        "line": 23,
+        "column": 8
+      }
+    },
+    "root": {
+      "start": {
+        "line": 2,
+        "column": 4
+      },
+      "end": {
+        "line": 2,
+        "column": 9
+      }
+    },
+    "title": {
+      "start": {
+        "line": 3,
+        "column": 4
+      },
+      "end": {
+        "line": 3,
+        "column": 10
+      }
+    },
+    "desc": {
+      "start": {
+        "line": 4,
+        "column": 4
+      },
+      "end": {
+        "line": 4,
+        "column": 9
+      }
+    },
+    "step": {
+      "start": {
+        "line": 5,
+        "column": 4
+      },
+      "end": {
+        "line": 5,
+        "column": 9
+      }
+    },
+    "row": {
+      "start": {
+        "line": 6,
+        "column": 4
+      },
+      "end": {
+        "line": 6,
+        "column": 8
+      }
+    },
+    "prev": {
+      "start": {
+        "line": 7,
+        "column": 4
+      },
+      "end": {
+        "line": 7,
+        "column": 9
+      }
+    },
+    "next": {
+      "start": {
+        "line": 8,
+        "column": 4
+      },
+      "end": {
+        "line": 8,
+        "column": 9
+      }
+    },
+    "skip": {
+      "start": {
+        "line": 9,
+        "column": 4
+      },
+      "end": {
+        "line": 9,
+        "column": 9
+      }
+    },
+    "page": {
+      "start": {
+        "line": 10,
+        "column": 4
+      },
+      "end": {
+        "line": 10,
+        "column": 9
+      }
+    },
+    "uid-2": {
+      "start": {
+        "line": 12,
+        "column": 2
+      },
+      "end": {
+        "line": 22,
+        "column": 14
+      }
+    },
+    "uid-3": {
+      "start": {
+        "line": 13,
+        "column": 4
+      },
+      "end": {
+        "line": 13,
+        "column": 54
+      }
+    },
+    "uid-4": {
+      "start": {
+        "line": 14,
+        "column": 4
+      },
+      "end": {
+        "line": 14,
+        "column": 66
+      }
+    },
+    "uid-5": {
+      "start": {
+        "line": 15,
+        "column": 4
+      },
+      "end": {
+        "line": 15,
+        "column": 55
+      }
+    },
+    "uid-6": {
+      "start": {
+        "line": 16,
+        "column": 4
+      },
+      "end": {
+        "line": 19,
+        "column": 16
+      }
+    },
+    "uid-7": {
+      "start": {
+        "line": 17,
+        "column": 6
+      },
+      "end": {
+        "line": 17,
+        "column": 50
+      }
+    },
+    "uid-8": {
+      "start": {
+        "line": 18,
+        "column": 6
+      },
+      "end": {
+        "line": 18,
+        "column": 50
+      }
+    },
+    "uid-9": {
+      "start": {
+        "line": 20,
+        "column": 4
+      },
+      "end": {
+        "line": 20,
+        "column": 57
+      }
+    },
+    "uid-10": {
+      "start": {
+        "line": 21,
+        "column": 4
+      },
+      "end": {
+        "line": 21,
+        "column": 47
+      }
+    }
+  }
+}
