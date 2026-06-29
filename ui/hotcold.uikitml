@@ -1,0 +1,15 @@
+<container flexDirection="column" gap="4" padding="10">
+  <text fontSize="14" fontWeight="bold" color="#00ffcc">HOT & COLD</text>
+  <text fontSize="10" color="#88ccff" fontWeight="bold">Hot (Most Landed)</text>
+  <text name="hot1" fontSize="10" color="#ff4444">--</text>
+  <text name="hot2" fontSize="10" color="#ff6644">--</text>
+  <text name="hot3" fontSize="10" color="#ff8844">--</text>
+  <text name="hot4" fontSize="10" color="#ffaa44">--</text>
+  <text name="hot5" fontSize="10" color="#ffcc44">--</text>
+  <text fontSize="10" color="#88ccff" fontWeight="bold" marginTop="4">Cold (Least Landed)</text>
+  <text name="cold1" fontSize="10" color="#4488ff">--</text>
+  <text name="cold2" fontSize="10" color="#4488ff">--</text>
+  <text name="cold3" fontSize="10" color="#4488ff">--</text>
+  <text name="cold4" fontSize="10" color="#4488ff">--</text>
+  <text name="cold5" fontSize="10" color="#4488ff">--</text>
+</container>

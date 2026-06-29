@@ -1,0 +1,103 @@
+
+> neon-roulette@1.0.0 dev:runtime
+> vite
+
+🚀 Generating initial UIKitML files for dev server...
+👁️  UIKitML file watcher started - monitoring for changes...
+
+  VITE v7.3.6  ready in 1529 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://198.19.0.2:5173/
+[browser] [PanelUISystem] Error loading panel for entity 2: TypeError: Cannot set properties of undefined (setting 'visible')
+    at http://localhost:5173/src/index.ts:1109:35
+    at QueryManager.updateEntity (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:793:11)
+    at Entity.addComponent (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:255:25)
+    at PanelUISystem.loadPanel (http://localhost:5173/@fs/home/hatch/workspace/immersive-web-sdk/packages/core/dist/ui/ui.js:167:20)
+[browser] [PanelUISystem] Error loading panel for entity 3: TypeError: Cannot set properties of undefined (setting 'visible')
+    at http://localhost:5173/src/index.ts:1109:35
+    at QueryManager.updateEntity (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:793:11)
+    at Entity.addComponent (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:255:25)
+    at PanelUISystem.loadPanel (http://localhost:5173/@fs/home/hatch/workspace/immersive-web-sdk/packages/core/dist/ui/ui.js:167:20)
+[browser] [PanelUISystem] Error loading panel for entity 4: TypeError: Cannot set properties of undefined (setting 'visible')
+    at http://localhost:5173/src/index.ts:1109:35
+    at QueryManager.updateEntity (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:793:11)
+    at Entity.addComponent (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:255:25)
+    at PanelUISystem.loadPanel (http://localhost:5173/@fs/home/hatch/workspace/immersive-web-sdk/packages/core/dist/ui/ui.js:167:20)
+[browser] [PanelUISystem] Error loading panel for entity 6: TypeError: Cannot set properties of undefined (setting 'visible')
+    at http://localhost:5173/src/index.ts:1109:35
+    at QueryManager.updateEntity (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:793:11)
+    at Entity.addComponent (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:255:25)
+    at PanelUISystem.loadPanel (http://localhost:5173/@fs/home/hatch/workspace/immersive-web-sdk/packages/core/dist/ui/ui.js:167:20)
+[browser] [PanelUISystem] Error loading panel for entity 7: TypeError: Cannot set properties of undefined (setting 'visible')
+    at http://localhost:5173/src/index.ts:1109:35
+    at QueryManager.updateEntity (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:793:11)
+    at Entity.addComponent (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:255:25)
+    at PanelUISystem.loadPanel (http://localhost:5173/@fs/home/hatch/workspace/immersive-web-sdk/packages/core/dist/ui/ui.js:167:20)
+[browser] [PanelUISystem] Error loading panel for entity 9: TypeError: Cannot set properties of undefined (setting 'visible')
+    at http://localhost:5173/src/index.ts:1109:35
+    at QueryManager.updateEntity (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:793:11)
+    at Entity.addComponent (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:255:25)
+    at PanelUISystem.loadPanel (http://localhost:5173/@fs/home/hatch/workspace/immersive-web-sdk/packages/core/dist/ui/ui.js:167:20)
+[browser] [PanelUISystem] Error loading panel for entity 10: TypeError: Cannot set properties of undefined (setting 'visible')
+    at http://localhost:5173/src/index.ts:1109:35
+    at QueryManager.updateEntity (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:793:11)
+    at Entity.addComponent (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:255:25)
+    at PanelUISystem.loadPanel (http://localhost:5173/@fs/home/hatch/workspace/immersive-web-sdk/packages/core/dist/ui/ui.js:167:20)
+[browser] [PanelUISystem] Error loading panel for entity 11: TypeError: Cannot set properties of undefined (setting 'visible')
+    at http://localhost:5173/src/index.ts:1109:35
+    at QueryManager.updateEntity (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:793:11)
+    at Entity.addComponent (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:255:25)
+    at PanelUISystem.loadPanel (http://localhost:5173/@fs/home/hatch/workspace/immersive-web-sdk/packages/core/dist/ui/ui.js:167:20)
+[browser] [PanelUISystem] Error loading panel for entity 12: TypeError: Cannot set properties of undefined (setting 'visible')
+    at http://localhost:5173/src/index.ts:1109:35
+    at QueryManager.updateEntity (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:793:11)
+    at Entity.addComponent (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:255:25)
+    at PanelUISystem.loadPanel (http://localhost:5173/@fs/home/hatch/workspace/immersive-web-sdk/packages/core/dist/ui/ui.js:167:20)
+[browser] [PanelUISystem] Error loading panel for entity 13: TypeError: Cannot set properties of undefined (setting 'visible')
+    at http://localhost:5173/src/index.ts:1109:35
+    at QueryManager.updateEntity (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:793:11)
+    at Entity.addComponent (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:255:25)
+    at PanelUISystem.loadPanel (http://localhost:5173/@fs/home/hatch/workspace/immersive-web-sdk/packages/core/dist/ui/ui.js:167:20)
+[browser] [PanelUISystem] Error loading panel for entity 14: TypeError: Cannot set properties of undefined (setting 'visible')
+    at http://localhost:5173/src/index.ts:1109:35
+    at QueryManager.updateEntity (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:793:11)
+    at Entity.addComponent (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:255:25)
+    at PanelUISystem.loadPanel (http://localhost:5173/@fs/home/hatch/workspace/immersive-web-sdk/packages/core/dist/ui/ui.js:167:20)
+[browser] [PanelUISystem] Error loading panel for entity 15: TypeError: Cannot set properties of undefined (setting 'visible')
+    at http://localhost:5173/src/index.ts:1109:35
+    at QueryManager.updateEntity (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:793:11)
+    at Entity.addComponent (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:255:25)
+    at PanelUISystem.loadPanel (http://localhost:5173/@fs/home/hatch/workspace/immersive-web-sdk/packages/core/dist/ui/ui.js:167:20)
+[browser] [PanelUISystem] Error loading panel for entity 18: TypeError: Cannot set properties of undefined (setting 'visible')
+    at http://localhost:5173/src/index.ts:1109:35
+    at QueryManager.updateEntity (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:793:11)
+    at Entity.addComponent (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:255:25)
+    at PanelUISystem.loadPanel (http://localhost:5173/@fs/home/hatch/workspace/immersive-web-sdk/packages/core/dist/ui/ui.js:167:20)
+[browser] [PanelUISystem] Error loading panel for entity 19: TypeError: Cannot set properties of undefined (setting 'visible')
+    at http://localhost:5173/src/index.ts:1109:35
+    at QueryManager.updateEntity (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:793:11)
+    at Entity.addComponent (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:255:25)
+    at PanelUISystem.loadPanel (http://localhost:5173/@fs/home/hatch/workspace/immersive-web-sdk/packages/core/dist/ui/ui.js:167:20)
+[browser] [PanelUISystem] Error loading panel for entity 20: TypeError: Cannot set properties of undefined (setting 'visible')
+    at http://localhost:5173/src/index.ts:1109:35
+    at QueryManager.updateEntity (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:793:11)
+    at Entity.addComponent (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:255:25)
+    at PanelUISystem.loadPanel (http://localhost:5173/@fs/home/hatch/workspace/immersive-web-sdk/packages/core/dist/ui/ui.js:167:20)
+9:06:47 AM [vite] (client) page reload src/index.ts
+
+🥽 IWSDK Dev Summary (Development):
+  - Device: metaQuest3
+  - Runtime injected: 1116.7KB
+  - Activation mode: localhost
+  - AI: agent mode (WebSocket at /__iwer_mcp)
+  - Note: Runtime only activates on localhost/local networks
+
+
+🥽 IWSDK Dev Summary (Development):
+  - Device: metaQuest3
+  - Runtime injected: 1116.7KB
+  - Activation mode: localhost
+  - AI: agent mode (WebSocket at /__iwer_mcp)
+  - Note: Runtime only activates on localhost/local networks
+

@@ -57,9 +57,12 @@ const THEMES: Theme[] = [
 ];
 
 // ─── Bet Types ───
-type BetType = 'straight' | 'red' | 'black' | 'odd' | 'even' | 'low' | 'high' | 'dozen1' | 'dozen2' | 'dozen3' | 'col1' | 'col2' | 'col3';
-interface Bet { type: BetType; number?: number; amount: number; }
+type BetType = 'straight' | 'red' | 'black' | 'odd' | 'even' | 'low' | 'high' | 'dozen1' | 'dozen2' | 'dozen3' | 'col1' | 'col2' | 'col3' | 'street' | 'line' | 'five' | 'split' | 'corner';
+interface Bet { type: BetType; number?: number; numbers?: number[]; amount: number; }
 
+// Street bet: 3 numbers in a row (e.g. 1-2-3, 4-5-6, ..., 34-35-36) pays 11:1
+// Line bet: 6 numbers across 2 rows (e.g. 1-6) pays 5:1
+// Five bet (American only): 0-00-1-2-3 pays 6:1
 function evaluateBet(bet: Bet, result: number): number {
   switch (bet.type) {
     case 'straight': return bet.number === result ? bet.amount * 35 : 0;
@@ -75,9 +78,22 @@ function evaluateBet(bet: Bet, result: number): number {
     case 'col1': return result > 0 && result % 3 === 1 ? bet.amount * 3 : 0;
     case 'col2': return result > 0 && result % 3 === 2 ? bet.amount * 3 : 0;
     case 'col3': return result > 0 && result % 3 === 0 && result > 0 ? bet.amount * 3 : 0;
+    case 'street': return bet.numbers && bet.numbers.includes(result) ? bet.amount * 12 : 0;
+    case 'line': return bet.numbers && bet.numbers.includes(result) ? bet.amount * 6 : 0;
+    case 'five': return [0, 37, 1, 2, 3].includes(result) ? bet.amount * 7 : 0;
+    case 'split': return bet.numbers && bet.numbers.includes(result) ? bet.amount * 18 : 0;
+    case 'corner': return bet.numbers && bet.numbers.includes(result) ? bet.amount * 9 : 0;
     default: return 0;
   }
 }
+
+// Generate street bet number sets: each row of 3 (1-2-3, 4-5-6, ..., 34-35-36)
+const STREETS: number[][] = [];
+for (let i = 0; i < 12; i++) STREETS.push([i * 3 + 1, i * 3 + 2, i * 3 + 3]);
+
+// Generate line bet number sets: each pair of adjacent rows
+const LINES: number[][] = [];
+for (let i = 0; i < 11; i++) LINES.push([...STREETS[i], ...STREETS[i + 1]]);
 
 // ─── Achievements ───
 interface Achievement { id: string; name: string; desc: string; check: (s: GameState) => boolean; }
@@ -304,7 +320,12 @@ async function main() {
   const world = await World.create(container, {
     xr: { offer: 'once' },
     render: { fov: 60 },
-  } as any);
+    features: {
+      locomotion: {
+        browserControls: true,
+      } as Record<string, unknown>,
+    },
+  });
 
   const scene = world.scene;
   const camera = world.camera;
@@ -340,6 +361,14 @@ async function main() {
   let ballSpeed = 0;
   let countdownPhase = 0;
   let countdownTimer = 0;
+  let winningPocketIdx = -1;
+  let winPulseTime = 0;
+  let cameraBaseZ = 0;
+  let cameraZoomTarget = 0;
+  let cameraZooming = false;
+  let betTooltip = '';
+  let streakFxTimer = 0;
+  let initialCameraZ = 0;
 
   const theme = () => THEMES[state.themeIdx];
   state.themesUsed.add(theme().name);
@@ -521,7 +550,7 @@ async function main() {
   tableGroup.add(tableEdge);
 
   // Bet zones (clickable areas on table)
-  interface BetZone { mesh: Mesh; type: BetType; number?: number; label: string; }
+  interface BetZone { mesh: Mesh; type: BetType; number?: number; numbers?: number[]; label: string; }
   const betZones: BetZone[] = [];
   const zoneMat = (col: string) => new MeshStandardMaterial({ color: col, emissive: col, emissiveIntensity: 0.2, transparent: true, opacity: 0.6, metalness: 0.1, roughness: 0.7 });
 
@@ -570,6 +599,65 @@ async function main() {
     mesh.position.set(ob.x, 0.015, ob.z);
     tableGroup.add(mesh);
     betZones.push({ mesh, type: ob.type, label: ob.label });
+  }
+
+  // Street bet zones (left edge of each row, pays 11:1)
+  for (let i = 0; i < 12; i++) {
+    const x = -0.75 + i * 0.13;
+    const geo = new BoxGeometry(0.11, 0.015, 0.06);
+    const mesh = new Mesh(geo, zoneMat('#005566'));
+    mesh.position.set(x, 0.015, -0.28);
+    tableGroup.add(mesh);
+    betZones.push({ mesh, type: 'street', numbers: STREETS[i], label: 'St ' + STREETS[i][0] + '-' + STREETS[i][2] });
+  }
+
+  // Line bet zones (between rows, pays 5:1)
+  for (let i = 0; i < 11; i++) {
+    const x = -0.75 + i * 0.13 + 0.065;
+    const geo = new BoxGeometry(0.06, 0.015, 0.06);
+    const mesh = new Mesh(geo, zoneMat('#554400'));
+    mesh.position.set(x, 0.015, -0.28);
+    tableGroup.add(mesh);
+    betZones.push({ mesh, type: 'line', numbers: LINES[i], label: 'Ln ' + LINES[i][0] + '-' + LINES[i][5] });
+  }
+
+  // Five-number bet (American only: 0-00-1-2-3, pays 6:1) - always shown but only works on American
+  const fiveGeo = new BoxGeometry(0.2, 0.015, 0.06);
+  const fiveMesh = new Mesh(fiveGeo, zoneMat('#006644'));
+  fiveMesh.position.set(-0.88, 0.015, -0.28);
+  tableGroup.add(fiveMesh);
+  betZones.push({ mesh: fiveMesh, type: 'five', label: '0-00-1-2-3' });
+
+  // Split bets (between two adjacent numbers horizontally, pays 17:1)
+  for (let row = 0; row < 12; row++) {
+    for (let col = 0; col < 2; col++) {
+      const num1 = row * 3 + (3 - col);
+      const num2 = row * 3 + (2 - col);
+      const x = -0.75 + row * 0.13;
+      const z = -0.35 + col * 0.2 + 0.1;
+      const geo = new BoxGeometry(0.11, 0.015, 0.04);
+      const mesh = new Mesh(geo, zoneMat('#335566'));
+      mesh.position.set(x, 0.017, z);
+      tableGroup.add(mesh);
+      betZones.push({ mesh, type: 'split', numbers: [num1, num2], label: 'Sp ' + num1 + '/' + num2 });
+    }
+  }
+
+  // Corner bets (intersection of 4 numbers, pays 8:1)
+  for (let row = 0; row < 11; row++) {
+    for (let col = 0; col < 2; col++) {
+      const n1 = row * 3 + (3 - col);
+      const n2 = row * 3 + (2 - col);
+      const n3 = (row + 1) * 3 + (3 - col);
+      const n4 = (row + 1) * 3 + (2 - col);
+      const x = -0.75 + row * 0.13 + 0.065;
+      const z = -0.35 + col * 0.2 + 0.1;
+      const geo = new BoxGeometry(0.04, 0.015, 0.04);
+      const mesh = new Mesh(geo, zoneMat('#445533'));
+      mesh.position.set(x, 0.017, z);
+      tableGroup.add(mesh);
+      betZones.push({ mesh, type: 'corner', numbers: [n1, n2, n3, n4], label: 'Cn ' + n1 + '/' + n2 + '/' + n3 + '/' + n4 });
+    }
   }
 
   // Chip markers (placed bets visualization)
@@ -640,7 +728,12 @@ async function main() {
   function placeBet(zone: BetZone) {
     if (uiState !== 'playing' || isSpinning) return;
     if (selectedChip > bankroll && gameMode !== 'practice') return;
-    bets.push({ type: zone.type, number: zone.number, amount: selectedChip });
+    // Five-number bet only valid on American table
+    if (zone.type === 'five' && !isAmerican) {
+      showToast('Five-bet is American only!');
+      return;
+    }
+    bets.push({ type: zone.type, number: zone.number, numbers: zone.numbers, amount: selectedChip });
     if (gameMode !== 'practice') bankroll -= selectedChip;
     state.betTypesUsed.add(zone.type);
     addChipMarker(zone.mesh.position.clone());
@@ -673,8 +766,25 @@ async function main() {
 
   function startSpin() {
     if (bets.length === 0 || isSpinning) return;
-    isSpinning = true;
+    initAudio();
+
+    // Start countdown sequence
+    countdownPhase = 3;
+    countdownTimer = 0;
     uiState = 'spinning';
+    hideAllPanels();
+    const ce = panelEntities['countdown'];
+    if (ce && ce.object3D) ce.object3D.visible = true;
+    setText(panelEntities['countdown'], 'countdown-text', '3');
+    playCountdown();
+
+    // Clear previous winning pocket highlight
+    winningPocketIdx = -1;
+    winPulseTime = 0;
+  }
+
+  function executeActualSpin() {
+    isSpinning = true;
     const totalBet = bets.reduce((s, b) => s + b.amount, 0);
     state.totalWagered += totalBet;
 
@@ -706,6 +816,11 @@ async function main() {
 
     playSpinSound();
     hideAllPanels();
+
+    // Camera zoom toward wheel
+    cameraBaseZ = camera.position.z;
+    cameraZoomTarget = cameraBaseZ + 1.0;
+    cameraZooming = true;
   }
 
   function resolveSpin() {
@@ -777,9 +892,22 @@ async function main() {
     clearChipMarkers();
 
     playBallSettle();
+
+    // Highlight winning pocket on wheel
+    winningPocketIdx = targetPocket;
+    winPulseTime = 0;
+
+    // Camera zoom back
+    cameraZooming = false;
+
     uiState = 'result';
     showResultPanel(totalWin);
     saveState(state);
+
+    // Streak visual effects
+    if (currentStreak >= 3) {
+      streakFxTimer = 2.0;
+    }
   }
 
   function continueAfterResult() {
@@ -882,7 +1010,7 @@ async function main() {
       case 'title': show('title'); break;
       case 'modes': show('modes'); break;
       case 'table': show('table'); break;
-      case 'playing': show('hud'); show('betting'); show('history'); break;
+      case 'playing': show('hud'); show('betting'); show('history'); show('hotcold'); show('payouts'); break;
       case 'spinning': show('hud'); break;
       case 'result': show('result'); show('hud'); break;
       case 'gameover': show('gameover'); break;
@@ -964,6 +1092,8 @@ async function main() {
     toast: { config: './ui/toast.json', world: false, pos: [0, 0, 0], follower: true },
     countdown: { config: './ui/countdown.json', world: false, pos: [0, 0, 0], follower: true },
     chips: { config: './ui/chips.json', world: true, pos: [0, 2.0, -3.5], scale: 1.2 },
+    hotcold: { config: './ui/hotcold.json', world: true, pos: [-1.8, 1.5, -2.5], scale: 0.8 },
+    payouts: { config: './ui/payouts.json', world: true, pos: [1.8, 1.8, -2.0], scale: 0.7 },
   };
 
   for (const [key, cfg] of Object.entries(panelConfigs)) {
@@ -996,6 +1126,8 @@ async function main() {
     toastQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/toast.json')] },
     countdownQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/countdown.json')] },
     chipsQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/chips.json')] },
+    hotcoldQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/hotcold.json')] },
+    payoutsQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/payouts.json')] },
   }) {
     init() {
       const wire = (qName: string, key: string, bindings: Record<string, () => void>) => {
@@ -1013,7 +1145,7 @@ async function main() {
             entity.object3D.position.set(...cfg.pos);
             if (cfg.scale) entity.object3D.scale.setScalar(cfg.scale);
           }
-          entity.object3D!.visible = false;
+          if (entity.object3D) entity.object3D.visible = false;
         });
       };
 
@@ -1091,7 +1223,20 @@ async function main() {
         'btn-resume': () => { uiState = 'playing'; showPanel('playing'); updateHUD(); playClick(); },
         'btn-quit': toTitle,
       });
-      wire('chipsQ', 'chips', { 'btn-back': toTitle });
+      wire('chipsQ', 'chips', {
+        'c1': () => { if (state.skinsUnlocked >= 1) { state.chipSkin = 0; saveState(state); updateChipsPanel(); playClick(); } },
+        'c2': () => { if (state.skinsUnlocked >= 2) { state.chipSkin = 1; saveState(state); updateChipsPanel(); playClick(); } },
+        'c3': () => { if (state.skinsUnlocked >= 3) { state.chipSkin = 2; saveState(state); updateChipsPanel(); playClick(); } },
+        'c4': () => { if (state.skinsUnlocked >= 4) { state.chipSkin = 3; saveState(state); updateChipsPanel(); playClick(); } },
+        'c5': () => { if (state.skinsUnlocked >= 5) { state.chipSkin = 4; saveState(state); updateChipsPanel(); playClick(); } },
+        'c6': () => { if (state.skinsUnlocked >= 6) { state.chipSkin = 5; saveState(state); updateChipsPanel(); playClick(); } },
+        'c7': () => { if (state.skinsUnlocked >= 7) { state.chipSkin = 6; saveState(state); updateChipsPanel(); playClick(); } },
+        'c8': () => { if (state.skinsUnlocked >= 8) { state.chipSkin = 7; saveState(state); updateChipsPanel(); playClick(); } },
+        'btn-back': toTitle,
+      });
+
+      wire('hotcoldQ', 'hotcold', {});
+      wire('payoutsQ', 'payouts', {});
     }
   }
 
@@ -1146,6 +1291,55 @@ async function main() {
     setText(e, 'theme-val', theme().name);
   }
 
+  function updateChipsPanel() {
+    const e = panelEntities['chips'];
+    if (!e) return;
+    const CHIP_NAMES = ['Classic Neon', 'Royal Red', 'Gold Rush', 'Void Purple', 'Solar Flare', 'Emerald', 'Rose Gold', 'Chrome'];
+    const CHIP_REQUIREMENTS = ['Default', '50 wins', '5K wagered', '10 games', 'x3 streak', 'Straight win', 'All bet types', 'Level 25'];
+    for (let i = 0; i < 8; i++) {
+      const unlocked = state.skinsUnlocked > i;
+      const equipped = state.chipSkin === i;
+      const label = unlocked
+        ? CHIP_NAMES[i] + (equipped ? ' [Equipped]' : '')
+        : CHIP_NAMES[i] + ' (Locked: ' + CHIP_REQUIREMENTS[i] + ')';
+      setText(e, 'c' + (i + 1), label);
+    }
+  }
+
+  function updateHotCold() {
+    const e = panelEntities['hotcold'];
+    if (!e) return;
+    // Hot: most landed numbers from session
+    const counts = new Map<number, number>();
+    for (const n of spinHistory) {
+      counts.set(n, (counts.get(n) || 0) + 1);
+    }
+    const sorted = [...counts.entries()].sort((a, b) => b[1] - a[1]);
+    for (let i = 0; i < 5; i++) {
+      if (sorted[i]) {
+        const [num, cnt] = sorted[i];
+        const col = isRed(num) ? 'R' : isBlack(num) ? 'B' : 'G';
+        setText(e, 'hot' + (i + 1), (num === 37 ? '00' : String(num)) + ' ' + col + ' (' + cnt + 'x)');
+      } else {
+        setText(e, 'hot' + (i + 1), '--');
+      }
+    }
+    // Cold: all 37 numbers, find those that haven't appeared or appeared least
+    const allNums: number[] = [];
+    const pCount = isAmerican ? 38 : 37;
+    for (let i = 0; i < pCount; i++) allNums.push(isAmerican ? AMER_SEQUENCE[i] : EURO_SEQUENCE[i]);
+    const coldSorted = allNums.map(n => ({ num: n, cnt: counts.get(n) || 0 })).sort((a, b) => a.cnt - b.cnt);
+    for (let i = 0; i < 5; i++) {
+      const c = coldSorted[i];
+      if (c) {
+        const col = isRed(c.num) ? 'R' : isBlack(c.num) ? 'B' : 'G';
+        setText(e, 'cold' + (i + 1), (c.num === 37 ? '00' : String(c.num)) + ' ' + col + ' (' + c.cnt + 'x)');
+      } else {
+        setText(e, 'cold' + (i + 1), '--');
+      }
+    }
+  }
+
   function updateGameOverPanel() {
     const e = panelEntities['gameover'];
     if (!e) return;
@@ -1185,6 +1379,8 @@ async function main() {
 
       if (!this.initialized) {
         this.initialized = true;
+        initialCameraZ = camera.position.z;
+        cameraBaseZ = initialCameraZ;
         // Wait a bit for panels to load
         setTimeout(() => {
           showPanel('title');
@@ -1192,6 +1388,27 @@ async function main() {
           const te = panelEntities['title'];
           if (te) setText(te, 'level-display', 'Level ' + state.level + ' - ' + state.xp + ' XP');
         }, 500);
+      }
+
+      // Countdown processing
+      if (uiState === 'spinning' && countdownPhase > 0) {
+        countdownTimer += delta;
+        if (countdownTimer >= 0.7) {
+          countdownTimer = 0;
+          countdownPhase--;
+          if (countdownPhase > 0) {
+            setText(panelEntities['countdown'], 'countdown-text', String(countdownPhase));
+            playCountdown();
+          } else {
+            setText(panelEntities['countdown'], 'countdown-text', 'GO!');
+            playGo();
+            setTimeout(() => {
+              const ce = panelEntities['countdown'];
+              if (ce && ce.object3D) ce.object3D.visible = false;
+              executeActualSpin();
+            }, 400);
+          }
+        }
       }
 
       // Decorations animation
@@ -1259,6 +1476,7 @@ async function main() {
           this.bounceInterval = 0;
           resolveSpin();
           updateHistoryPanel();
+          updateHotCold();
           if (uiState === 'gameover') updateGameOverPanel();
         }
       }
@@ -1292,7 +1510,32 @@ async function main() {
           const zone = betZones[zoneMeshes.indexOf(hits[0].object as Mesh)];
           if (zone) {
             (zone.mesh.material as MeshStandardMaterial).emissiveIntensity = 0.8;
+            // Update payout panel with hover info
+            const payoutMap: Record<string, string> = {
+              straight: '35:1 ($' + selectedChip + ' -> $' + (selectedChip * 36) + ')',
+              split: '17:1 ($' + selectedChip + ' -> $' + (selectedChip * 18) + ')',
+              street: '11:1 ($' + selectedChip + ' -> $' + (selectedChip * 12) + ')',
+              corner: '8:1 ($' + selectedChip + ' -> $' + (selectedChip * 9) + ')',
+              five: '6:1 ($' + selectedChip + ' -> $' + (selectedChip * 7) + ')',
+              line: '5:1 ($' + selectedChip + ' -> $' + (selectedChip * 6) + ')',
+              dozen1: '2:1 ($' + selectedChip + ' -> $' + (selectedChip * 3) + ')',
+              dozen2: '2:1 ($' + selectedChip + ' -> $' + (selectedChip * 3) + ')',
+              dozen3: '2:1 ($' + selectedChip + ' -> $' + (selectedChip * 3) + ')',
+              col1: '2:1 ($' + selectedChip + ' -> $' + (selectedChip * 3) + ')',
+              col2: '2:1 ($' + selectedChip + ' -> $' + (selectedChip * 3) + ')',
+              col3: '2:1 ($' + selectedChip + ' -> $' + (selectedChip * 3) + ')',
+              red: '1:1 ($' + selectedChip + ' -> $' + (selectedChip * 2) + ')',
+              black: '1:1 ($' + selectedChip + ' -> $' + (selectedChip * 2) + ')',
+              odd: '1:1 ($' + selectedChip + ' -> $' + (selectedChip * 2) + ')',
+              even: '1:1 ($' + selectedChip + ' -> $' + (selectedChip * 2) + ')',
+              low: '1:1 ($' + selectedChip + ' -> $' + (selectedChip * 2) + ')',
+              high: '1:1 ($' + selectedChip + ' -> $' + (selectedChip * 2) + ')',
+            };
+            const info = zone.label + ' | ' + (payoutMap[zone.type] || '');
+            setText(panelEntities['payouts'], 'hover-info', info);
           }
+        } else {
+          setText(panelEntities['payouts'], 'hover-info', 'Hover a zone to see payout');
         }
       }
 
@@ -1311,6 +1554,39 @@ async function main() {
             if (uiState === 'playing') updateHUD();
           }
         }
+      }
+
+      // Camera zoom toward wheel during spin
+      if (cameraZooming && isSpinning) {
+        const targetZ = cameraBaseZ - 1.0;
+        camera.position.z += (targetZ - camera.position.z) * 2.0 * delta;
+      } else if (!isSpinning && cameraBaseZ !== 0) {
+        camera.position.z += (cameraBaseZ - camera.position.z) * 3.0 * delta;
+        if (Math.abs(camera.position.z - cameraBaseZ) < 0.01) {
+          camera.position.z = cameraBaseZ;
+        }
+      }
+
+      // Winning pocket pulse (glow the winning slot after spin)
+      if (winningPocketIdx >= 0 && winningPocketIdx < pocketMeshes.length) {
+        winPulseTime += delta;
+        const pulse = 0.5 + 0.5 * Math.sin(winPulseTime * 6.0);
+        const pm = pocketMeshes[winningPocketIdx];
+        if (pm) {
+          (pm.material as MeshStandardMaterial).emissiveIntensity = 0.5 + pulse * 1.5;
+          pm.scale.setScalar(1.0 + pulse * 0.3);
+        }
+      }
+
+      // Streak visual effects (screen-edge glow when on a streak)
+      if (streakFxTimer > 0) {
+        streakFxTimer -= delta;
+        const intensity = Math.min(streakFxTimer, 1.0);
+        accent1.intensity = 1.5 + intensity * 3.0;
+        accent2.intensity = 1.2 + intensity * 3.0;
+      } else {
+        accent1.intensity += (1.5 - accent1.intensity) * 2.0 * delta;
+        accent2.intensity += (1.2 - accent2.intensity) * 2.0 * delta;
       }
     }
   }

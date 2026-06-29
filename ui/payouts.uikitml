@@ -1,0 +1,12 @@
+<container flexDirection="column" gap="3" padding="10">
+  <text fontSize="14" fontWeight="bold" color="#00ffcc">PAYOUTS</text>
+  <text fontSize="9" color="#ccddee">Straight (1 num): 35:1</text>
+  <text fontSize="9" color="#ccddee">Split (2 nums): 17:1</text>
+  <text fontSize="9" color="#ccddee">Street (3 nums): 11:1</text>
+  <text fontSize="9" color="#ccddee">Corner (4 nums): 8:1</text>
+  <text fontSize="9" color="#ccddee">Five (0-00-1-2-3): 6:1</text>
+  <text fontSize="9" color="#ccddee">Line (6 nums): 5:1</text>
+  <text fontSize="9" color="#ccddee">Dozen/Column: 2:1</text>
+  <text fontSize="9" color="#ccddee">Red/Black/Odd/Even: 1:1</text>
+  <text name="hover-info" fontSize="10" color="#ffcc44" marginTop="4">Hover a zone to see payout</text>
+</container>
