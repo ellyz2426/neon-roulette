@@ -1,0 +1,147 @@
+{
+  "element": {
+    "sourceTag": "container",
+    "type": "custom",
+    "children": [
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "14 RED"
+        ],
+        "properties": {
+          "name": "result-label",
+          "fontsize": "20",
+          "fontweight": "bold",
+          "color": "#00ffcc"
+        },
+        "dataUid": "uid-2"
+      },
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "WIN $50!"
+        ],
+        "properties": {
+          "name": "win-label",
+          "fontsize": "16",
+          "color": "#00ff88"
+        },
+        "dataUid": "uid-3"
+      },
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "Red: +$10 | Even: +$10"
+        ],
+        "properties": {
+          "name": "bets-detail",
+          "fontsize": "10",
+          "color": "#88cccc"
+        },
+        "dataUid": "uid-4"
+      },
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "Bankroll: $1050"
+        ],
+        "properties": {
+          "name": "bankroll-label",
+          "fontsize": "12",
+          "color": "#ccaa00"
+        },
+        "dataUid": "uid-5"
+      },
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "CONTINUE"
+        ],
+        "properties": {
+          "name": "btn-continue",
+          "fontsize": "14",
+          "color": "#00ffcc",
+          "cursor": "pointer",
+          "hoverColor": "#ffffff",
+          "margintop": "6"
+        },
+        "dataUid": "uid-6"
+      }
+    ],
+    "properties": {
+      "flexdirection": "column",
+      "alignitems": "center",
+      "gap": "6",
+      "padding": "10"
+    },
+    "dataUid": "uid-1"
+  },
+  "classes": {},
+  "ranges": {
+    "uid-1": {
+      "start": {
+        "line": 0,
+        "column": 0
+      },
+      "end": {
+        "line": 6,
+        "column": 12
+      }
+    },
+    "uid-2": {
+      "start": {
+        "line": 1,
+        "column": 2
+      },
+      "end": {
+        "line": 1,
+        "column": 89
+      }
+    },
+    "uid-3": {
+      "start": {
+        "line": 2,
+        "column": 2
+      },
+      "end": {
+        "line": 2,
+        "column": 70
+      }
+    },
+    "uid-4": {
+      "start": {
+        "line": 3,
+        "column": 2
+      },
+      "end": {
+        "line": 3,
+        "column": 86
+      }
+    },
+    "uid-5": {
+      "start": {
+        "line": 4,
+        "column": 2
+      },
+      "end": {
+        "line": 4,
+        "column": 82
+      }
+    },
+    "uid-6": {
+      "start": {
+        "line": 5,
+        "column": 2
+      },
+      "end": {
+        "line": 5,
+        "column": 126
+      }
+    }
+  }
+}

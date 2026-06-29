@@ -1,0 +1,30 @@
+<container flexDirection="column" alignItems="center" gap="4" padding="10">
+  <text fontSize="16" fontWeight="bold" color="#668888">HELP</text>
+  <text fontSize="9" color="#88cccc">-- Browser Controls --</text>
+  <text fontSize="8" color="#ffffff">Click table to place bets</text>
+  <text fontSize="8" color="#ffffff">1-5: Select chip value</text>
+  <text fontSize="8" color="#ffffff">Space: Spin wheel</text>
+  <text fontSize="8" color="#ffffff">C: Clear bets | R: Rebet</text>
+  <text fontSize="8" color="#ffffff">ESC: Pause</text>
+  <text fontSize="9" color="#88cccc" marginTop="4">-- VR Controls --</text>
+  <text fontSize="8" color="#ffffff">Laser: Point at table to bet</text>
+  <text fontSize="8" color="#ffffff">Trigger: Place chip / Spin</text>
+  <text fontSize="8" color="#ffffff">B: Pause</text>
+  <text fontSize="9" color="#88cccc" marginTop="4">-- Bet Types --</text>
+  <text fontSize="8" color="#ffffff">Straight (1 number): 35:1</text>
+  <text fontSize="8" color="#ffffff">Red/Black: 1:1</text>
+  <text fontSize="8" color="#ffffff">Odd/Even: 1:1</text>
+  <text fontSize="8" color="#ffffff">High/Low: 1:1</text>
+  <text fontSize="8" color="#ffffff">Dozen (1-12/13-24/25-36): 2:1</text>
+  <text fontSize="8" color="#ffffff">Column: 2:1</text>
+  <text fontSize="9" color="#88cccc" marginTop="4">-- Modes --</text>
+  <text fontSize="8" color="#ffffff">Single: One spin, all in</text>
+  <text fontSize="8" color="#ffffff">Session: 10 spins, $1000</text>
+  <text fontSize="8" color="#ffffff">Marathon: 50 spins, $5000</text>
+  <text fontSize="8" color="#ffffff">High Roller: Min bet $100</text>
+  <text fontSize="8" color="#ffffff">Daily: Seeded daily puzzle</text>
+  <text fontSize="8" color="#ffffff">Practice: Free play, no score</text>
+  <text fontSize="8" color="#ffffff">Hot Streak: Win streak mode</text>
+  <text fontSize="8" color="#ffffff">Tournament: 4-round bracket</text>
+  <text name="btn-back" fontSize="12" color="#668888" cursor="pointer" hover-color="#ffffff" marginTop="6">BACK</text>
+</container>

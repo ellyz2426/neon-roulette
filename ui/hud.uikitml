@@ -1,0 +1,8 @@
+<container flexDirection="column" alignItems="center" gap="4" padding="8">
+  <text name="bankroll" fontSize="16" fontWeight="bold" color="#00ffcc">$1000</text>
+  <text name="bet-total" fontSize="12" color="#ccaa00">Bet: $0</text>
+  <text name="last-number" fontSize="14" color="#ffffff">--</text>
+  <text name="spin-count" fontSize="10" color="#88cccc">Spin 0/10</text>
+  <text name="mode-label" fontSize="10" color="#668888">Session</text>
+  <text name="streak-label" fontSize="10" color="#ff4488">Streak: 0</text>
+</container>

@@ -1,0 +1,14 @@
+<container flexDirection="column" alignItems="center" gap="4" padding="10">
+  <text fontSize="16" fontWeight="bold" color="#aa88ff">CAREER STATS</text>
+  <text name="s1" fontSize="9" color="#ffffff">Total Spins: 0</text>
+  <text name="s2" fontSize="9" color="#ffffff">Total Wins: 0</text>
+  <text name="s3" fontSize="9" color="#ffffff">Win Rate: 0%</text>
+  <text name="s4" fontSize="9" color="#ffffff">Total Wagered: $0</text>
+  <text name="s5" fontSize="9" color="#ffffff">Total Won: $0</text>
+  <text name="s6" fontSize="9" color="#ffffff">Best Win: $0</text>
+  <text name="s7" fontSize="9" color="#ffffff">Best Streak: 0</text>
+  <text name="s8" fontSize="9" color="#ffffff">Hot Numbers: --</text>
+  <text name="s9" fontSize="9" color="#ffffff">Sessions Played: 0</text>
+  <text name="s10" fontSize="9" color="#ffffff">Level: 1</text>
+  <text name="btn-back" fontSize="12" color="#668888" cursor="pointer" hover-color="#ffffff" marginTop="6">BACK</text>
+</container>

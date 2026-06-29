@@ -1,0 +1,7 @@
+<container flexDirection="column" alignItems="center" gap="6" padding="10">
+  <text name="result-label" fontSize="20" fontWeight="bold" color="#00ffcc">14 RED</text>
+  <text name="win-label" fontSize="16" color="#00ff88">WIN $50!</text>
+  <text name="bets-detail" fontSize="10" color="#88cccc">Red: +$10 | Even: +$10</text>
+  <text name="bankroll-label" fontSize="12" color="#ccaa00">Bankroll: $1050</text>
+  <text name="btn-continue" fontSize="14" color="#00ffcc" cursor="pointer" hover-color="#ffffff" marginTop="6">CONTINUE</text>
+</container>

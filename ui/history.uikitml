@@ -1,0 +1,13 @@
+<container flexDirection="column" alignItems="center" gap="4" padding="8">
+  <text fontSize="14" fontWeight="bold" color="#88cccc">HISTORY</text>
+  <text name="h1" fontSize="10" color="#ffffff">--</text>
+  <text name="h2" fontSize="10" color="#ffffff">--</text>
+  <text name="h3" fontSize="10" color="#ffffff">--</text>
+  <text name="h4" fontSize="10" color="#ffffff">--</text>
+  <text name="h5" fontSize="10" color="#ffffff">--</text>
+  <text name="h6" fontSize="10" color="#ffffff">--</text>
+  <text name="h7" fontSize="10" color="#ffffff">--</text>
+  <text name="h8" fontSize="10" color="#ffffff">--</text>
+  <text name="h9" fontSize="10" color="#ffffff">--</text>
+  <text name="h10" fontSize="10" color="#ffffff">--</text>
+</container>

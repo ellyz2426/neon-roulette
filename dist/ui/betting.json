@@ -1,0 +1,319 @@
+{
+  "element": {
+    "sourceTag": "container",
+    "type": "custom",
+    "children": [
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "PLACE YOUR BETS"
+        ],
+        "properties": {
+          "fontsize": "16",
+          "fontweight": "bold",
+          "color": "#ccaa00"
+        },
+        "dataUid": "uid-2"
+      },
+      {
+        "sourceTag": "container",
+        "type": "custom",
+        "children": [
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "$1"
+            ],
+            "properties": {
+              "name": "chip-1",
+              "fontsize": "12",
+              "color": "#88cccc",
+              "cursor": "pointer",
+              "hoverColor": "#ffffff"
+            },
+            "dataUid": "uid-4"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "$5"
+            ],
+            "properties": {
+              "name": "chip-5",
+              "fontsize": "12",
+              "color": "#00ccaa",
+              "cursor": "pointer",
+              "hoverColor": "#ffffff"
+            },
+            "dataUid": "uid-5"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "$10"
+            ],
+            "properties": {
+              "name": "chip-10",
+              "fontsize": "12",
+              "color": "#ccaa00",
+              "cursor": "pointer",
+              "hoverColor": "#ffffff"
+            },
+            "dataUid": "uid-6"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "$25"
+            ],
+            "properties": {
+              "name": "chip-25",
+              "fontsize": "12",
+              "color": "#ff8844",
+              "cursor": "pointer",
+              "hoverColor": "#ffffff"
+            },
+            "dataUid": "uid-7"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "$100"
+            ],
+            "properties": {
+              "name": "chip-100",
+              "fontsize": "12",
+              "color": "#ff4488",
+              "cursor": "pointer",
+              "hoverColor": "#ffffff"
+            },
+            "dataUid": "uid-8"
+          }
+        ],
+        "properties": {
+          "flexdirection": "row",
+          "gap": "6",
+          "margintop": "4"
+        },
+        "dataUid": "uid-3"
+      },
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "Selected: $5"
+        ],
+        "properties": {
+          "name": "selected-chip",
+          "fontsize": "10",
+          "color": "#ffffff"
+        },
+        "dataUid": "uid-9"
+      },
+      {
+        "sourceTag": "container",
+        "type": "custom",
+        "children": [
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "SPIN"
+            ],
+            "properties": {
+              "name": "btn-spin",
+              "fontsize": "16",
+              "fontweight": "bold",
+              "color": "#00ff88",
+              "cursor": "pointer",
+              "hoverColor": "#ffffff"
+            },
+            "dataUid": "uid-11"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "CLEAR"
+            ],
+            "properties": {
+              "name": "btn-clear",
+              "fontsize": "12",
+              "color": "#ff4444",
+              "cursor": "pointer",
+              "hoverColor": "#ffffff"
+            },
+            "dataUid": "uid-12"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "REBET"
+            ],
+            "properties": {
+              "name": "btn-rebet",
+              "fontsize": "12",
+              "color": "#aa88ff",
+              "cursor": "pointer",
+              "hoverColor": "#ffffff"
+            },
+            "dataUid": "uid-13"
+          }
+        ],
+        "properties": {
+          "flexdirection": "row",
+          "gap": "8",
+          "margintop": "4"
+        },
+        "dataUid": "uid-10"
+      }
+    ],
+    "properties": {
+      "flexdirection": "column",
+      "alignitems": "center",
+      "gap": "6",
+      "padding": "10"
+    },
+    "dataUid": "uid-1"
+  },
+  "classes": {},
+  "ranges": {
+    "uid-1": {
+      "start": {
+        "line": 0,
+        "column": 0
+      },
+      "end": {
+        "line": 15,
+        "column": 12
+      }
+    },
+    "uid-2": {
+      "start": {
+        "line": 1,
+        "column": 2
+      },
+      "end": {
+        "line": 1,
+        "column": 78
+      }
+    },
+    "uid-3": {
+      "start": {
+        "line": 2,
+        "column": 2
+      },
+      "end": {
+        "line": 8,
+        "column": 14
+      }
+    },
+    "uid-4": {
+      "start": {
+        "line": 3,
+        "column": 4
+      },
+      "end": {
+        "line": 3,
+        "column": 102
+      }
+    },
+    "uid-5": {
+      "start": {
+        "line": 4,
+        "column": 4
+      },
+      "end": {
+        "line": 4,
+        "column": 102
+      }
+    },
+    "uid-6": {
+      "start": {
+        "line": 5,
+        "column": 4
+      },
+      "end": {
+        "line": 5,
+        "column": 104
+      }
+    },
+    "uid-7": {
+      "start": {
+        "line": 6,
+        "column": 4
+      },
+      "end": {
+        "line": 6,
+        "column": 104
+      }
+    },
+    "uid-8": {
+      "start": {
+        "line": 7,
+        "column": 4
+      },
+      "end": {
+        "line": 7,
+        "column": 106
+      }
+    },
+    "uid-9": {
+      "start": {
+        "line": 9,
+        "column": 2
+      },
+      "end": {
+        "line": 9,
+        "column": 78
+      }
+    },
+    "uid-10": {
+      "start": {
+        "line": 10,
+        "column": 2
+      },
+      "end": {
+        "line": 14,
+        "column": 14
+      }
+    },
+    "uid-11": {
+      "start": {
+        "line": 11,
+        "column": 4
+      },
+      "end": {
+        "line": 11,
+        "column": 124
+      }
+    },
+    "uid-12": {
+      "start": {
+        "line": 12,
+        "column": 4
+      },
+      "end": {
+        "line": 12,
+        "column": 108
+      }
+    },
+    "uid-13": {
+      "start": {
+        "line": 13,
+        "column": 4
+      },
+      "end": {
+        "line": 13,
+        "column": 108
+      }
+    }
+  }
+}

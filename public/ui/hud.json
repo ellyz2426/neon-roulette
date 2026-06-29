@@ -1,0 +1,167 @@
+{
+  "element": {
+    "sourceTag": "container",
+    "type": "custom",
+    "children": [
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "$1000"
+        ],
+        "properties": {
+          "name": "bankroll",
+          "fontsize": "16",
+          "fontweight": "bold",
+          "color": "#00ffcc"
+        },
+        "dataUid": "uid-2"
+      },
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "Bet: $0"
+        ],
+        "properties": {
+          "name": "bet-total",
+          "fontsize": "12",
+          "color": "#ccaa00"
+        },
+        "dataUid": "uid-3"
+      },
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "--"
+        ],
+        "properties": {
+          "name": "last-number",
+          "fontsize": "14",
+          "color": "#ffffff"
+        },
+        "dataUid": "uid-4"
+      },
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "Spin 0/10"
+        ],
+        "properties": {
+          "name": "spin-count",
+          "fontsize": "10",
+          "color": "#88cccc"
+        },
+        "dataUid": "uid-5"
+      },
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "Session"
+        ],
+        "properties": {
+          "name": "mode-label",
+          "fontsize": "10",
+          "color": "#668888"
+        },
+        "dataUid": "uid-6"
+      },
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "Streak: 0"
+        ],
+        "properties": {
+          "name": "streak-label",
+          "fontsize": "10",
+          "color": "#ff4488"
+        },
+        "dataUid": "uid-7"
+      }
+    ],
+    "properties": {
+      "flexdirection": "column",
+      "alignitems": "center",
+      "gap": "4",
+      "padding": "8"
+    },
+    "dataUid": "uid-1"
+  },
+  "classes": {},
+  "ranges": {
+    "uid-1": {
+      "start": {
+        "line": 0,
+        "column": 0
+      },
+      "end": {
+        "line": 7,
+        "column": 12
+      }
+    },
+    "uid-2": {
+      "start": {
+        "line": 1,
+        "column": 2
+      },
+      "end": {
+        "line": 1,
+        "column": 84
+      }
+    },
+    "uid-3": {
+      "start": {
+        "line": 2,
+        "column": 2
+      },
+      "end": {
+        "line": 2,
+        "column": 69
+      }
+    },
+    "uid-4": {
+      "start": {
+        "line": 3,
+        "column": 2
+      },
+      "end": {
+        "line": 3,
+        "column": 66
+      }
+    },
+    "uid-5": {
+      "start": {
+        "line": 4,
+        "column": 2
+      },
+      "end": {
+        "line": 4,
+        "column": 72
+      }
+    },
+    "uid-6": {
+      "start": {
+        "line": 5,
+        "column": 2
+      },
+      "end": {
+        "line": 5,
+        "column": 70
+      }
+    },
+    "uid-7": {
+      "start": {
+        "line": 6,
+        "column": 2
+      },
+      "end": {
+        "line": 6,
+        "column": 74
+      }
+    }
+  }
+}

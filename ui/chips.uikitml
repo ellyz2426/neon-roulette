@@ -1,0 +1,12 @@
+<container flexDirection="column" alignItems="center" gap="4" padding="10">
+  <text fontSize="16" fontWeight="bold" color="#ff8844">CHIP SKINS</text>
+  <text name="c1" fontSize="9" color="#00ffcc" cursor="pointer" hover-color="#ffffff">Classic Neon [Equipped]</text>
+  <text name="c2" fontSize="9" color="#ff4444" cursor="pointer" hover-color="#ffffff">Royal Red (50 wins)</text>
+  <text name="c3" fontSize="9" color="#ccaa00" cursor="pointer" hover-color="#ffffff">Gold Rush (5K wagered)</text>
+  <text name="c4" fontSize="9" color="#aa88ff" cursor="pointer" hover-color="#ffffff">Void Purple (10 games)</text>
+  <text name="c5" fontSize="9" color="#ff8844" cursor="pointer" hover-color="#ffffff">Solar Flare (x3 streak)</text>
+  <text name="c6" fontSize="9" color="#44ff88" cursor="pointer" hover-color="#ffffff">Emerald (straight win)</text>
+  <text name="c7" fontSize="9" color="#ff88cc" cursor="pointer" hover-color="#ffffff">Rose Gold (all modes)</text>
+  <text name="c8" fontSize="9" color="#ffffff" cursor="pointer" hover-color="#cccccc">Chrome (Level 25)</text>
+  <text name="btn-back" fontSize="12" color="#668888" cursor="pointer" hover-color="#ffffff" marginTop="6">BACK</text>
+</container>

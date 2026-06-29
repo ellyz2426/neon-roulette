@@ -1,0 +1,8 @@
+<container flexDirection="column" alignItems="center" gap="8" padding="12">
+  <text fontSize="20" fontWeight="bold" color="#00ffcc">TABLE TYPE</text>
+  <container flexDirection="column" gap="6" marginTop="6">
+    <text name="btn-european" fontSize="14" color="#00ffcc" cursor="pointer" hover-color="#ffffff">European (37 pockets)</text>
+    <text name="btn-american" fontSize="14" color="#ff8844" cursor="pointer" hover-color="#ffffff">American (38 pockets)</text>
+  </container>
+  <text name="btn-back" fontSize="12" color="#668888" cursor="pointer" hover-color="#ffffff" marginTop="8">BACK</text>
+</container>

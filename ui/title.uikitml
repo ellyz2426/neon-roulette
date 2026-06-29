@@ -1,0 +1,14 @@
+<container flexDirection="column" alignItems="center" gap="12" padding="16">
+  <text name="title" fontSize="28" fontWeight="bold" color="#00ffff">NEON ROULETTE</text>
+  <text name="subtitle" fontSize="12" color="#88cccc">Casino Roulette in VR</text>
+  <text name="level-display" fontSize="10" color="#66aaaa">Level 1 - 0 XP</text>
+  <container flexDirection="column" gap="8" marginTop="8">
+    <text name="btn-play" fontSize="16" color="#00ffcc" cursor="pointer" hover-color="#ffffff">PLAY</text>
+    <text name="btn-scores" fontSize="14" color="#00ccaa" cursor="pointer" hover-color="#ffffff">LEADERBOARD</text>
+    <text name="btn-achievements" fontSize="14" color="#ccaa00" cursor="pointer" hover-color="#ffffff">ACHIEVEMENTS</text>
+    <text name="btn-stats" fontSize="14" color="#aa88ff" cursor="pointer" hover-color="#ffffff">STATS</text>
+    <text name="btn-chips" fontSize="14" color="#ff8844" cursor="pointer" hover-color="#ffffff">CHIP SKINS</text>
+    <text name="btn-settings" fontSize="14" color="#88aacc" cursor="pointer" hover-color="#ffffff">SETTINGS</text>
+    <text name="btn-help" fontSize="14" color="#668888" cursor="pointer" hover-color="#ffffff">HELP</text>
+  </container>
+</container>

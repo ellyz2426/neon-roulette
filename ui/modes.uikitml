@@ -1,0 +1,14 @@
+<container flexDirection="column" alignItems="center" gap="8" padding="12">
+  <text fontSize="20" fontWeight="bold" color="#00ffcc">SELECT MODE</text>
+  <container flexDirection="column" gap="6" marginTop="6">
+    <text name="btn-single" fontSize="14" color="#00ffcc" cursor="pointer" hover-color="#ffffff">Single Spin</text>
+    <text name="btn-session" fontSize="14" color="#00ccaa" cursor="pointer" hover-color="#ffffff">Session (10 Spins)</text>
+    <text name="btn-marathon" fontSize="14" color="#ccaa00" cursor="pointer" hover-color="#ffffff">Marathon (50 Spins)</text>
+    <text name="btn-high-roller" fontSize="14" color="#ff8844" cursor="pointer" hover-color="#ffffff">High Roller</text>
+    <text name="btn-daily" fontSize="14" color="#aa88ff" cursor="pointer" hover-color="#ffffff">Daily Challenge</text>
+    <text name="btn-practice" fontSize="14" color="#88cccc" cursor="pointer" hover-color="#ffffff">Practice (Free)</text>
+    <text name="btn-streak" fontSize="14" color="#ff4488" cursor="pointer" hover-color="#ffffff">Hot Streak</text>
+    <text name="btn-tournament" fontSize="14" color="#44ff88" cursor="pointer" hover-color="#ffffff">Tournament</text>
+  </container>
+  <text name="btn-back" fontSize="12" color="#668888" cursor="pointer" hover-color="#ffffff" marginTop="8">BACK</text>
+</container>
