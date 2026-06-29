@@ -1,18 +1,21 @@
 <panel>
   <style>
-    .root { flexDirection: column; alignItems: center; gap: 6; padding: 10; }
+    .root { flexDirection: column; alignItems: center; gap: 6; padding: 10; backgroundColor: rgba(0,10,20,0.92); borderRadius: 8; width: 300; }
     .title { fontSize: 16; fontWeight: bold; color: #ccaa00; }
     .chip-row { flexDirection: row; gap: 6; marginTop: 4; }
-    .chip { fontSize: 12; color: #88cccc; }
-    .chip-active { fontSize: 12; color: #00ccaa; }
+    .chip { fontSize: 12; color: #88cccc; backgroundColor: rgba(0,40,40,0.5); borderRadius: 4; padding: 4; paddingLeft: 8; paddingRight: 8; }
+    .chip-active { fontSize: 12; color: #00ccaa; backgroundColor: rgba(0,80,60,0.7); borderRadius: 4; padding: 4; paddingLeft: 8; paddingRight: 8; }
     .selected { fontSize: 10; color: #ffffff; }
     .btn-row { flexDirection: row; gap: 8; marginTop: 4; }
-    .spin { fontSize: 16; fontWeight: bold; color: #00ff88; }
+    .spin { fontSize: 16; fontWeight: bold; color: #00ff88; backgroundColor: rgba(0,80,40,0.7); borderRadius: 6; padding: 6; paddingLeft: 16; paddingRight: 16; }
     .clear { fontSize: 12; color: #ff4444; }
     .rebet { fontSize: 12; color: #aa88ff; }
     .extra-row { flexDirection: row; gap: 10; marginTop: 6; }
     .btn-call { fontSize: 10; color: #00ccff; }
     .btn-auto { fontSize: 10; color: #ffaa00; }
+    .martingale-row { flexDirection: row; gap: 6; marginTop: 4; alignItems: center; }
+    .mgl-label { fontSize: 9; color: #ff88cc; }
+    .bet-summary { fontSize: 8; color: #88aaaa; marginTop: 2; }
   </style>
   <container class="root">
     <text class="title">PLACE YOUR BETS</text>
@@ -34,5 +37,10 @@
       <text class="btn-auto" id="btn-autospin">Auto-Spin</text>
       <text class="btn-call" id="btn-double">2x Bets</text>
     </container>
+    <container class="martingale-row">
+      <text class="mgl-label" id="btn-martingale">Martingale</text>
+      <text class="mgl-label" id="martingale-status"></text>
+    </container>
+    <text class="bet-summary" id="bet-summary">No bets placed</text>
   </container>
 </panel>

@@ -191,6 +191,50 @@
               "class": "extra-row"
             },
             "dataUid": "uid-15"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "Martingale"
+                ],
+                "properties": {
+                  "class": "mgl-label",
+                  "id": "btn-martingale"
+                },
+                "dataUid": "uid-20"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [],
+                "properties": {
+                  "class": "mgl-label",
+                  "id": "martingale-status"
+                },
+                "dataUid": "uid-21"
+              }
+            ],
+            "properties": {
+              "class": "martingale-row"
+            },
+            "dataUid": "uid-19"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "No bets placed"
+            ],
+            "properties": {
+              "class": "bet-summary",
+              "id": "bet-summary"
+            },
+            "dataUid": "uid-22"
           }
         ],
         "properties": {
@@ -208,7 +252,10 @@
         "flexDirection": "column",
         "alignItems": "center",
         "gap": "6",
-        "padding": "10"
+        "padding": "10",
+        "backgroundColor": "rgba(0,10,20,0.92)",
+        "borderRadius": 8,
+        "width": "300"
       }
     },
     "title": {
@@ -228,13 +275,23 @@
     "chip": {
       "content": {
         "fontSize": "12",
-        "color": "#88cccc"
+        "color": "#88cccc",
+        "backgroundColor": "rgba(0,40,40,0.5)",
+        "borderRadius": 4,
+        "padding": "4",
+        "paddingLeft": "8",
+        "paddingRight": "8"
       }
     },
     "chip-active": {
       "content": {
         "fontSize": "12",
-        "color": "#00ccaa"
+        "color": "#00ccaa",
+        "backgroundColor": "rgba(0,80,60,0.7)",
+        "borderRadius": 4,
+        "padding": "4",
+        "paddingLeft": "8",
+        "paddingRight": "8"
       }
     },
     "selected": {
@@ -254,7 +311,12 @@
       "content": {
         "fontSize": "16",
         "fontWeight": "bold",
-        "color": "#00ff88"
+        "color": "#00ff88",
+        "backgroundColor": "rgba(0,80,40,0.7)",
+        "borderRadius": 6,
+        "padding": "6",
+        "paddingLeft": "16",
+        "paddingRight": "16"
       }
     },
     "clear": {
@@ -287,6 +349,27 @@
         "fontSize": "10",
         "color": "#ffaa00"
       }
+    },
+    "martingale-row": {
+      "content": {
+        "flexDirection": "row",
+        "gap": "6",
+        "marginTop": "4",
+        "alignItems": "center"
+      }
+    },
+    "mgl-label": {
+      "content": {
+        "fontSize": "9",
+        "color": "#ff88cc"
+      }
+    },
+    "bet-summary": {
+      "content": {
+        "fontSize": "8",
+        "color": "#88aaaa",
+        "marginTop": "2"
+      }
     }
   },
   "ranges": {
@@ -296,7 +379,7 @@
         "column": 0
       },
       "end": {
-        "line": 37,
+        "line": 45,
         "column": 8
       }
     },
@@ -430,174 +513,244 @@
         "column": 13
       }
     },
-    "uid-2": {
+    "martingale-row": {
+      "start": {
+        "line": 15,
+        "column": 4
+      },
+      "end": {
+        "line": 15,
+        "column": 19
+      }
+    },
+    "mgl-label": {
       "start": {
         "line": 16,
+        "column": 4
+      },
+      "end": {
+        "line": 16,
+        "column": 14
+      }
+    },
+    "bet-summary": {
+      "start": {
+        "line": 17,
+        "column": 4
+      },
+      "end": {
+        "line": 17,
+        "column": 16
+      }
+    },
+    "uid-2": {
+      "start": {
+        "line": 19,
         "column": 2
       },
       "end": {
-        "line": 36,
+        "line": 44,
         "column": 14
       }
     },
     "uid-3": {
       "start": {
-        "line": 17,
+        "line": 20,
         "column": 4
       },
       "end": {
-        "line": 17,
+        "line": 20,
         "column": 46
       }
     },
     "uid-4": {
       "start": {
-        "line": 18,
+        "line": 21,
         "column": 4
       },
       "end": {
-        "line": 24,
+        "line": 27,
         "column": 16
       }
     },
     "uid-5": {
       "start": {
-        "line": 19,
+        "line": 22,
         "column": 6
       },
       "end": {
-        "line": 19,
+        "line": 22,
         "column": 46
       }
     },
     "uid-6": {
       "start": {
-        "line": 20,
+        "line": 23,
         "column": 6
       },
       "end": {
-        "line": 20,
+        "line": 23,
         "column": 53
       }
     },
     "uid-7": {
       "start": {
-        "line": 21,
+        "line": 24,
         "column": 6
       },
       "end": {
-        "line": 21,
+        "line": 24,
         "column": 48
       }
     },
     "uid-8": {
       "start": {
-        "line": 22,
+        "line": 25,
         "column": 6
       },
       "end": {
-        "line": 22,
+        "line": 25,
         "column": 48
       }
     },
     "uid-9": {
       "start": {
-        "line": 23,
+        "line": 26,
         "column": 6
       },
       "end": {
-        "line": 23,
+        "line": 26,
         "column": 50
       }
     },
     "uid-10": {
       "start": {
-        "line": 25,
+        "line": 28,
         "column": 4
       },
       "end": {
-        "line": 25,
+        "line": 28,
         "column": 65
       }
     },
     "uid-11": {
       "start": {
-        "line": 26,
+        "line": 29,
         "column": 4
       },
       "end": {
-        "line": 30,
+        "line": 33,
         "column": 16
       }
     },
     "uid-12": {
       "start": {
-        "line": 27,
+        "line": 30,
         "column": 6
       },
       "end": {
-        "line": 27,
+        "line": 30,
         "column": 50
       }
     },
     "uid-13": {
       "start": {
-        "line": 28,
+        "line": 31,
         "column": 6
       },
       "end": {
-        "line": 28,
+        "line": 31,
         "column": 53
       }
     },
     "uid-14": {
       "start": {
-        "line": 29,
+        "line": 32,
         "column": 6
       },
       "end": {
-        "line": 29,
+        "line": 32,
         "column": 53
       }
     },
     "uid-15": {
       "start": {
-        "line": 31,
+        "line": 34,
         "column": 4
       },
       "end": {
-        "line": 35,
+        "line": 38,
         "column": 16
       }
     },
     "uid-16": {
       "start": {
-        "line": 32,
+        "line": 35,
         "column": 6
       },
       "end": {
-        "line": 32,
+        "line": 35,
         "column": 63
       }
     },
     "uid-17": {
       "start": {
-        "line": 33,
+        "line": 36,
         "column": 6
       },
       "end": {
-        "line": 33,
+        "line": 36,
         "column": 63
       }
     },
     "uid-18": {
       "start": {
-        "line": 34,
+        "line": 37,
         "column": 6
       },
       "end": {
-        "line": 34,
+        "line": 37,
         "column": 59
+      }
+    },
+    "uid-19": {
+      "start": {
+        "line": 39,
+        "column": 4
+      },
+      "end": {
+        "line": 42,
+        "column": 16
+      }
+    },
+    "uid-20": {
+      "start": {
+        "line": 40,
+        "column": 6
+      },
+      "end": {
+        "line": 40,
+        "column": 67
+      }
+    },
+    "uid-21": {
+      "start": {
+        "line": 41,
+        "column": 6
+      },
+      "end": {
+        "line": 41,
+        "column": 60
+      }
+    },
+    "uid-22": {
+      "start": {
+        "line": 43,
+        "column": 4
+      },
+      "end": {
+        "line": 43,
+        "column": 68
       }
     }
   }

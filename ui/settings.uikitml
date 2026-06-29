@@ -1,28 +1,53 @@
-<container flexDirection="column" alignItems="center" gap="6" padding="10">
-  <text fontSize="16" fontWeight="bold" color="#88aacc">SETTINGS</text>
-  <container flexDirection="row" gap="6" alignItems="center">
-    <text fontSize="10" color="#88cccc">Master</text>
-    <text name="master-down" fontSize="12" color="#668888" cursor="pointer" hover-color="#ffffff">-</text>
-    <text name="master-val" fontSize="10" color="#ffffff">100%</text>
-    <text name="master-up" fontSize="12" color="#668888" cursor="pointer" hover-color="#ffffff">+</text>
+<panel>
+  <style>
+    .root { flexDirection: column; alignItems: center; gap: 6; padding: 12; backgroundColor: rgba(0,10,20,0.92); borderRadius: 8; width: 280; }
+    .title { fontSize: 16; fontWeight: bold; color: #88aacc; }
+    .row { flexDirection: row; gap: 6; alignItems: center; }
+    .label { fontSize: 10; color: #88cccc; }
+    .val { fontSize: 10; color: #ffffff; }
+    .btn { fontSize: 12; color: #668888; }
+    .divider { width: 250; height: 1; backgroundColor: rgba(136,170,204,0.2); }
+    .section { fontSize: 11; color: #aacccc; marginTop: 4; }
+    .rule-label { fontSize: 9; color: #44ccaa; }
+    .rule-val { fontSize: 9; color: #ffffff; }
+    .back { fontSize: 12; color: #668888; marginTop: 6; }
+  </style>
+  <container class="root">
+    <text class="title">SETTINGS</text>
+    <container class="row">
+      <text class="label">Master</text>
+      <text class="btn" id="master-down">-</text>
+      <text class="val" id="master-val">100%</text>
+      <text class="btn" id="master-up">+</text>
+    </container>
+    <container class="row">
+      <text class="label">SFX</text>
+      <text class="btn" id="sfx-down">-</text>
+      <text class="val" id="sfx-val">100%</text>
+      <text class="btn" id="sfx-up">+</text>
+    </container>
+    <container class="row">
+      <text class="label">Music</text>
+      <text class="btn" id="music-down">-</text>
+      <text class="val" id="music-val">100%</text>
+      <text class="btn" id="music-up">+</text>
+    </container>
+    <container class="row">
+      <text class="label">Theme</text>
+      <text class="btn" id="theme-prev">&lt;</text>
+      <text class="val" id="theme-val">Neon Holodeck</text>
+      <text class="btn" id="theme-next">&gt;</text>
+    </container>
+    <container class="divider" />
+    <text class="section">Table Rules</text>
+    <container class="row">
+      <text class="rule-label">La Partage</text>
+      <text class="rule-val" id="btn-partage">OFF</text>
+    </container>
+    <container class="row">
+      <text class="rule-label">En Prison</text>
+      <text class="rule-val" id="btn-enprison">OFF</text>
+    </container>
+    <text class="back" id="btn-back">BACK</text>
   </container>
-  <container flexDirection="row" gap="6" alignItems="center">
-    <text fontSize="10" color="#88cccc">SFX</text>
-    <text name="sfx-down" fontSize="12" color="#668888" cursor="pointer" hover-color="#ffffff">-</text>
-    <text name="sfx-val" fontSize="10" color="#ffffff">100%</text>
-    <text name="sfx-up" fontSize="12" color="#668888" cursor="pointer" hover-color="#ffffff">+</text>
-  </container>
-  <container flexDirection="row" gap="6" alignItems="center">
-    <text fontSize="10" color="#88cccc">Music</text>
-    <text name="music-down" fontSize="12" color="#668888" cursor="pointer" hover-color="#ffffff">-</text>
-    <text name="music-val" fontSize="10" color="#ffffff">100%</text>
-    <text name="music-up" fontSize="12" color="#668888" cursor="pointer" hover-color="#ffffff">+</text>
-  </container>
-  <container flexDirection="row" gap="6" alignItems="center" marginTop="4">
-    <text fontSize="10" color="#88cccc">Theme</text>
-    <text name="theme-prev" fontSize="12" color="#668888" cursor="pointer" hover-color="#ffffff">&lt;</text>
-    <text name="theme-val" fontSize="10" color="#ffffff">Neon Holodeck</text>
-    <text name="theme-next" fontSize="12" color="#668888" cursor="pointer" hover-color="#ffffff">&gt;</text>
-  </container>
-  <text name="btn-back" fontSize="12" color="#668888" cursor="pointer" hover-color="#ffffff" marginTop="6">BACK</text>
-</container>
+</panel>

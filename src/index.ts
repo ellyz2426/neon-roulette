@@ -173,7 +173,7 @@ interface GameState {
   chipSkin: number; themeIdx: number;
 }
 
-type UIState = 'title' | 'modes' | 'table' | 'playing' | 'spinning' | 'result' | 'gameover' | 'leaderboard' | 'achievements' | 'stats' | 'settings' | 'help' | 'pause' | 'chips' | 'callbets' | 'autospin';
+type UIState = 'title' | 'modes' | 'table' | 'playing' | 'spinning' | 'result' | 'gameover' | 'leaderboard' | 'achievements' | 'stats' | 'settings' | 'help' | 'pause' | 'chips' | 'callbets' | 'autospin' | 'racetrack';
 type GameMode = 'single' | 'session' | 'marathon' | 'high-roller' | 'daily' | 'practice' | 'streak' | 'tournament';
 
 function loadState(): GameState {
@@ -399,6 +399,13 @@ async function main() {
   let neighborCount = 2;
   let neighborPickMode = false;
   let ballTrail: { x: number; y: number; z: number; alpha: number }[] = [];
+  let laPartageEnabled = false;
+  let enPrisonEnabled = false;
+  let enPrisonBets: Bet[] = [];
+  let partageRefund = 0;
+  let martingaleActive = false;
+  let startingBankroll = 1000;
+  let sessionProfit = 0;
 
   const theme = () => THEMES[state.themeIdx];
   state.themesUsed.add(theme().name);
@@ -497,6 +504,7 @@ async function main() {
     for (const m of pocketLabels) wheelDisc.remove(m);
     pocketMeshes = [];
     pocketLabels = [];
+    buildRacetrackMarkers();
 
     const seq = sequence();
     const count = pocketCount();
@@ -690,6 +698,40 @@ async function main() {
     }
   }
 
+  // ─── Racetrack 3D Ring ───
+  const racetrackGroup = new Group();
+  racetrackGroup.position.set(0, 1.4, -2.5);
+  scene.add(racetrackGroup);
+
+  // Build a physical ring showing wheel numbers in order (decorative)
+  const raceRingGeo = new TorusGeometry(1.5, 0.03, 8, 64);
+  const raceRingMat = new MeshBasicMaterial({ color: theme().glow, transparent: true, opacity: 0.15 });
+  const raceRing = new Mesh(raceRingGeo, raceRingMat);
+  raceRing.rotation.x = Math.PI / 2;
+  racetrackGroup.add(raceRing);
+
+  // Number position markers around racetrack
+  const raceMarkers: Mesh[] = [];
+  function buildRacetrackMarkers() {
+    for (const m of raceMarkers) racetrackGroup.remove(m);
+    raceMarkers.length = 0;
+    const seq = isAmerican ? AMER_SEQUENCE : EURO_SEQUENCE;
+    const count = seq.length;
+    for (let i = 0; i < count; i++) {
+      const num = seq[i];
+      const angle = (i / count) * Math.PI * 2;
+      const r = 1.5;
+      const geo = new SphereGeometry(0.025, 6, 6);
+      const col = numberColor(num);
+      const mat = new MeshBasicMaterial({ color: col, transparent: true, opacity: 0.6 });
+      const mesh = new Mesh(geo, mat);
+      mesh.position.set(Math.cos(angle) * r, 0, Math.sin(angle) * r);
+      racetrackGroup.add(mesh);
+      raceMarkers.push(mesh);
+    }
+  }
+  buildRacetrackMarkers();
+
   // Chip markers (placed bets visualization)
   const chipMarkers: Mesh[] = [];
   const chipGeo = new CylinderGeometry(0.03, 0.03, 0.015, 12);
@@ -863,10 +905,42 @@ async function main() {
   function resolveSpin() {
     isSpinning = false;
     let totalWin = 0;
+    partageRefund = 0;
+
+    // Check En Prison bets first (from previous zero)
+    if (enPrisonBets.length > 0) {
+      for (const b of enPrisonBets) {
+        const win = evaluateBet(b, currentResult);
+        if (win > 0) {
+          totalWin += b.amount; // Return original bet (no profit)
+        }
+        // If zero again, bet is lost
+      }
+      enPrisonBets = [];
+    }
+
     for (const b of bets) {
-      totalWin += evaluateBet(b, currentResult);
+      const win = evaluateBet(b, currentResult);
+      if (win > 0) {
+        totalWin += win;
+      } else if ((currentResult === 0 || currentResult === 37) && !isAmerican) {
+        // La Partage / En Prison for even-money bets on European table
+        const evenMoneyTypes: BetType[] = ['red', 'black', 'odd', 'even', 'low', 'high'];
+        if (evenMoneyTypes.includes(b.type)) {
+          if (enPrisonEnabled) {
+            // En Prison: lock the bet for next spin
+            enPrisonBets.push({ ...b });
+          } else if (laPartageEnabled) {
+            // La Partage: return half the bet
+            const refund = Math.floor(b.amount / 2);
+            totalWin += refund;
+            partageRefund += refund;
+          }
+        }
+      }
     }
     bankroll += totalWin;
+    sessionProfit = bankroll - startingBankroll;
     state.totalSpins++;
     sessionSpins++;
 
@@ -966,6 +1040,10 @@ async function main() {
     } else {
       uiState = 'playing';
       showPanel('playing');
+      // Apply martingale on loss
+      if (martingaleActive && currentStreak === 0 && sessionSpins > 0) {
+        applyMartingale();
+      }
       updateHUD();
     }
   }
@@ -1012,8 +1090,10 @@ async function main() {
     }
 
     sessionSpins = 0; currentStreak = 0; sessionWins = 0; sessionBestWin = 0; sessionBestStreak = 0;
-    spinHistory = []; bets = []; lastBets = [];
+    spinHistory = []; bets = []; lastBets = []; enPrisonBets = [];
     clearChipMarkers();
+    startingBankroll = bankroll;
+    sessionProfit = 0;
 
     uiState = 'playing';
     showPanel('playing');
@@ -1177,7 +1257,7 @@ async function main() {
       case 'help': show('help'); break;
       case 'pause': show('pause'); break;
       case 'chips': show('chips'); break;
-      case 'callbets': show('callbets'); show('hud'); break;
+      case 'callbets': show('callbets'); show('hud'); show('racetrack'); break;
       case 'autospin': show('autospin'); show('hud'); break;
     }
   }
@@ -1198,6 +1278,38 @@ async function main() {
     setText(e, 'spin-count', 'Spin ' + sessionSpins + '/' + maxSpins);
     setText(e, 'mode-label', gameMode);
     setText(e, 'streak-label', 'Streak: ' + currentStreak);
+    sessionProfit = bankroll - startingBankroll;
+    setText(e, 'profit-label', (sessionProfit >= 0 ? '+' : '') + '$' + sessionProfit);
+    // Calculate bet coverage
+    const coveredNumbers = new Set<number>();
+    for (const b of bets) {
+      if (b.number !== undefined) coveredNumbers.add(b.number);
+      if (b.numbers) for (const n of b.numbers) coveredNumbers.add(n);
+      if (b.type === 'red') { for (let i = 1; i <= 36; i++) if (isRed(i)) coveredNumbers.add(i); }
+      if (b.type === 'black') { for (let i = 1; i <= 36; i++) if (isBlack(i)) coveredNumbers.add(i); }
+      if (b.type === 'odd') { for (let i = 1; i <= 36; i += 2) coveredNumbers.add(i); }
+      if (b.type === 'even') { for (let i = 2; i <= 36; i += 2) coveredNumbers.add(i); }
+      if (b.type === 'low') { for (let i = 1; i <= 18; i++) coveredNumbers.add(i); }
+      if (b.type === 'high') { for (let i = 19; i <= 36; i++) coveredNumbers.add(i); }
+      if (b.type === 'dozen1') { for (let i = 1; i <= 12; i++) coveredNumbers.add(i); }
+      if (b.type === 'dozen2') { for (let i = 13; i <= 24; i++) coveredNumbers.add(i); }
+      if (b.type === 'dozen3') { for (let i = 25; i <= 36; i++) coveredNumbers.add(i); }
+      if (b.type === 'col1') { for (let i = 1; i <= 36; i += 3) coveredNumbers.add(i); }
+      if (b.type === 'col2') { for (let i = 2; i <= 36; i += 3) coveredNumbers.add(i); }
+      if (b.type === 'col3') { for (let i = 3; i <= 36; i += 3) coveredNumbers.add(i); }
+      if (b.type === 'five') [0, 37, 1, 2, 3].forEach(n => coveredNumbers.add(n));
+    }
+    const totalPockets = isAmerican ? 38 : 37;
+    setText(e, 'coverage-label', 'Coverage: ' + coveredNumbers.size + '/' + totalPockets);
+    // Show active rules
+    const rules: string[] = [];
+    if (laPartageEnabled) rules.push('La Partage');
+    if (enPrisonEnabled) rules.push('En Prison');
+    if (martingaleActive) rules.push('Martingale');
+    if (enPrisonBets.length > 0) rules.push(enPrisonBets.length + ' imprisoned');
+    setText(e, 'rule-label', rules.join(' | '));
+    // Update betting panel summary
+    updateBetSummary();
   }
 
   function showResultPanel(totalWin: number) {
@@ -1209,6 +1321,14 @@ async function main() {
     setText(e, 'win-label', totalWin > 0 ? 'WIN $' + totalWin + '!' : 'No win');
     setText(e, 'bets-detail', lastBets.map(b => b.type + (b.number !== undefined ? ' ' + b.number : '')).join(', '));
     setText(e, 'bankroll-label', 'Bankroll: $' + bankroll);
+    setText(e, 'session-profit', 'Session: ' + (sessionProfit >= 0 ? '+' : '') + '$' + sessionProfit);
+    if (partageRefund > 0) {
+      setText(e, 'partage-label', 'La Partage: +$' + partageRefund + ' returned');
+    } else if (enPrisonBets.length > 0) {
+      setText(e, 'partage-label', 'En Prison: ' + enPrisonBets.length + ' bet(s) locked');
+    } else {
+      setText(e, 'partage-label', '');
+    }
   }
 
   function updateHistoryPanel() {
@@ -1229,6 +1349,52 @@ async function main() {
     const e = panelEntities['betting'];
     if (!e) return;
     setText(e, 'selected-chip', 'Selected: $' + selectedChip);
+    setText(e, 'martingale-status', martingaleActive ? 'ON' : 'OFF');
+  }
+
+  function updateBetSummary() {
+    const e = panelEntities['betting'];
+    if (!e) return;
+    if (bets.length === 0) {
+      setText(e, 'bet-summary', 'No bets placed');
+      return;
+    }
+    // Group bets by type and sum
+    const groups = new Map<string, number>();
+    for (const b of bets) {
+      const key = b.type;
+      groups.set(key, (groups.get(key) || 0) + b.amount);
+    }
+    const parts: string[] = [];
+    for (const [type, amount] of groups) {
+      parts.push(type + ': $' + amount);
+    }
+    setText(e, 'bet-summary', parts.slice(0, 4).join(' | ') + (parts.length > 4 ? ' +' + (parts.length - 4) + ' more' : ''));
+  }
+
+  // Martingale: auto-double on loss for even-money bets
+  function applyMartingale() {
+    if (!martingaleActive || lastBets.length === 0) return;
+    // Only apply to even-money bets
+    const evenMoneyTypes: BetType[] = ['red', 'black', 'odd', 'even', 'low', 'high'];
+    const mgBets = lastBets.filter(b => evenMoneyTypes.includes(b.type));
+    if (mgBets.length === 0) return;
+    // Double each even-money bet
+    const doubled = mgBets.map(b => ({ ...b, amount: b.amount * 2 }));
+    const totalCost = doubled.reduce((s, b) => s + b.amount, 0);
+    if (totalCost > bankroll && gameMode !== 'practice') {
+      showToast('Martingale: not enough chips');
+      return;
+    }
+    bets = doubled;
+    if (gameMode !== 'practice') bankroll -= totalCost;
+    clearChipMarkers();
+    for (const b of bets) {
+      const zone = betZones.find(z => z.type === b.type && z.number === b.number);
+      if (zone) addChipMarker(zone.mesh.position.clone());
+    }
+    showToast('Martingale: doubled to $' + totalCost);
+    updateHUD();
   }
 
   // ─── Create UI Entities ───
@@ -1254,6 +1420,7 @@ async function main() {
     payouts: { config: './ui/payouts.json', world: true, pos: [1.8, 1.8, -2.0], scale: 0.7 },
     callbets: { config: './ui/callbets.json', world: true, pos: [-1.8, 1.8, -2.0], scale: 0.9 },
     autospin: { config: './ui/autospin.json', world: true, pos: [0, 2.0, -3.5], scale: 1.2 },
+    racetrack: { config: './ui/racetrack.json', world: true, pos: [-1.5, 2.0, -2.0], scale: 0.9 },
   };
 
   for (const [key, cfg] of Object.entries(panelConfigs)) {
@@ -1290,6 +1457,7 @@ async function main() {
     payoutsQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/payouts.json')] },
     callbetsQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/callbets.json')] },
     autospinQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/autospin.json')] },
+    racetrackQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/racetrack.json')] },
   }) {
     init() {
       const wire = (qName: string, key: string, bindings: Record<string, () => void>) => {
@@ -1351,9 +1519,10 @@ async function main() {
         'btn-spin': () => { if (bets.length > 0) startSpin(); },
         'btn-clear': () => { clearBets(); playClick(); },
         'btn-rebet': () => { rebet(); playClick(); },
-        'btn-callbets': () => { hideAllPanels(); const ce = panelEntities['callbets']; if (ce && ce.object3D) ce.object3D.visible = true; const he = panelEntities['hud']; if (he && he.object3D) he.object3D.visible = true; updateCallBetsPanel(); playClick(); },
+        'btn-callbets': () => { hideAllPanels(); const ce = panelEntities['callbets']; if (ce && ce.object3D) ce.object3D.visible = true; const re = panelEntities['racetrack']; if (re && re.object3D) re.object3D.visible = true; const he = panelEntities['hud']; if (he && he.object3D) he.object3D.visible = true; updateCallBetsPanel(); updateRacetrackPanel(); playClick(); },
         'btn-autospin': () => { hideAllPanels(); const ae = panelEntities['autospin']; if (ae && ae.object3D) ae.object3D.visible = true; const he = panelEntities['hud']; if (he && he.object3D) he.object3D.visible = true; updateAutoSpinPanel(); playClick(); },
         'btn-double': () => { doubleBets(); playClick(); },
+        'btn-martingale': () => { martingaleActive = !martingaleActive; updateBettingPanel(); playClick(); showToast('Martingale: ' + (martingaleActive ? 'ON' : 'OFF')); },
       });
 
       wire('resultQ', 'result', {
@@ -1381,6 +1550,8 @@ async function main() {
         'music-down': () => { musicVol = Math.max(0, musicVol - 0.1); if (musicGain) musicGain.gain.value = musicVol; updateSettingsPanel(); },
         'theme-prev': () => { state.themeIdx = (state.themeIdx - 1 + THEMES.length) % THEMES.length; applyTheme(); state.themesUsed.add(theme().name); updateSettingsPanel(); saveState(state); },
         'theme-next': () => { state.themeIdx = (state.themeIdx + 1) % THEMES.length; applyTheme(); state.themesUsed.add(theme().name); updateSettingsPanel(); saveState(state); },
+        'btn-partage': () => { laPartageEnabled = !laPartageEnabled; if (laPartageEnabled) enPrisonEnabled = false; updateSettingsPanel(); playClick(); },
+        'btn-enprison': () => { enPrisonEnabled = !enPrisonEnabled; if (enPrisonEnabled) laPartageEnabled = false; updateSettingsPanel(); playClick(); },
         'btn-back': toTitle,
       });
       wire('helpQ', 'help', { 'btn-back': toTitle });
@@ -1422,6 +1593,10 @@ async function main() {
         'btn-start-auto': () => { startAutoSpin(); uiState = 'playing'; showPanel('playing'); updateHUD(); playClick(); },
         'btn-stop-auto': () => { stopAutoSpin(); updateAutoSpinPanel(); playClick(); },
         'btn-back': () => { uiState = 'playing'; showPanel('playing'); updateHUD(); playClick(); },
+      });
+
+      wire('racetrackQ', 'racetrack', {
+        'btn-close-track': () => { uiState = 'playing'; showPanel('playing'); updateHUD(); playClick(); },
       });
     }
   }
@@ -1475,6 +1650,8 @@ async function main() {
     setText(e, 'sfx-val', Math.round(sfxVol * 100) + '%');
     setText(e, 'music-val', Math.round(musicVol * 100) + '%');
     setText(e, 'theme-val', theme().name);
+    setText(e, 'btn-partage', laPartageEnabled ? 'ON' : 'OFF');
+    setText(e, 'btn-enprison', enPrisonEnabled ? 'ON' : 'OFF');
   }
 
   function updateChipsPanel() {
@@ -1553,6 +1730,39 @@ async function main() {
     const profit = bankroll - startBank;
     setText(e, 'profit-label', 'Profit: ' + (profit >= 0 ? '+' : '') + '$' + profit);
     setText(e, 'streak-label', 'Best Streak: ' + sessionBestStreak);
+  }
+
+  function updateRacetrackPanel() {
+    const e = panelEntities['racetrack'];
+    if (!e) return;
+    const seq = isAmerican ? AMER_SEQUENCE : EURO_SEQUENCE;
+    // Determine which numbers are covered by bets
+    const coveredNumbers = new Set<number>();
+    for (const b of bets) {
+      if (b.number !== undefined) coveredNumbers.add(b.number);
+      if (b.numbers) for (const n of b.numbers) coveredNumbers.add(n);
+      if (b.type === 'red') { for (let i = 1; i <= 36; i++) if (isRed(i)) coveredNumbers.add(i); }
+      if (b.type === 'black') { for (let i = 1; i <= 36; i++) if (isBlack(i)) coveredNumbers.add(i); }
+      if (b.type === 'odd') { for (let i = 1; i <= 36; i += 2) coveredNumbers.add(i); }
+      if (b.type === 'even') { for (let i = 2; i <= 36; i += 2) coveredNumbers.add(i); }
+      if (b.type === 'low') { for (let i = 1; i <= 18; i++) coveredNumbers.add(i); }
+      if (b.type === 'high') { for (let i = 19; i <= 36; i++) coveredNumbers.add(i); }
+      if (b.type === 'dozen1') { for (let i = 1; i <= 12; i++) coveredNumbers.add(i); }
+      if (b.type === 'dozen2') { for (let i = 13; i <= 24; i++) coveredNumbers.add(i); }
+      if (b.type === 'dozen3') { for (let i = 25; i <= 36; i++) coveredNumbers.add(i); }
+      if (b.type === 'col1') { for (let i = 1; i <= 36; i += 3) coveredNumbers.add(i); }
+      if (b.type === 'col2') { for (let i = 2; i <= 36; i += 3) coveredNumbers.add(i); }
+      if (b.type === 'col3') { for (let i = 3; i <= 36; i += 3) coveredNumbers.add(i); }
+      if (b.type === 'five') [0, 37, 1, 2, 3].forEach(n => coveredNumbers.add(n));
+    }
+    // Update racetrack numbers (show coverage by marking covered ones)
+    for (let i = 0; i < Math.min(seq.length, 37); i++) {
+      const num = seq[i];
+      const numStr = num === 37 ? '00' : String(num);
+      const covered = coveredNumbers.has(num);
+      setText(e, 't' + i, covered ? '[' + numStr + ']' : numStr);
+    }
+    setText(e, 'coverage-count', coveredNumbers.size + ' covered');
   }
 
   function applyTheme() {
@@ -1775,7 +1985,7 @@ async function main() {
         }
       }
 
-      // XR input
+      // XR input - Right controller
       const right = (world.input as any).xr?.gamepads?.right;
       if (right) {
         if (right.getButtonDown(InputComponent.Trigger)) {
@@ -1789,6 +1999,47 @@ async function main() {
             showPanel(uiState);
             if (uiState === 'playing') updateHUD();
           }
+        }
+        if (right.getButtonDown(InputComponent.A_Button)) {
+          if (uiState === 'playing') { rebet(); playClick(); }
+          else if (uiState === 'result') { continueAfterResult(); playClick(); }
+        }
+      }
+
+      // XR input - Left controller
+      const left = (world.input as any).xr?.gamepads?.left;
+      if (left) {
+        if (left.getButtonDown(InputComponent.Trigger)) {
+          // Left trigger: cycle chip values
+          const chipValues = [1, 5, 10, 25, 100];
+          const idx = chipValues.indexOf(selectedChip);
+          selectedChip = chipValues[(idx + 1) % chipValues.length];
+          updateBettingPanel();
+          showToast('Chip: $' + selectedChip);
+          playClick();
+        }
+        if (left.getButtonDown(InputComponent.X_Button)) {
+          // X button: clear bets
+          if (uiState === 'playing') { clearBets(); playClick(); }
+        }
+        if (left.getButtonDown(InputComponent.Y_Button)) {
+          // Y button: toggle call bets panel
+          if (uiState === 'playing') {
+            hideAllPanels();
+            const ce = panelEntities['callbets'];
+            if (ce && ce.object3D) ce.object3D.visible = true;
+            const re = panelEntities['racetrack'];
+            if (re && re.object3D) re.object3D.visible = true;
+            const he = panelEntities['hud'];
+            if (he && he.object3D) he.object3D.visible = true;
+            updateCallBetsPanel();
+            updateRacetrackPanel();
+            playClick();
+          }
+        }
+        // Left grip: double bets
+        if (left.getButtonDown(InputComponent.Squeeze)) {
+          if (uiState === 'playing') { doubleBets(); playClick(); }
         }
       }
 

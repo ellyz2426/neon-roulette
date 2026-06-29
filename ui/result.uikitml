@@ -1,7 +1,23 @@
-<container flexDirection="column" alignItems="center" gap="6" padding="10">
-  <text name="result-label" fontSize="20" fontWeight="bold" color="#00ffcc">14 RED</text>
-  <text name="win-label" fontSize="16" color="#00ff88">WIN $50!</text>
-  <text name="bets-detail" fontSize="10" color="#88cccc">Red: +$10 | Even: +$10</text>
-  <text name="bankroll-label" fontSize="12" color="#ccaa00">Bankroll: $1050</text>
-  <text name="btn-continue" fontSize="14" color="#00ffcc" cursor="pointer" hover-color="#ffffff" marginTop="6">CONTINUE</text>
-</container>
+<panel>
+  <style>
+    .root { flexDirection: column; alignItems: center; gap: 6; padding: 12; backgroundColor: rgba(0,10,20,0.94); borderRadius: 10; width: 300; }
+    .result-num { fontSize: 24; fontWeight: bold; color: #00ffcc; }
+    .win-big { fontSize: 18; fontWeight: bold; color: #00ff88; }
+    .lose { fontSize: 16; color: #ff4444; }
+    .detail { fontSize: 10; color: #88cccc; }
+    .bankroll { fontSize: 13; color: #ccaa00; }
+    .profit-pos { fontSize: 11; color: #00ff88; }
+    .profit-neg { fontSize: 11; color: #ff4444; }
+    .partage { fontSize: 10; color: #44ccaa; }
+    .btn { fontSize: 14; color: #00ffcc; marginTop: 6; backgroundColor: rgba(0,80,80,0.6); borderRadius: 6; padding: 6; paddingLeft: 20; paddingRight: 20; }
+  </style>
+  <container class="root">
+    <text class="result-num" id="result-label">14 RED</text>
+    <text class="win-big" id="win-label">WIN $50!</text>
+    <text class="detail" id="bets-detail">Red: +$10</text>
+    <text class="bankroll" id="bankroll-label">Bankroll: $1050</text>
+    <text class="profit-pos" id="session-profit">Session: +$50</text>
+    <text class="partage" id="partage-label"></text>
+    <text class="btn" id="btn-continue">CONTINUE</text>
+  </container>
+</panel>

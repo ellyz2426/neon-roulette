@@ -1,21 +1,8 @@
 {
   "element": {
-    "sourceTag": "container",
+    "sourceTag": "panel",
     "type": "custom",
     "children": [
-      {
-        "sourceTag": "text",
-        "type": "custom",
-        "children": [
-          "PLACE YOUR BETS"
-        ],
-        "properties": {
-          "fontsize": "16",
-          "fontweight": "bold",
-          "color": "#ccaa00"
-        },
-        "dataUid": "uid-2"
-      },
       {
         "sourceTag": "container",
         "type": "custom",
@@ -24,14 +11,80 @@
             "sourceTag": "text",
             "type": "custom",
             "children": [
-              "$1"
+              "PLACE YOUR BETS"
             ],
             "properties": {
-              "name": "chip-1",
-              "fontsize": "12",
-              "color": "#88cccc",
-              "cursor": "pointer",
-              "hoverColor": "#ffffff"
+              "class": "title"
+            },
+            "dataUid": "uid-3"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "$1"
+                ],
+                "properties": {
+                  "class": "chip",
+                  "id": "chip-1"
+                },
+                "dataUid": "uid-5"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "$5"
+                ],
+                "properties": {
+                  "class": "chip-active",
+                  "id": "chip-5"
+                },
+                "dataUid": "uid-6"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "$10"
+                ],
+                "properties": {
+                  "class": "chip",
+                  "id": "chip-10"
+                },
+                "dataUid": "uid-7"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "$25"
+                ],
+                "properties": {
+                  "class": "chip",
+                  "id": "chip-25"
+                },
+                "dataUid": "uid-8"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "$100"
+                ],
+                "properties": {
+                  "class": "chip",
+                  "id": "chip-100"
+                },
+                "dataUid": "uid-9"
+              }
+            ],
+            "properties": {
+              "class": "chip-row"
             },
             "dataUid": "uid-4"
           },
@@ -39,151 +92,286 @@
             "sourceTag": "text",
             "type": "custom",
             "children": [
-              "$5"
+              "Selected: $5"
             ],
             "properties": {
-              "name": "chip-5",
-              "fontsize": "12",
-              "color": "#00ccaa",
-              "cursor": "pointer",
-              "hoverColor": "#ffffff"
+              "class": "selected",
+              "id": "selected-chip"
             },
-            "dataUid": "uid-5"
+            "dataUid": "uid-10"
           },
           {
-            "sourceTag": "text",
+            "sourceTag": "container",
             "type": "custom",
             "children": [
-              "$10"
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "SPIN"
+                ],
+                "properties": {
+                  "class": "spin",
+                  "id": "btn-spin"
+                },
+                "dataUid": "uid-12"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "CLEAR"
+                ],
+                "properties": {
+                  "class": "clear",
+                  "id": "btn-clear"
+                },
+                "dataUid": "uid-13"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "REBET"
+                ],
+                "properties": {
+                  "class": "rebet",
+                  "id": "btn-rebet"
+                },
+                "dataUid": "uid-14"
+              }
             ],
             "properties": {
-              "name": "chip-10",
-              "fontsize": "12",
-              "color": "#ccaa00",
-              "cursor": "pointer",
-              "hoverColor": "#ffffff"
-            },
-            "dataUid": "uid-6"
-          },
-          {
-            "sourceTag": "text",
-            "type": "custom",
-            "children": [
-              "$25"
-            ],
-            "properties": {
-              "name": "chip-25",
-              "fontsize": "12",
-              "color": "#ff8844",
-              "cursor": "pointer",
-              "hoverColor": "#ffffff"
-            },
-            "dataUid": "uid-7"
-          },
-          {
-            "sourceTag": "text",
-            "type": "custom",
-            "children": [
-              "$100"
-            ],
-            "properties": {
-              "name": "chip-100",
-              "fontsize": "12",
-              "color": "#ff4488",
-              "cursor": "pointer",
-              "hoverColor": "#ffffff"
-            },
-            "dataUid": "uid-8"
-          }
-        ],
-        "properties": {
-          "flexdirection": "row",
-          "gap": "6",
-          "margintop": "4"
-        },
-        "dataUid": "uid-3"
-      },
-      {
-        "sourceTag": "text",
-        "type": "custom",
-        "children": [
-          "Selected: $5"
-        ],
-        "properties": {
-          "name": "selected-chip",
-          "fontsize": "10",
-          "color": "#ffffff"
-        },
-        "dataUid": "uid-9"
-      },
-      {
-        "sourceTag": "container",
-        "type": "custom",
-        "children": [
-          {
-            "sourceTag": "text",
-            "type": "custom",
-            "children": [
-              "SPIN"
-            ],
-            "properties": {
-              "name": "btn-spin",
-              "fontsize": "16",
-              "fontweight": "bold",
-              "color": "#00ff88",
-              "cursor": "pointer",
-              "hoverColor": "#ffffff"
+              "class": "btn-row"
             },
             "dataUid": "uid-11"
           },
           {
-            "sourceTag": "text",
+            "sourceTag": "container",
             "type": "custom",
             "children": [
-              "CLEAR"
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "Call Bets"
+                ],
+                "properties": {
+                  "class": "btn-call",
+                  "id": "btn-callbets"
+                },
+                "dataUid": "uid-16"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "Auto-Spin"
+                ],
+                "properties": {
+                  "class": "btn-auto",
+                  "id": "btn-autospin"
+                },
+                "dataUid": "uid-17"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "2x Bets"
+                ],
+                "properties": {
+                  "class": "btn-call",
+                  "id": "btn-double"
+                },
+                "dataUid": "uid-18"
+              }
             ],
             "properties": {
-              "name": "btn-clear",
-              "fontsize": "12",
-              "color": "#ff4444",
-              "cursor": "pointer",
-              "hoverColor": "#ffffff"
+              "class": "extra-row"
             },
-            "dataUid": "uid-12"
+            "dataUid": "uid-15"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "Martingale"
+                ],
+                "properties": {
+                  "class": "mgl-label",
+                  "id": "btn-martingale"
+                },
+                "dataUid": "uid-20"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [],
+                "properties": {
+                  "class": "mgl-label",
+                  "id": "martingale-status"
+                },
+                "dataUid": "uid-21"
+              }
+            ],
+            "properties": {
+              "class": "martingale-row"
+            },
+            "dataUid": "uid-19"
           },
           {
             "sourceTag": "text",
             "type": "custom",
             "children": [
-              "REBET"
+              "No bets placed"
             ],
             "properties": {
-              "name": "btn-rebet",
-              "fontsize": "12",
-              "color": "#aa88ff",
-              "cursor": "pointer",
-              "hoverColor": "#ffffff"
+              "class": "bet-summary",
+              "id": "bet-summary"
             },
-            "dataUid": "uid-13"
+            "dataUid": "uid-22"
           }
         ],
         "properties": {
-          "flexdirection": "row",
-          "gap": "8",
-          "margintop": "4"
+          "class": "root"
         },
-        "dataUid": "uid-10"
+        "dataUid": "uid-2"
       }
     ],
-    "properties": {
-      "flexdirection": "column",
-      "alignitems": "center",
-      "gap": "6",
-      "padding": "10"
-    },
+    "properties": {},
     "dataUid": "uid-1"
   },
-  "classes": {},
+  "classes": {
+    "root": {
+      "content": {
+        "flexDirection": "column",
+        "alignItems": "center",
+        "gap": "6",
+        "padding": "10",
+        "backgroundColor": "rgba(0,10,20,0.92)",
+        "borderRadius": 8,
+        "width": "300"
+      }
+    },
+    "title": {
+      "content": {
+        "fontSize": "16",
+        "fontWeight": "bold",
+        "color": "#ccaa00"
+      }
+    },
+    "chip-row": {
+      "content": {
+        "flexDirection": "row",
+        "gap": "6",
+        "marginTop": "4"
+      }
+    },
+    "chip": {
+      "content": {
+        "fontSize": "12",
+        "color": "#88cccc",
+        "backgroundColor": "rgba(0,40,40,0.5)",
+        "borderRadius": 4,
+        "padding": "4",
+        "paddingLeft": "8",
+        "paddingRight": "8"
+      }
+    },
+    "chip-active": {
+      "content": {
+        "fontSize": "12",
+        "color": "#00ccaa",
+        "backgroundColor": "rgba(0,80,60,0.7)",
+        "borderRadius": 4,
+        "padding": "4",
+        "paddingLeft": "8",
+        "paddingRight": "8"
+      }
+    },
+    "selected": {
+      "content": {
+        "fontSize": "10",
+        "color": "#ffffff"
+      }
+    },
+    "btn-row": {
+      "content": {
+        "flexDirection": "row",
+        "gap": "8",
+        "marginTop": "4"
+      }
+    },
+    "spin": {
+      "content": {
+        "fontSize": "16",
+        "fontWeight": "bold",
+        "color": "#00ff88",
+        "backgroundColor": "rgba(0,80,40,0.7)",
+        "borderRadius": 6,
+        "padding": "6",
+        "paddingLeft": "16",
+        "paddingRight": "16"
+      }
+    },
+    "clear": {
+      "content": {
+        "fontSize": "12",
+        "color": "#ff4444"
+      }
+    },
+    "rebet": {
+      "content": {
+        "fontSize": "12",
+        "color": "#aa88ff"
+      }
+    },
+    "extra-row": {
+      "content": {
+        "flexDirection": "row",
+        "gap": "10",
+        "marginTop": "6"
+      }
+    },
+    "btn-call": {
+      "content": {
+        "fontSize": "10",
+        "color": "#00ccff"
+      }
+    },
+    "btn-auto": {
+      "content": {
+        "fontSize": "10",
+        "color": "#ffaa00"
+      }
+    },
+    "martingale-row": {
+      "content": {
+        "flexDirection": "row",
+        "gap": "6",
+        "marginTop": "4",
+        "alignItems": "center"
+      }
+    },
+    "mgl-label": {
+      "content": {
+        "fontSize": "9",
+        "color": "#ff88cc"
+      }
+    },
+    "bet-summary": {
+      "content": {
+        "fontSize": "8",
+        "color": "#88aaaa",
+        "marginTop": "2"
+      }
+    }
+  },
   "ranges": {
     "uid-1": {
       "start": {
@@ -191,128 +379,378 @@
         "column": 0
       },
       "end": {
-        "line": 15,
+        "line": 45,
+        "column": 8
+      }
+    },
+    "root": {
+      "start": {
+        "line": 2,
+        "column": 4
+      },
+      "end": {
+        "line": 2,
+        "column": 9
+      }
+    },
+    "title": {
+      "start": {
+        "line": 3,
+        "column": 4
+      },
+      "end": {
+        "line": 3,
+        "column": 10
+      }
+    },
+    "chip-row": {
+      "start": {
+        "line": 4,
+        "column": 4
+      },
+      "end": {
+        "line": 4,
+        "column": 13
+      }
+    },
+    "chip": {
+      "start": {
+        "line": 5,
+        "column": 4
+      },
+      "end": {
+        "line": 5,
+        "column": 9
+      }
+    },
+    "chip-active": {
+      "start": {
+        "line": 6,
+        "column": 4
+      },
+      "end": {
+        "line": 6,
+        "column": 16
+      }
+    },
+    "selected": {
+      "start": {
+        "line": 7,
+        "column": 4
+      },
+      "end": {
+        "line": 7,
+        "column": 13
+      }
+    },
+    "btn-row": {
+      "start": {
+        "line": 8,
+        "column": 4
+      },
+      "end": {
+        "line": 8,
         "column": 12
+      }
+    },
+    "spin": {
+      "start": {
+        "line": 9,
+        "column": 4
+      },
+      "end": {
+        "line": 9,
+        "column": 9
+      }
+    },
+    "clear": {
+      "start": {
+        "line": 10,
+        "column": 4
+      },
+      "end": {
+        "line": 10,
+        "column": 10
+      }
+    },
+    "rebet": {
+      "start": {
+        "line": 11,
+        "column": 4
+      },
+      "end": {
+        "line": 11,
+        "column": 10
+      }
+    },
+    "extra-row": {
+      "start": {
+        "line": 12,
+        "column": 4
+      },
+      "end": {
+        "line": 12,
+        "column": 14
+      }
+    },
+    "btn-call": {
+      "start": {
+        "line": 13,
+        "column": 4
+      },
+      "end": {
+        "line": 13,
+        "column": 13
+      }
+    },
+    "btn-auto": {
+      "start": {
+        "line": 14,
+        "column": 4
+      },
+      "end": {
+        "line": 14,
+        "column": 13
+      }
+    },
+    "martingale-row": {
+      "start": {
+        "line": 15,
+        "column": 4
+      },
+      "end": {
+        "line": 15,
+        "column": 19
+      }
+    },
+    "mgl-label": {
+      "start": {
+        "line": 16,
+        "column": 4
+      },
+      "end": {
+        "line": 16,
+        "column": 14
+      }
+    },
+    "bet-summary": {
+      "start": {
+        "line": 17,
+        "column": 4
+      },
+      "end": {
+        "line": 17,
+        "column": 16
       }
     },
     "uid-2": {
       "start": {
-        "line": 1,
+        "line": 19,
         "column": 2
       },
       "end": {
-        "line": 1,
-        "column": 78
+        "line": 44,
+        "column": 14
       }
     },
     "uid-3": {
       "start": {
-        "line": 2,
-        "column": 2
+        "line": 20,
+        "column": 4
       },
       "end": {
-        "line": 8,
-        "column": 14
+        "line": 20,
+        "column": 46
       }
     },
     "uid-4": {
       "start": {
-        "line": 3,
+        "line": 21,
         "column": 4
       },
       "end": {
-        "line": 3,
-        "column": 102
+        "line": 27,
+        "column": 16
       }
     },
     "uid-5": {
       "start": {
-        "line": 4,
-        "column": 4
+        "line": 22,
+        "column": 6
       },
       "end": {
-        "line": 4,
-        "column": 102
+        "line": 22,
+        "column": 46
       }
     },
     "uid-6": {
       "start": {
-        "line": 5,
-        "column": 4
+        "line": 23,
+        "column": 6
       },
       "end": {
-        "line": 5,
-        "column": 104
+        "line": 23,
+        "column": 53
       }
     },
     "uid-7": {
       "start": {
-        "line": 6,
-        "column": 4
+        "line": 24,
+        "column": 6
       },
       "end": {
-        "line": 6,
-        "column": 104
+        "line": 24,
+        "column": 48
       }
     },
     "uid-8": {
       "start": {
-        "line": 7,
-        "column": 4
+        "line": 25,
+        "column": 6
       },
       "end": {
-        "line": 7,
-        "column": 106
+        "line": 25,
+        "column": 48
       }
     },
     "uid-9": {
       "start": {
-        "line": 9,
-        "column": 2
+        "line": 26,
+        "column": 6
       },
       "end": {
-        "line": 9,
-        "column": 78
+        "line": 26,
+        "column": 50
       }
     },
     "uid-10": {
       "start": {
-        "line": 10,
-        "column": 2
+        "line": 28,
+        "column": 4
       },
       "end": {
-        "line": 14,
-        "column": 14
+        "line": 28,
+        "column": 65
       }
     },
     "uid-11": {
       "start": {
-        "line": 11,
+        "line": 29,
         "column": 4
       },
       "end": {
-        "line": 11,
-        "column": 124
+        "line": 33,
+        "column": 16
       }
     },
     "uid-12": {
       "start": {
-        "line": 12,
-        "column": 4
+        "line": 30,
+        "column": 6
       },
       "end": {
-        "line": 12,
-        "column": 108
+        "line": 30,
+        "column": 50
       }
     },
     "uid-13": {
       "start": {
-        "line": 13,
+        "line": 31,
+        "column": 6
+      },
+      "end": {
+        "line": 31,
+        "column": 53
+      }
+    },
+    "uid-14": {
+      "start": {
+        "line": 32,
+        "column": 6
+      },
+      "end": {
+        "line": 32,
+        "column": 53
+      }
+    },
+    "uid-15": {
+      "start": {
+        "line": 34,
         "column": 4
       },
       "end": {
-        "line": 13,
-        "column": 108
+        "line": 38,
+        "column": 16
+      }
+    },
+    "uid-16": {
+      "start": {
+        "line": 35,
+        "column": 6
+      },
+      "end": {
+        "line": 35,
+        "column": 63
+      }
+    },
+    "uid-17": {
+      "start": {
+        "line": 36,
+        "column": 6
+      },
+      "end": {
+        "line": 36,
+        "column": 63
+      }
+    },
+    "uid-18": {
+      "start": {
+        "line": 37,
+        "column": 6
+      },
+      "end": {
+        "line": 37,
+        "column": 59
+      }
+    },
+    "uid-19": {
+      "start": {
+        "line": 39,
+        "column": 4
+      },
+      "end": {
+        "line": 42,
+        "column": 16
+      }
+    },
+    "uid-20": {
+      "start": {
+        "line": 40,
+        "column": 6
+      },
+      "end": {
+        "line": 40,
+        "column": 67
+      }
+    },
+    "uid-21": {
+      "start": {
+        "line": 41,
+        "column": 6
+      },
+      "end": {
+        "line": 41,
+        "column": 60
+      }
+    },
+    "uid-22": {
+      "start": {
+        "line": 43,
+        "column": 4
+      },
+      "end": {
+        "line": 43,
+        "column": 68
       }
     }
   }

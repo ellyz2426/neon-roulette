@@ -1,0 +1,74 @@
+<panel>
+  <style>
+    .root { flexDirection: column; alignItems: center; gap: 4; padding: 8; backgroundColor: rgba(0,10,20,0.9); borderRadius: 8; width: 260; }
+    .title { fontSize: 12; fontWeight: bold; color: #00ffcc; }
+    .desc { fontSize: 8; color: #668888; }
+    .track-row { flexDirection: row; gap: 2; flexWrap: wrap; justifyContent: center; }
+    .num { fontSize: 7; color: #888888; backgroundColor: rgba(40,40,40,0.6); borderRadius: 2; padding: 2; paddingLeft: 3; paddingRight: 3; width: 18; textAlign: center; }
+    .num-red { fontSize: 7; color: #ff4444; backgroundColor: rgba(80,20,20,0.6); borderRadius: 2; padding: 2; paddingLeft: 3; paddingRight: 3; width: 18; textAlign: center; }
+    .num-black { fontSize: 7; color: #aaaaaa; backgroundColor: rgba(30,30,30,0.8); borderRadius: 2; padding: 2; paddingLeft: 3; paddingRight: 3; width: 18; textAlign: center; }
+    .num-green { fontSize: 7; color: #44ff88; backgroundColor: rgba(0,60,30,0.6); borderRadius: 2; padding: 2; paddingLeft: 3; paddingRight: 3; width: 18; textAlign: center; }
+    .num-covered { fontSize: 7; color: #00ffcc; backgroundColor: rgba(0,100,80,0.8); borderRadius: 2; padding: 2; paddingLeft: 3; paddingRight: 3; width: 18; textAlign: center; fontWeight: bold; }
+    .section-label { fontSize: 8; color: #44aaaa; marginTop: 4; }
+    .voisins-bar { width: 240; height: 3; backgroundColor: rgba(0,180,180,0.4); borderRadius: 1; }
+    .tiers-bar { width: 240; height: 3; backgroundColor: rgba(180,100,0,0.4); borderRadius: 1; }
+    .orphelins-bar { width: 240; height: 3; backgroundColor: rgba(160,0,160,0.4); borderRadius: 1; }
+    .legend-row { flexDirection: row; gap: 8; marginTop: 4; }
+    .legend { fontSize: 7; color: #668888; }
+    .close-btn { fontSize: 9; color: #668888; marginTop: 4; }
+  </style>
+  <container class="root">
+    <text class="title">Racetrack</text>
+    <text class="desc">Numbers in wheel order</text>
+    <container class="track-row">
+      <text class="num-green" id="t0">0</text>
+      <text class="num" id="t1">32</text>
+      <text class="num" id="t2">15</text>
+      <text class="num" id="t3">19</text>
+      <text class="num" id="t4">4</text>
+      <text class="num" id="t5">21</text>
+      <text class="num" id="t6">2</text>
+      <text class="num" id="t7">25</text>
+      <text class="num" id="t8">17</text>
+      <text class="num" id="t9">34</text>
+      <text class="num" id="t10">6</text>
+      <text class="num" id="t11">27</text>
+      <text class="num" id="t12">13</text>
+    </container>
+    <container class="track-row">
+      <text class="num" id="t13">36</text>
+      <text class="num" id="t14">11</text>
+      <text class="num" id="t15">30</text>
+      <text class="num" id="t16">8</text>
+      <text class="num" id="t17">23</text>
+      <text class="num" id="t18">10</text>
+      <text class="num" id="t19">5</text>
+      <text class="num" id="t20">24</text>
+      <text class="num" id="t21">16</text>
+      <text class="num" id="t22">33</text>
+      <text class="num" id="t23">1</text>
+      <text class="num" id="t24">20</text>
+    </container>
+    <container class="track-row">
+      <text class="num" id="t25">14</text>
+      <text class="num" id="t26">31</text>
+      <text class="num" id="t27">9</text>
+      <text class="num" id="t28">22</text>
+      <text class="num" id="t29">18</text>
+      <text class="num" id="t30">29</text>
+      <text class="num" id="t31">7</text>
+      <text class="num" id="t32">28</text>
+      <text class="num" id="t33">12</text>
+      <text class="num" id="t34">35</text>
+      <text class="num" id="t35">3</text>
+      <text class="num" id="t36">26</text>
+    </container>
+    <container class="legend-row">
+      <text class="legend">Voisins</text>
+      <text class="legend">Tiers</text>
+      <text class="legend">Orphelins</text>
+      <text class="legend" id="coverage-count">0 covered</text>
+    </container>
+    <text class="close-btn" id="btn-close-track">Close</text>
+  </container>
+</panel>
