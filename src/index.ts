@@ -173,7 +173,7 @@ interface GameState {
   chipSkin: number; themeIdx: number;
 }
 
-type UIState = 'title' | 'modes' | 'table' | 'playing' | 'spinning' | 'result' | 'gameover' | 'leaderboard' | 'achievements' | 'stats' | 'settings' | 'help' | 'pause' | 'chips' | 'callbets' | 'autospin' | 'racetrack';
+type UIState = 'title' | 'modes' | 'table' | 'playing' | 'spinning' | 'result' | 'gameover' | 'leaderboard' | 'achievements' | 'stats' | 'settings' | 'help' | 'pause' | 'chips' | 'callbets' | 'autospin' | 'racetrack' | 'favorites' | 'tutorial';
 type GameMode = 'single' | 'session' | 'marathon' | 'high-roller' | 'daily' | 'practice' | 'streak' | 'tournament';
 
 function loadState(): GameState {
@@ -219,6 +219,75 @@ function loadLeaderboard(): LeaderEntry[] {
 function saveLeaderboard(board: LeaderEntry[]) {
   localStorage.setItem('neon-roulette-leaders', JSON.stringify(board.slice(0, 20)));
 }
+
+// ─── Favorite Bets ───
+interface FavoriteBet { name: string; bets: Bet[]; }
+function loadFavorites(): (FavoriteBet | null)[] {
+  const raw = localStorage.getItem('neon-roulette-favs');
+  if (raw) return JSON.parse(raw);
+  return [null, null, null, null, null];
+}
+function saveFavorites(favs: (FavoriteBet | null)[]) {
+  localStorage.setItem('neon-roulette-favs', JSON.stringify(favs));
+}
+
+// ─── Dealer Messages ───
+const DEALER_GREETINGS = [
+  'Welcome to the Neon Holodeck Casino!',
+  'Step up to the table, friend.',
+  'The wheel awaits your wager.',
+  'Good luck tonight!',
+  'May fortune favor the bold.',
+];
+const DEALER_BET_COMMENTS: Record<string, string[]> = {
+  straight: ['Bold choice! 35 to 1 odds.', 'A straight bet, the purest gamble.', 'One number, one dream.'],
+  red: ['Red it is! Classic.', 'Feeling the crimson tonight?', 'Red, the color of fortune.'],
+  black: ['Black, the dark horse bet.', 'Riding the shadows tonight.', 'Black bets, bold moves.'],
+  split: ['Split bet, doubling your coverage.', 'Two numbers, 17 to 1.'],
+  corner: ['Corner play! Covering 4.', 'Smart spread on the corners.'],
+  dozen: ['Dozen bet, good coverage.', 'A third of the board is yours.'],
+  street: ['Street bet, three in a row.', 'Taking the whole street!'],
+  default: ['Bet placed!', 'Good luck with that one.', 'Interesting choice.'],
+};
+const DEALER_WIN = [
+  'Winner! The table pays.',
+  'Congratulations! A fine win.',
+  'The odds were with you!',
+  'Well played!',
+  'Your bankroll grows!',
+];
+const DEALER_BIG_WIN = [
+  'Incredible! A massive payout!',
+  'The house is shaking!',
+  'What a spectacular hit!',
+  'History in the making!',
+];
+const DEALER_LOSE = [
+  'Not this time.',
+  'The wheel has spoken.',
+  'Better luck on the next spin.',
+  'The house wins this round.',
+];
+const DEALER_SPIN = [
+  'No more bets! The wheel spins!',
+  'Round and round she goes!',
+  'Spinning!',
+  'The wheel is in motion!',
+];
+
+function randomFrom<T>(arr: T[]): T { return arr[Math.floor(Math.random() * arr.length)]; }
+
+// ─── Tutorial Steps ───
+const TUTORIAL_STEPS = [
+  { title: 'Welcome!', desc: 'This is Neon Roulette VR -- a full casino roulette experience in your browser or headset.' },
+  { title: 'The Wheel', desc: 'European wheels have 37 pockets (0-36). American wheels add a 00 pocket (38 total).' },
+  { title: 'Placing Bets', desc: 'Click or point at the betting table to place chips. Use number keys 1-5 to select chip values ($1/$5/$10/$25/$100).' },
+  { title: 'Bet Types', desc: 'Straight (35:1) = one number. Red/Black (1:1) = color. Split (17:1) = two numbers. Many more options!' },
+  { title: 'Spinning', desc: 'Press SPACE or click Spin when you have bets placed. Watch the ball and hope for the best!' },
+  { title: 'Special Bets', desc: 'Try French call bets (Voisins, Tiers, Orphelins) or neighbor bets for wider coverage.' },
+  { title: 'Features', desc: 'Auto-spin, Martingale doubling, La Partage/En Prison rules, favorite bets, and 8 game modes await!' },
+  { title: 'VR Controls', desc: 'Right trigger = spin, A = continue/rebet, B = pause. Left trigger = cycle chips, X = clear, Y = call bets, grip = double.' },
+];
 
 // ─── Audio ───
 let audioCtx: AudioContext | null = null;
@@ -406,6 +475,12 @@ async function main() {
   let martingaleActive = false;
   let startingBankroll = 1000;
   let sessionProfit = 0;
+  let dealerMsg = '';
+  let dealerSub = '';
+  let dealerTimer = 0;
+  let tutorialStep = 0;
+  let tutorialActive = false;
+  let favorites = loadFavorites();
 
   const theme = () => THEMES[state.themeIdx];
   state.themesUsed.add(theme().name);
@@ -504,8 +579,6 @@ async function main() {
     for (const m of pocketLabels) wheelDisc.remove(m);
     pocketMeshes = [];
     pocketLabels = [];
-    buildRacetrackMarkers();
-
     const seq = sequence();
     const count = pocketCount();
     for (let i = 0; i < count; i++) {
@@ -547,6 +620,26 @@ async function main() {
     innerRing.rotation.x = Math.PI / 2;
     innerRing.position.y = 0.1;
     wheelDisc.add(innerRing);
+
+    // Outer rim glow ring
+    const outerRim = new Mesh(
+      new TorusGeometry(1.12, 0.015, 8, 48),
+      new MeshStandardMaterial({ color: theme().glow, emissive: theme().glow, emissiveIntensity: 0.5, transparent: true, opacity: 0.6 })
+    );
+    outerRim.rotation.x = Math.PI / 2;
+    outerRim.position.y = 0.12;
+    wheelDisc.add(outerRim);
+
+    // Pocket divider lines between pockets
+    const divMat = new MeshBasicMaterial({ color: theme().glow, transparent: true, opacity: 0.3 });
+    for (let i = 0; i < count; i++) {
+      const angle = (i / count) * Math.PI * 2 + (0.5 / count) * Math.PI * 2;
+      const divGeo = new BoxGeometry(0.005, 0.06, 0.12);
+      const div = new Mesh(divGeo, divMat);
+      div.position.set(Math.cos(angle) * 1.0, 0.1, Math.sin(angle) * 1.0);
+      div.lookAt(0, 0.1, 0);
+      wheelDisc.add(div);
+    }
   }
 
   buildWheel();
@@ -795,6 +888,7 @@ async function main() {
     if (e.key === 'c' && uiState === 'playing') clearBets();
     if (e.key === 'r' && uiState === 'playing') rebet();
     if (e.key === 'a' && uiState === 'playing') { uiState = 'autospin' as UIState; hideAllPanels(); const ae = panelEntities['autospin']; if (ae && ae.object3D) ae.object3D.visible = true; updateAutoSpinPanel(); }
+    if (e.key === 'f' && uiState === 'playing') { uiState = 'favorites' as UIState; hideAllPanels(); const fe = panelEntities['favorites']; if (fe && fe.object3D) fe.object3D.visible = true; const he = panelEntities['hud']; if (he && he.object3D) he.object3D.visible = true; updateFavoritesPanel(); }
     if (e.key === 'Enter' && uiState === 'result') continueAfterResult();
     if ((e.key === 'Escape' || e.key === 'p') && (uiState === 'playing' || uiState === 'pause')) {
       uiState = uiState === 'pause' ? 'playing' : 'pause';
@@ -818,6 +912,12 @@ async function main() {
     addChipMarker(zone.mesh.position.clone());
     playChipPlace();
     updateHUD();
+    updateOddsPanel();
+    // Dealer comment on bet type (occasionally)
+    if (Math.random() < 0.3 || bets.length === 1) {
+      const comments = DEALER_BET_COMMENTS[zone.type] || DEALER_BET_COMMENTS['default'];
+      showDealer(randomFrom(comments), zone.label);
+    }
   }
 
   function clearBets() {
@@ -827,6 +927,7 @@ async function main() {
     bets = [];
     clearChipMarkers();
     updateHUD();
+    updateOddsPanel();
   }
 
   function rebet() {
@@ -841,6 +942,7 @@ async function main() {
       if (zone) addChipMarker(zone.mesh.position.clone());
     }
     updateHUD();
+    updateOddsPanel();
   }
 
   function startSpin() {
@@ -849,6 +951,7 @@ async function main() {
 
     // Start countdown sequence
     countdownPhase = 3;
+    showDealer(randomFrom(DEALER_SPIN));
     countdownTimer = 0;
     uiState = 'spinning';
     hideAllPanels();
@@ -977,6 +1080,12 @@ async function main() {
       else { state.redStreak = 0; state.blackStreak = 0; }
 
       playWin();
+      const numStr2 = currentResult === 37 ? '00' : String(currentResult);
+      if (totalWin >= 500) {
+        showDealer(randomFrom(DEALER_BIG_WIN), numStr2 + ' pays $' + totalWin);
+      } else {
+        showDealer(randomFrom(DEALER_WIN), numStr2 + ' pays $' + totalWin);
+      }
       const winColor = isRed(currentResult) ? '#ff4444' : isBlack(currentResult) ? '#8844ff' : '#44ff88';
       emitParticles(0, 1.5, -1, 25, winColor);
       emitParticles(0, 2.0, -2, 15, theme().glow);
@@ -987,6 +1096,8 @@ async function main() {
       state.redStreak = 0;
       state.blackStreak = 0;
       playLose();
+      const numStr3 = currentResult === 37 ? '00' : String(currentResult);
+      showDealer(randomFrom(DEALER_LOSE), numStr3 + ' -- the house collects');
     }
 
     // XP
@@ -1077,6 +1188,7 @@ async function main() {
     gameMode = mode;
     isAmerican = american;
     buildWheel();
+    buildRacetrackMarkers();
 
     switch (mode) {
       case 'single': bankroll = 1000; maxSpins = 1; break;
@@ -1098,6 +1210,7 @@ async function main() {
     uiState = 'playing';
     showPanel('playing');
     updateHUD();
+    showDealer(randomFrom(DEALER_GREETINGS), mode + ' mode -- ' + (american ? 'American' : 'European') + ' table');
   }
 
   function checkAchievements() {
@@ -1116,6 +1229,124 @@ async function main() {
   function showToast(msg: string) {
     toastMsg = msg;
     toastTimer = 2.5;
+  }
+
+  function showDealer(msg: string, sub = '') {
+    dealerMsg = msg;
+    dealerSub = sub;
+    dealerTimer = 4.0;
+    const de = panelEntities['dealer'];
+    if (de) {
+      setText(de, 'dealer-msg', msg);
+      setText(de, 'dealer-sub', sub);
+      if (de.object3D) de.object3D.visible = true;
+    }
+  }
+
+  function calculateOdds(): { prob: number; ev: number; maxPayout: number; edge: number; risk: string } {
+    if (bets.length === 0) return { prob: 0, ev: 0, maxPayout: 0, edge: 0, risk: '--' };
+    const totalPockets = isAmerican ? 38 : 37;
+    // Count unique covered numbers from all bets
+    const coveredNumbers = new Set<number>();
+    let totalBet = 0;
+    let maxPayout = 0;
+    for (const b of bets) {
+      totalBet += b.amount;
+      if (b.type === 'straight' && b.number !== undefined) { coveredNumbers.add(b.number); maxPayout = Math.max(maxPayout, b.amount * 35); }
+      else if (b.type === 'split' && b.numbers) { b.numbers.forEach(n => coveredNumbers.add(n)); maxPayout = Math.max(maxPayout, b.amount * 17); }
+      else if (b.type === 'corner' && b.numbers) { b.numbers.forEach(n => coveredNumbers.add(n)); maxPayout = Math.max(maxPayout, b.amount * 8); }
+      else if (b.type === 'street' && b.numbers) { b.numbers.forEach(n => coveredNumbers.add(n)); maxPayout = Math.max(maxPayout, b.amount * 11); }
+      else if (b.type === 'line' && b.numbers) { b.numbers.forEach(n => coveredNumbers.add(n)); maxPayout = Math.max(maxPayout, b.amount * 5); }
+      else if (b.type === 'red') { for (let i = 1; i <= 36; i++) if (isRed(i)) coveredNumbers.add(i); maxPayout = Math.max(maxPayout, b.amount); }
+      else if (b.type === 'black') { for (let i = 1; i <= 36; i++) if (isBlack(i)) coveredNumbers.add(i); maxPayout = Math.max(maxPayout, b.amount); }
+      else if (b.type === 'odd') { for (let i = 1; i <= 36; i += 2) coveredNumbers.add(i); maxPayout = Math.max(maxPayout, b.amount); }
+      else if (b.type === 'even') { for (let i = 2; i <= 36; i += 2) coveredNumbers.add(i); maxPayout = Math.max(maxPayout, b.amount); }
+      else if (b.type === 'low') { for (let i = 1; i <= 18; i++) coveredNumbers.add(i); maxPayout = Math.max(maxPayout, b.amount); }
+      else if (b.type === 'high') { for (let i = 19; i <= 36; i++) coveredNumbers.add(i); maxPayout = Math.max(maxPayout, b.amount); }
+      else if (b.type === 'dozen1') { for (let i = 1; i <= 12; i++) coveredNumbers.add(i); maxPayout = Math.max(maxPayout, b.amount * 2); }
+      else if (b.type === 'dozen2') { for (let i = 13; i <= 24; i++) coveredNumbers.add(i); maxPayout = Math.max(maxPayout, b.amount * 2); }
+      else if (b.type === 'dozen3') { for (let i = 25; i <= 36; i++) coveredNumbers.add(i); maxPayout = Math.max(maxPayout, b.amount * 2); }
+      else if (b.type === 'col1') { for (let i = 1; i <= 36; i += 3) coveredNumbers.add(i); maxPayout = Math.max(maxPayout, b.amount * 2); }
+      else if (b.type === 'col2') { for (let i = 2; i <= 36; i += 3) coveredNumbers.add(i); maxPayout = Math.max(maxPayout, b.amount * 2); }
+      else if (b.type === 'col3') { for (let i = 3; i <= 36; i += 3) coveredNumbers.add(i); maxPayout = Math.max(maxPayout, b.amount * 2); }
+      else if (b.type === 'five') { [0, 37, 1, 2, 3].forEach(n => coveredNumbers.add(n)); maxPayout = Math.max(maxPayout, b.amount * 6); }
+    }
+    const prob = coveredNumbers.size / totalPockets;
+    const edge = isAmerican ? 5.26 : 2.70;
+    const ev = -totalBet * (edge / 100);
+    const risk = prob < 0.15 ? 'HIGH' : prob < 0.4 ? 'MEDIUM' : 'LOW';
+    return { prob: Math.round(prob * 100), ev: Math.round(ev * 100) / 100, maxPayout, edge, risk };
+  }
+
+  function updateOddsPanel() {
+    const e = panelEntities['odds'];
+    if (!e) return;
+    const odds = calculateOdds();
+    setText(e, 'odds-prob', odds.prob + '%');
+    setText(e, 'odds-ev', (odds.ev >= 0 ? '+' : '') + '$' + odds.ev);
+    setText(e, 'odds-max', '$' + odds.maxPayout);
+    setText(e, 'odds-edge', odds.edge + '%');
+    setText(e, 'odds-risk', odds.risk);
+  }
+
+  // ─── Favorites Management ───
+  function saveFavoriteBet(slot: number) {
+    if (bets.length === 0) { showToast('No bets to save!'); return; }
+    const types = new Set(bets.map(b => b.type));
+    const totalAmount = bets.reduce((s, b) => s + b.amount, 0);
+    const name = [...types].slice(0, 3).join('+') + ' $' + totalAmount;
+    favorites[slot] = { name, bets: bets.map(b => ({ ...b })) };
+    saveFavorites(favorites);
+    showToast('Saved to slot ' + (slot + 1) + '!');
+    updateFavoritesPanel();
+  }
+
+  function loadFavoriteBet(slot: number) {
+    const fav = favorites[slot];
+    if (!fav) { showToast('Slot ' + (slot + 1) + ' is empty!'); return; }
+    const totalNeeded = fav.bets.reduce((s, b) => s + b.amount, 0);
+    if (totalNeeded > bankroll && gameMode !== 'practice') { showToast('Not enough chips!'); return; }
+    clearBets();
+    bets = fav.bets.map(b => ({ ...b }));
+    if (gameMode !== 'practice') bankroll -= totalNeeded;
+    clearChipMarkers();
+    for (const b of bets) {
+      const zone = betZones.find(z => z.type === b.type && z.number === b.number);
+      if (zone) addChipMarker(zone.mesh.position.clone());
+    }
+    showToast('Loaded from slot ' + (slot + 1));
+    showDealer('Your favorite bet is in play.', fav.name);
+    updateHUD();
+  }
+
+  function updateFavoritesPanel() {
+    const e = panelEntities['favorites'];
+    if (!e) return;
+    for (let i = 0; i < 5; i++) {
+      const fav = favorites[i];
+      setText(e, 'fav-' + (i + 1), fav ? fav.name : 'Empty');
+    }
+  }
+
+  // ─── Tutorial ───
+  function showTutorial() {
+    tutorialStep = 0;
+    tutorialActive = true;
+    uiState = 'tutorial';
+    hideAllPanels();
+    const te = panelEntities['tutorial'];
+    if (te && te.object3D) te.object3D.visible = true;
+    updateTutorialPanel();
+  }
+
+  function updateTutorialPanel() {
+    const e = panelEntities['tutorial'];
+    if (!e) return;
+    const step = TUTORIAL_STEPS[tutorialStep];
+    setText(e, 'tut-title', step.title);
+    setText(e, 'tut-desc', step.desc);
+    setText(e, 'tut-step', 'Step ' + (tutorialStep + 1) + ' of ' + TUTORIAL_STEPS.length);
+    setText(e, 'tut-page', (tutorialStep + 1) + '/' + TUTORIAL_STEPS.length);
   }
 
   // ─── Call Bets ───
@@ -1246,9 +1477,9 @@ async function main() {
       case 'title': show('title'); break;
       case 'modes': show('modes'); break;
       case 'table': show('table'); break;
-      case 'playing': show('hud'); show('betting'); show('history'); show('hotcold'); show('payouts'); show('callbets'); break;
-      case 'spinning': show('hud'); break;
-      case 'result': show('result'); show('hud'); break;
+      case 'playing': show('hud'); show('betting'); show('history'); show('hotcold'); show('payouts'); show('odds'); break;
+      case 'spinning': show('hud'); show('dealer'); break;
+      case 'result': show('result'); show('hud'); show('dealer'); break;
       case 'gameover': show('gameover'); break;
       case 'leaderboard': show('leaderboard'); break;
       case 'achievements': show('achievements'); break;
@@ -1259,6 +1490,8 @@ async function main() {
       case 'chips': show('chips'); break;
       case 'callbets': show('callbets'); show('hud'); show('racetrack'); break;
       case 'autospin': show('autospin'); show('hud'); break;
+      case 'favorites': show('favorites'); show('hud'); break;
+      case 'tutorial': show('tutorial'); break;
     }
   }
 
@@ -1421,6 +1654,10 @@ async function main() {
     callbets: { config: './ui/callbets.json', world: true, pos: [-1.8, 1.8, -2.0], scale: 0.9 },
     autospin: { config: './ui/autospin.json', world: true, pos: [0, 2.0, -3.5], scale: 1.2 },
     racetrack: { config: './ui/racetrack.json', world: true, pos: [-1.5, 2.0, -2.0], scale: 0.9 },
+    dealer: { config: './ui/dealer.json', world: true, pos: [0, 2.5, -2.5], scale: 1.0 },
+    odds: { config: './ui/odds.json', world: true, pos: [-1.8, 1.2, -2.0], scale: 0.7 },
+    favorites: { config: './ui/favorites.json', world: true, pos: [0, 2.0, -3.5], scale: 1.2 },
+    tutorial: { config: './ui/tutorial.json', world: true, pos: [0, 2.0, -3.5], scale: 1.5 },
   };
 
   for (const [key, cfg] of Object.entries(panelConfigs)) {
@@ -1458,6 +1695,10 @@ async function main() {
     callbetsQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/callbets.json')] },
     autospinQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/autospin.json')] },
     racetrackQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/racetrack.json')] },
+    dealerQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/dealer.json')] },
+    oddsQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/odds.json')] },
+    favoritesQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/favorites.json')] },
+    tutorialQ: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/tutorial.json')] },
   }) {
     init() {
       const wire = (qName: string, key: string, bindings: Record<string, () => void>) => {
@@ -1490,6 +1731,8 @@ async function main() {
         'btn-chips': () => { uiState = 'chips'; showPanel('chips'); playClick(); },
         'btn-settings': () => { uiState = 'settings'; showPanel('settings'); playClick(); },
         'btn-help': () => { uiState = 'help'; showPanel('help'); playClick(); },
+        'btn-tutorial': () => { showTutorial(); playClick(); },
+        'btn-favorites': () => { uiState = 'favorites' as UIState; hideAllPanels(); const fe = panelEntities['favorites']; if (fe && fe.object3D) fe.object3D.visible = true; updateFavoritesPanel(); playClick(); },
       });
 
       wire('modesQ', 'modes', {
@@ -1523,6 +1766,7 @@ async function main() {
         'btn-autospin': () => { hideAllPanels(); const ae = panelEntities['autospin']; if (ae && ae.object3D) ae.object3D.visible = true; const he = panelEntities['hud']; if (he && he.object3D) he.object3D.visible = true; updateAutoSpinPanel(); playClick(); },
         'btn-double': () => { doubleBets(); playClick(); },
         'btn-martingale': () => { martingaleActive = !martingaleActive; updateBettingPanel(); playClick(); showToast('Martingale: ' + (martingaleActive ? 'ON' : 'OFF')); },
+        'btn-favorites': () => { uiState = 'favorites' as UIState; hideAllPanels(); const fe = panelEntities['favorites']; if (fe && fe.object3D) fe.object3D.visible = true; const he = panelEntities['hud']; if (he && he.object3D) he.object3D.visible = true; updateFavoritesPanel(); playClick(); },
       });
 
       wire('resultQ', 'result', {
@@ -1597,6 +1841,30 @@ async function main() {
 
       wire('racetrackQ', 'racetrack', {
         'btn-close-track': () => { uiState = 'playing'; showPanel('playing'); updateHUD(); playClick(); },
+      });
+
+      wire('dealerQ', 'dealer', {});
+
+      wire('oddsQ', 'odds', {});
+
+      wire('favoritesQ', 'favorites', {
+        'fav-save-1': () => { saveFavoriteBet(0); playClick(); },
+        'fav-save-2': () => { saveFavoriteBet(1); playClick(); },
+        'fav-save-3': () => { saveFavoriteBet(2); playClick(); },
+        'fav-save-4': () => { saveFavoriteBet(3); playClick(); },
+        'fav-save-5': () => { saveFavoriteBet(4); playClick(); },
+        'fav-load-1': () => { loadFavoriteBet(0); uiState = 'playing'; showPanel('playing'); updateHUD(); playClick(); },
+        'fav-load-2': () => { loadFavoriteBet(1); uiState = 'playing'; showPanel('playing'); updateHUD(); playClick(); },
+        'fav-load-3': () => { loadFavoriteBet(2); uiState = 'playing'; showPanel('playing'); updateHUD(); playClick(); },
+        'fav-load-4': () => { loadFavoriteBet(3); uiState = 'playing'; showPanel('playing'); updateHUD(); playClick(); },
+        'fav-load-5': () => { loadFavoriteBet(4); uiState = 'playing'; showPanel('playing'); updateHUD(); playClick(); },
+        'btn-back': () => { uiState = 'playing'; showPanel('playing'); updateHUD(); playClick(); },
+      });
+
+      wire('tutorialQ', 'tutorial', {
+        'tut-prev': () => { if (tutorialStep > 0) { tutorialStep--; updateTutorialPanel(); playClick(); } },
+        'tut-next': () => { if (tutorialStep < TUTORIAL_STEPS.length - 1) { tutorialStep++; updateTutorialPanel(); playClick(); } else { tutorialActive = false; uiState = 'title'; showPanel('title'); playClick(); } },
+        'tut-skip': () => { tutorialActive = false; uiState = 'title'; showPanel('title'); playClick(); },
       });
     }
   }
@@ -1938,6 +2206,17 @@ async function main() {
         if (toastTimer <= 0) {
           const te2 = panelEntities['toast'];
           if (te2 && te2.object3D) te2.object3D.visible = false;
+        }
+      }
+
+      // Dealer message timer
+      if (dealerTimer > 0) {
+        dealerTimer -= delta;
+        if (dealerTimer <= 0) {
+          const de = panelEntities['dealer'];
+          if (de && de.object3D && uiState !== 'spinning' && uiState !== 'result') {
+            de.object3D.visible = false;
+          }
         }
       }
 

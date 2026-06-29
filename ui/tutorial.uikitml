@@ -1,0 +1,24 @@
+<panel>
+  <style>
+    .root { flexDirection: column; alignItems: center; gap: 4; padding: 8; backgroundColor: rgba(0,30,50,0.85); borderRadius: 8; width: 300; }
+    .title { fontSize: 11; color: #00ffcc; fontWeight: bold; }
+    .desc { fontSize: 9; color: #88ccdd; textAlign: center; }
+    .step { fontSize: 9; color: #ffffff; textAlign: center; }
+    .row { flexDirection: row; gap: 6; }
+    .prev { fontSize: 9; color: #ff8844; backgroundColor: rgba(255,136,68,0.15); borderRadius: 4; padding: 4; width: 50; textAlign: center; }
+    .next { fontSize: 9; color: #00ffcc; backgroundColor: rgba(0,255,204,0.15); borderRadius: 4; padding: 4; width: 50; textAlign: center; }
+    .skip { fontSize: 9; color: #ff4444; backgroundColor: rgba(255,68,68,0.15); borderRadius: 4; padding: 4; width: 90; textAlign: center; marginTop: 4; }
+    .page { fontSize: 8; color: #668899; }
+  </style>
+  <container class="root">
+    <text class="title" id="tut-title">TUTORIAL</text>
+    <text class="desc" id="tut-desc">Learn to play roulette</text>
+    <text class="step" id="tut-step">Step 1 of 8</text>
+    <container class="row">
+      <text class="prev" id="tut-prev">Prev</text>
+      <text class="next" id="tut-next">Next</text>
+    </container>
+    <text class="skip" id="tut-skip">Skip Tutorial</text>
+    <text class="page" id="tut-page">1/8</text>
+  </container>
+</panel>

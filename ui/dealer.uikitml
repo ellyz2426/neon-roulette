@@ -1,0 +1,13 @@
+<panel>
+  <style>
+    .root { flexDirection: column; alignItems: center; gap: 6; padding: 8; backgroundColor: rgba(0,30,50,0.85); borderRadius: 8; width: 340; }
+    .title { fontSize: 11; color: #00ffcc; fontWeight: bold; }
+    .msg { fontSize: 14; color: #ffffff; textAlign: center; }
+    .sub { fontSize: 10; color: #88ccdd; textAlign: center; }
+  </style>
+  <container class="root">
+    <text class="title" id="dealer-title">DEALER</text>
+    <text class="msg" id="dealer-msg">Place your bets!</text>
+    <text class="sub" id="dealer-sub"></text>
+  </container>
+</panel>

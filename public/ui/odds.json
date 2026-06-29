@@ -11,35 +11,12 @@
             "sourceTag": "text",
             "type": "custom",
             "children": [
-              "NEON ROULETTE"
+              "BET ODDS"
             ],
             "properties": {
               "class": "title"
             },
             "dataUid": "uid-3"
-          },
-          {
-            "sourceTag": "text",
-            "type": "custom",
-            "children": [
-              "Casino Roulette in VR"
-            ],
-            "properties": {
-              "class": "sub"
-            },
-            "dataUid": "uid-4"
-          },
-          {
-            "sourceTag": "text",
-            "type": "custom",
-            "children": [
-              "Level 1 - 0 XP"
-            ],
-            "properties": {
-              "class": "level",
-              "id": "level-display"
-            },
-            "dataUid": "uid-5"
           },
           {
             "sourceTag": "container",
@@ -49,23 +26,43 @@
                 "sourceTag": "text",
                 "type": "custom",
                 "children": [
-                  "PLAY"
+                  "Win Probability"
                 ],
                 "properties": {
-                  "class": "btn",
-                  "id": "btn-play"
+                  "class": "label"
                 },
-                "dataUid": "uid-7"
+                "dataUid": "uid-5"
               },
               {
                 "sourceTag": "text",
                 "type": "custom",
                 "children": [
-                  "LEADERBOARD"
+                  "--"
                 ],
                 "properties": {
-                  "class": "btn2",
-                  "id": "btn-scores"
+                  "class": "val",
+                  "id": "odds-prob"
+                },
+                "dataUid": "uid-6"
+              }
+            ],
+            "properties": {
+              "class": "row"
+            },
+            "dataUid": "uid-4"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "Expected Value"
+                ],
+                "properties": {
+                  "class": "label"
                 },
                 "dataUid": "uid-8"
               },
@@ -73,35 +70,32 @@
                 "sourceTag": "text",
                 "type": "custom",
                 "children": [
-                  "ACHIEVEMENTS"
+                  "--"
                 ],
                 "properties": {
-                  "class": "btn3",
-                  "id": "btn-achievements"
+                  "class": "val",
+                  "id": "odds-ev"
                 },
                 "dataUid": "uid-9"
-              },
+              }
+            ],
+            "properties": {
+              "class": "row"
+            },
+            "dataUid": "uid-7"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
               {
                 "sourceTag": "text",
                 "type": "custom",
                 "children": [
-                  "STATS"
+                  "Max Payout"
                 ],
                 "properties": {
-                  "class": "btn4",
-                  "id": "btn-stats"
-                },
-                "dataUid": "uid-10"
-              },
-              {
-                "sourceTag": "text",
-                "type": "custom",
-                "children": [
-                  "CHIP SKINS"
-                ],
-                "properties": {
-                  "class": "btn5",
-                  "id": "btn-chips"
+                  "class": "label"
                 },
                 "dataUid": "uid-11"
               },
@@ -109,35 +103,32 @@
                 "sourceTag": "text",
                 "type": "custom",
                 "children": [
-                  "FAVORITES"
+                  "--"
                 ],
                 "properties": {
-                  "class": "btn7",
-                  "id": "btn-favorites"
+                  "class": "val",
+                  "id": "odds-max"
                 },
                 "dataUid": "uid-12"
-              },
+              }
+            ],
+            "properties": {
+              "class": "row"
+            },
+            "dataUid": "uid-10"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
               {
                 "sourceTag": "text",
                 "type": "custom",
                 "children": [
-                  "SETTINGS"
+                  "House Edge"
                 ],
                 "properties": {
-                  "class": "btn6",
-                  "id": "btn-settings"
-                },
-                "dataUid": "uid-13"
-              },
-              {
-                "sourceTag": "text",
-                "type": "custom",
-                "children": [
-                  "TUTORIAL"
-                ],
-                "properties": {
-                  "class": "btn8",
-                  "id": "btn-tutorial"
+                  "class": "label"
                 },
                 "dataUid": "uid-14"
               },
@@ -145,19 +136,52 @@
                 "sourceTag": "text",
                 "type": "custom",
                 "children": [
-                  "HELP"
+                  "--"
                 ],
                 "properties": {
-                  "class": "btn9",
-                  "id": "btn-help"
+                  "class": "val",
+                  "id": "odds-edge"
                 },
                 "dataUid": "uid-15"
               }
             ],
             "properties": {
-              "class": "menu"
+              "class": "row"
             },
-            "dataUid": "uid-6"
+            "dataUid": "uid-13"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "Risk Level"
+                ],
+                "properties": {
+                  "class": "label"
+                },
+                "dataUid": "uid-17"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "--"
+                ],
+                "properties": {
+                  "class": "val",
+                  "id": "odds-risk"
+                },
+                "dataUid": "uid-18"
+              }
+            ],
+            "properties": {
+              "class": "row"
+            },
+            "dataUid": "uid-16"
           }
         ],
         "properties": {
@@ -174,92 +198,56 @@
       "content": {
         "flexDirection": "column",
         "alignItems": "center",
-        "gap": "10",
-        "padding": "16",
-        "backgroundColor": "rgba(0,20,40,0.9)",
-        "borderRadius": 12,
-        "width": "360"
+        "gap": "4",
+        "padding": "8",
+        "backgroundColor": "rgba(0,30,50,0.85)",
+        "borderRadius": 8,
+        "width": "260"
       }
     },
     "title": {
       "content": {
-        "fontSize": "28",
-        "fontWeight": "bold",
-        "color": "#00ffff"
-      }
-    },
-    "sub": {
-      "content": {
-        "fontSize": "12",
-        "color": "#88cccc"
-      }
-    },
-    "level": {
-      "content": {
         "fontSize": "10",
-        "color": "#66aaaa"
+        "color": "#00ffcc",
+        "fontWeight": "bold"
       }
     },
-    "menu": {
+    "row": {
       "content": {
-        "flexDirection": "column",
-        "gap": "6",
-        "marginTop": "6",
+        "flexDirection": "row",
+        "gap": "4",
         "alignItems": "center"
       }
     },
-    "btn": {
+    "label": {
       "content": {
-        "fontSize": "16",
-        "color": "#00ffcc"
+        "fontSize": "9",
+        "color": "#88ccdd",
+        "width": "100"
       }
     },
-    "btn2": {
+    "val": {
       "content": {
-        "fontSize": "13",
-        "color": "#00ccaa"
+        "fontSize": "9",
+        "color": "#ffffff",
+        "width": "80",
+        "textAlign": "right"
       }
     },
-    "btn3": {
+    "good": {
       "content": {
-        "fontSize": "13",
-        "color": "#ccaa00"
+        "fontSize": "9",
+        "color": "#44ff88",
+        "width": "80",
+        "textAlign": "right"
       }
     },
-    "btn4": {
+    "bad": {
       "content": {
-        "fontSize": "13",
-        "color": "#aa88ff"
-      }
-    },
-    "btn5": {
-      "content": {
-        "fontSize": "13",
-        "color": "#ff8844"
-      }
-    },
-    "btn6": {
-      "content": {
-        "fontSize": "13",
-        "color": "#88aacc"
-      }
-    },
-    "btn7": {
-      "content": {
-        "fontSize": "13",
-        "color": "#44ccaa"
-      }
-    },
-    "btn8": {
-      "content": {
-        "fontSize": "13",
-        "color": "#cc88ff"
-      }
-    },
-    "btn9": {
-      "content": {
-        "fontSize": "12",
-        "color": "#668888"
+        "fontSize": "9",
+        "color": "#ff4444",
+        "width": "80",
+        "textAlign": "right"
       }
     }
   },
@@ -294,7 +282,7 @@
         "column": 10
       }
     },
-    "sub": {
+    "row": {
       "start": {
         "line": 4,
         "column": 4
@@ -304,7 +292,7 @@
         "column": 8
       }
     },
-    "level": {
+    "label": {
       "start": {
         "line": 5,
         "column": 4
@@ -314,109 +302,39 @@
         "column": 10
       }
     },
-    "menu": {
+    "val": {
       "start": {
         "line": 6,
         "column": 4
       },
       "end": {
         "line": 6,
-        "column": 9
-      }
-    },
-    "btn": {
-      "start": {
-        "line": 7,
-        "column": 4
-      },
-      "end": {
-        "line": 7,
         "column": 8
       }
     },
-    "btn2": {
+    "good": {
+      "start": {
+        "line": 7,
+        "column": 4
+      },
+      "end": {
+        "line": 7,
+        "column": 9
+      }
+    },
+    "bad": {
       "start": {
         "line": 8,
         "column": 4
       },
       "end": {
         "line": 8,
-        "column": 9
-      }
-    },
-    "btn3": {
-      "start": {
-        "line": 9,
-        "column": 4
-      },
-      "end": {
-        "line": 9,
-        "column": 9
-      }
-    },
-    "btn4": {
-      "start": {
-        "line": 10,
-        "column": 4
-      },
-      "end": {
-        "line": 10,
-        "column": 9
-      }
-    },
-    "btn5": {
-      "start": {
-        "line": 11,
-        "column": 4
-      },
-      "end": {
-        "line": 11,
-        "column": 9
-      }
-    },
-    "btn6": {
-      "start": {
-        "line": 12,
-        "column": 4
-      },
-      "end": {
-        "line": 12,
-        "column": 9
-      }
-    },
-    "btn7": {
-      "start": {
-        "line": 13,
-        "column": 4
-      },
-      "end": {
-        "line": 13,
-        "column": 9
-      }
-    },
-    "btn8": {
-      "start": {
-        "line": 14,
-        "column": 4
-      },
-      "end": {
-        "line": 14,
-        "column": 9
-      }
-    },
-    "btn9": {
-      "start": {
-        "line": 15,
-        "column": 4
-      },
-      "end": {
-        "line": 15,
-        "column": 9
+        "column": 8
       }
     },
     "uid-2": {
       "start": {
-        "line": 17,
+        "line": 10,
         "column": 2
       },
       "end": {
@@ -426,37 +344,137 @@
     },
     "uid-3": {
       "start": {
-        "line": 18,
+        "line": 11,
         "column": 4
       },
       "end": {
-        "line": 18,
-        "column": 44
+        "line": 11,
+        "column": 39
       }
     },
     "uid-4": {
       "start": {
-        "line": 19,
+        "line": 12,
         "column": 4
       },
       "end": {
-        "line": 19,
-        "column": 50
+        "line": 15,
+        "column": 16
       }
     },
     "uid-5": {
       "start": {
-        "line": 20,
-        "column": 4
+        "line": 13,
+        "column": 6
       },
       "end": {
-        "line": 20,
-        "column": 64
+        "line": 13,
+        "column": 48
       }
     },
     "uid-6": {
       "start": {
+        "line": 14,
+        "column": 6
+      },
+      "end": {
+        "line": 14,
+        "column": 48
+      }
+    },
+    "uid-7": {
+      "start": {
+        "line": 16,
+        "column": 4
+      },
+      "end": {
+        "line": 19,
+        "column": 16
+      }
+    },
+    "uid-8": {
+      "start": {
+        "line": 17,
+        "column": 6
+      },
+      "end": {
+        "line": 17,
+        "column": 47
+      }
+    },
+    "uid-9": {
+      "start": {
+        "line": 18,
+        "column": 6
+      },
+      "end": {
+        "line": 18,
+        "column": 46
+      }
+    },
+    "uid-10": {
+      "start": {
+        "line": 20,
+        "column": 4
+      },
+      "end": {
+        "line": 23,
+        "column": 16
+      }
+    },
+    "uid-11": {
+      "start": {
         "line": 21,
+        "column": 6
+      },
+      "end": {
+        "line": 21,
+        "column": 43
+      }
+    },
+    "uid-12": {
+      "start": {
+        "line": 22,
+        "column": 6
+      },
+      "end": {
+        "line": 22,
+        "column": 47
+      }
+    },
+    "uid-13": {
+      "start": {
+        "line": 24,
+        "column": 4
+      },
+      "end": {
+        "line": 27,
+        "column": 16
+      }
+    },
+    "uid-14": {
+      "start": {
+        "line": 25,
+        "column": 6
+      },
+      "end": {
+        "line": 25,
+        "column": 43
+      }
+    },
+    "uid-15": {
+      "start": {
+        "line": 26,
+        "column": 6
+      },
+      "end": {
+        "line": 26,
+        "column": 48
+      }
+    },
+    "uid-16": {
+      "start": {
+        "line": 28,
         "column": 4
       },
       "end": {
@@ -464,94 +482,24 @@
         "column": 16
       }
     },
-    "uid-7": {
-      "start": {
-        "line": 22,
-        "column": 6
-      },
-      "end": {
-        "line": 22,
-        "column": 49
-      }
-    },
-    "uid-8": {
-      "start": {
-        "line": 23,
-        "column": 6
-      },
-      "end": {
-        "line": 23,
-        "column": 59
-      }
-    },
-    "uid-9": {
-      "start": {
-        "line": 24,
-        "column": 6
-      },
-      "end": {
-        "line": 24,
-        "column": 66
-      }
-    },
-    "uid-10": {
-      "start": {
-        "line": 25,
-        "column": 6
-      },
-      "end": {
-        "line": 25,
-        "column": 52
-      }
-    },
-    "uid-11": {
-      "start": {
-        "line": 26,
-        "column": 6
-      },
-      "end": {
-        "line": 26,
-        "column": 57
-      }
-    },
-    "uid-12": {
-      "start": {
-        "line": 27,
-        "column": 6
-      },
-      "end": {
-        "line": 27,
-        "column": 60
-      }
-    },
-    "uid-13": {
-      "start": {
-        "line": 28,
-        "column": 6
-      },
-      "end": {
-        "line": 28,
-        "column": 58
-      }
-    },
-    "uid-14": {
+    "uid-17": {
       "start": {
         "line": 29,
         "column": 6
       },
       "end": {
         "line": 29,
-        "column": 58
+        "column": 43
       }
     },
-    "uid-15": {
+    "uid-18": {
       "start": {
         "line": 30,
         "column": 6
       },
       "end": {
         "line": 30,
-        "column": 50
+        "column": 48
       }
     }
   }

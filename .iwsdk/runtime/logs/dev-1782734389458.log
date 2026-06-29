@@ -1,0 +1,37 @@
+
+> neon-roulette@1.0.0 dev:runtime
+> vite
+
+🚀 Generating initial UIKitML files for dev server...
+👁️  UIKitML file watcher started - monitoring for changes...
+
+  VITE v7.3.6  ready in 1436 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://198.19.0.2:5173/
+[browser] [unhandledrejection] ReferenceError: Cannot access 'raceMarkers' before initialization
+    at buildRacetrackMarkers (http://localhost:5173/src/index.ts:657:21)
+    at buildWheel (http://localhost:5173/src/index.ts:493:5)
+    at main (http://localhost:5173/src/index.ts:529:3)
+[browser:pageerror] ReferenceError: Cannot access 'raceMarkers' before initialization
+    at buildRacetrackMarkers (http://localhost:5173/src/index.ts:657:21)
+    at buildWheel (http://localhost:5173/src/index.ts:493:5)
+    at main (http://localhost:5173/src/index.ts:529:3)
+12:01:48 PM [vite] (client) page reload src/index.ts
+12:01:59 PM [vite] (client) page reload src/index.ts
+
+🥽 IWSDK Dev Summary (Development):
+  - Device: metaQuest3
+  - Runtime injected: 1116.7KB
+  - Activation mode: localhost
+  - AI: agent mode (WebSocket at /__iwer_mcp)
+  - Note: Runtime only activates on localhost/local networks
+
+
+🥽 IWSDK Dev Summary (Development):
+  - Device: metaQuest3
+  - Runtime injected: 1116.7KB
+  - Activation mode: localhost
+  - AI: agent mode (WebSocket at /__iwer_mcp)
+  - Note: Runtime only activates on localhost/local networks
+

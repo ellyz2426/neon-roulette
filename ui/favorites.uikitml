@@ -1,0 +1,48 @@
+<panel>
+  <style>
+    .root { flexDirection: column; alignItems: center; gap: 4; padding: 8; backgroundColor: rgba(0,30,50,0.85); borderRadius: 8; width: 260; }
+    .title { fontSize: 10; color: #00ffcc; fontWeight: bold; }
+    .slot { flexDirection: row; gap: 4; alignItems: center; }
+    .label { fontSize: 9; color: #88ccdd; width: 40; }
+    .name { fontSize: 9; color: #ffffff; width: 120; }
+    .btn { fontSize: 9; color: #00ffcc; backgroundColor: rgba(0,255,204,0.15); borderRadius: 4; padding: 3; width: 50; textAlign: center; }
+    .btnAlt { fontSize: 9; color: #ff8844; backgroundColor: rgba(255,136,68,0.15); borderRadius: 4; padding: 3; width: 50; textAlign: center; }
+    .back { fontSize: 9; color: #ff8844; backgroundColor: rgba(255,136,68,0.15); borderRadius: 4; padding: 4; width: 80; textAlign: center; marginTop: 4; }
+    .info { fontSize: 8; color: #668899; textAlign: center; }
+  </style>
+  <container class="root">
+    <text class="title">FAVORITE BETS</text>
+    <text class="info">Save and load custom bet patterns</text>
+    <container class="slot">
+      <text class="label">1.</text>
+      <text class="name" id="fav-1">Empty</text>
+      <text class="btn" id="fav-save-1">Save</text>
+      <text class="btnAlt" id="fav-load-1">Load</text>
+    </container>
+    <container class="slot">
+      <text class="label">2.</text>
+      <text class="name" id="fav-2">Empty</text>
+      <text class="btn" id="fav-save-2">Save</text>
+      <text class="btnAlt" id="fav-load-2">Load</text>
+    </container>
+    <container class="slot">
+      <text class="label">3.</text>
+      <text class="name" id="fav-3">Empty</text>
+      <text class="btn" id="fav-save-3">Save</text>
+      <text class="btnAlt" id="fav-load-3">Load</text>
+    </container>
+    <container class="slot">
+      <text class="label">4.</text>
+      <text class="name" id="fav-4">Empty</text>
+      <text class="btn" id="fav-save-4">Save</text>
+      <text class="btnAlt" id="fav-load-4">Load</text>
+    </container>
+    <container class="slot">
+      <text class="label">5.</text>
+      <text class="name" id="fav-5">Empty</text>
+      <text class="btn" id="fav-save-5">Save</text>
+      <text class="btnAlt" id="fav-load-5">Load</text>
+    </container>
+    <text class="back" id="btn-back">Back</text>
+  </container>
+</panel>

@@ -1,0 +1,69 @@
+
+> neon-roulette@1.0.0 dev:runtime
+> vite
+
+🚀 Generating initial UIKitML files for dev server...
+👁️  UIKitML file watcher started - monitoring for changes...
+
+  VITE v7.3.6  ready in 1607 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://198.19.0.2:5173/
+➕ UIKitML file add: ui/dealer.uikitml
+✅ UIKitML file recompiled: dealer.uikitml
+➕ UIKitML file add: ui/odds.uikitml
+✅ UIKitML file recompiled: odds.uikitml
+➕ UIKitML file add: ui/favorites.uikitml
+✅ UIKitML file recompiled: favorites.uikitml
+➕ UIKitML file add: ui/tutorial.uikitml
+✅ UIKitML file recompiled: tutorial.uikitml
+12:04:36 PM [vite] (client) page reload src/index.ts
+12:05:05 PM [vite] (client) page reload src/index.ts
+12:05:15 PM [vite] (client) page reload src/index.ts
+12:05:52 PM [vite] (client) page reload src/index.ts
+12:06:08 PM [vite] (client) page reload src/index.ts
+12:06:16 PM [vite] (client) page reload src/index.ts
+12:06:30 PM [vite] (client) page reload src/index.ts
+12:06:34 PM [vite] (client) page reload src/index.ts
+12:06:46 PM [vite] (client) page reload src/index.ts
+12:06:59 PM [vite] (client) page reload src/index.ts
+12:07:11 PM [vite] (client) page reload src/index.ts
+12:07:15 PM [vite] (client) page reload src/index.ts
+12:07:33 PM [vite] (client) page reload src/index.ts
+[browser] [unhandledrejection] TypeError: Cannot read properties of undefined (reading 'subscribe')
+    at wire (http://localhost:5173/src/index.ts?t=1782734853506:1671:29)
+    at RouletteUISystem.init (http://localhost:5173/src/index.ts?t=1782734853506:2125:7)
+    at World.registerSystem (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:898:20)
+    at main (http://localhost:5173/src/index.ts?t=1782734853506:2402:9)
+[browser:pageerror] TypeError: Cannot read properties of undefined (reading 'subscribe')
+    at wire (http://localhost:5173/src/index.ts?t=1782734853506:1671:29)
+    at RouletteUISystem.init (http://localhost:5173/src/index.ts?t=1782734853506:2125:7)
+    at World.registerSystem (http://localhost:5173/node_modules/.vite/deps/elics.js?v=783c27e3:898:20)
+    at main (http://localhost:5173/src/index.ts?t=1782734853506:2402:9)
+12:07:43 PM [vite] (client) page reload src/index.ts
+12:07:52 PM [vite] (client) page reload src/index.ts
+12:08:05 PM [vite] (client) page reload src/index.ts
+12:08:20 PM [vite] (client) page reload src/index.ts
+📝 UIKitML file change: ui/title.uikitml
+✅ UIKitML file recompiled: title.uikitml
+📝 UIKitML file change: ui/betting.uikitml
+✅ UIKitML file recompiled: betting.uikitml
+12:09:04 PM [vite] (client) page reload src/index.ts
+12:09:21 PM [vite] (client) page reload src/index.ts
+12:09:38 PM [vite] (client) page reload src/index.ts
+
+🥽 IWSDK Dev Summary (Development):
+  - Device: metaQuest3
+  - Runtime injected: 1116.7KB
+  - Activation mode: localhost
+  - AI: agent mode (WebSocket at /__iwer_mcp)
+  - Note: Runtime only activates on localhost/local networks
+
+
+🥽 IWSDK Dev Summary (Development):
+  - Device: metaQuest3
+  - Runtime injected: 1116.7KB
+  - Activation mode: localhost
+  - AI: agent mode (WebSocket at /__iwer_mcp)
+  - Note: Runtime only activates on localhost/local networks
+
